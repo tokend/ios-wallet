@@ -1,0 +1,20 @@
+platform :ios, '10.0'
+
+source 'git@github.com:tokend/ios-specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+use_modular_headers!
+
+def main_pods
+    pod 'TokenDWallet', :path => '../'
+end
+
+target 'TokenDWallet_Example' do
+    main_pods
+end
+
+target 'TokenDWallet_Tests' do
+    inherit! :search_paths
+
+    main_pods
+end

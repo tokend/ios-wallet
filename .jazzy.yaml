@@ -1,0 +1,24 @@
+source_directory: Example/Pods
+xcodebuild_arguments: [-scheme,TokenDWallet]
+exclude:
+  - "Sources/TokenDWallet/Utils/*"
+  - "Sources/TokenDWallet/Xdr/*"
+
+readme: README.md
+docset_icon: Resources/logo200.png
+
+author: Distributed Lab
+author_url: https://distributedlab.com
+copyright: '© 2018 [Distributed Lab](https://distributedlab.com) under [open source license]().'
+
+theme: fullwidth
+
+disable_search:
+  
+skip_undocumented:
+
+# custom_categories:
+#
+#   - name:
+#     children:
+#       -
