@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'TokenDWallet'
-  s.version          = '1.0'
+  s.version          = '1.0.1'
   s.summary          = 'Wallet utilities for TokenD.'
   s.homepage         = 'https://github.com/tokend/ios-wallet'
   s.author           = { 'Distributed Lab' => 'info@distributedlab.com' }

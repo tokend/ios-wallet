@@ -1,11 +1,14 @@
 import Foundation
 import DLCryptoKit
 
+/// Represents model that contains transaction's data
 public class TransactionModel {
     
     static let TransactionDefaultLifetimeSeconds: Uint64 = 7 * 24 * 60 * 60
     
+    /// Error models which are possible to get while building transaction
     public enum TransactionModelError: Swift.Error {
+        /// Case when no operations were added to transaction
         case noOperations
     }
     
@@ -57,11 +60,16 @@ public class TransactionModel {
     
     // MARK: - Public
     
+    /// Method signs transaction with given key
+    /// - Parameters:
+    ///     - signer: Key which is used to sign transaction
     public func addSignature(signer: ECDSA.KeyData) throws {
         let decoratedSignature = try self.getDecoratedSignature(signer: signer)
         self.signatures.append(decoratedSignature)
     }
     
+    /// Method retruns transaction's envelope
+    /// - Returns: `TransactionEnvelope`
     public func getEnvelope() -> TransactionEnvelope {
         return TransactionEnvelope(
             tx: self.getXdrTransaction(),

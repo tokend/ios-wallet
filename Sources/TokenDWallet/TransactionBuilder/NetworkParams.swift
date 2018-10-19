@@ -1,6 +1,7 @@
 import Foundation
 import DLCryptoKit
 
+/// Struct contains data which is used to identify network
 public struct NetworkParams {
     
     // MARK: - Public properties

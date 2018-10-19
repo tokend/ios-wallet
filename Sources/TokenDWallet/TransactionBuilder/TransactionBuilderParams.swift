@@ -1,5 +1,7 @@
 import Foundation
 
+/// Struct which contains parameters
+/// that are necessary for transaction building
 public struct TransactionBuilderParams {
     public let memo: TokenDWallet.Memo?
     public let timeBounds: TokenDWallet.TimeBounds

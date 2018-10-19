@@ -1,5 +1,6 @@
 import Foundation
 
+/// Provides functionality that allows to build transactions
 public class TransactionBuilder {
     
     // MARK: - Public properties
@@ -27,6 +28,10 @@ public class TransactionBuilder {
     
     // MARK: - Public
     
+    /// Method adds operations to transaction
+    /// - Parameters:
+    ///     - operationBody: Operation that should be added
+    ///     - operationSourceAccount: Identifier of account from which operation is sended
     public func add(
         operationBody: Operation.OperationBody,
         operationSourceAccount: AccountID? = nil
@@ -39,6 +44,8 @@ public class TransactionBuilder {
         self.operations.append(operation)
     }
     
+    /// Method builds transaction
+    /// - Returns: `TransactionModel`
     public func buildTransaction() throws -> TransactionModel {
         return try TransactionModel(
             networkParams: self.networkParams,
