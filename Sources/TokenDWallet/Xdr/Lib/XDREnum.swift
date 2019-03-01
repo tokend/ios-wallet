@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol XDREnum: RawRepresentable, XDREncodable { }
+public protocol XDREnum: RawRepresentable, XDREncodable, CaseIterable { }
 
 extension XDREnum where RawValue: XDREncodable {
     public func toXDR() -> Data {

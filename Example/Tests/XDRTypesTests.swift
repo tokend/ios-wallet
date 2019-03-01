@@ -38,24 +38,6 @@ class XDRTypesTests: XCTestCase {
         
         XCTAssertEqual(op.toXDR().base64, "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
     }
-    
-    func testPaymentOp() {
-        let feeData = PaymentFeeData(sourceFee: FeeData(paymentFee: amount, fixedFee: amount, ext: FeeData.FeeDataExt.emptyVersion()),
-                                     destinationFee: FeeData(paymentFee: amount, fixedFee: amount, ext: FeeData.FeeDataExt.emptyVersion()),
-                                     sourcePaysForDest: true,
-                                     ext: PaymentFeeData.PaymentFeeDataExt.emptyVersion())
-        let paymentOp = PaymentOp(sourceBalanceID: toXdr(balanceId),
-                                  destinationBalanceID: toXdr(counterpartyBalanceId),
-                                  amount: amount,
-                                  feeData: feeData,
-                                  subject: "",
-                                  reference: "",
-                                  invoiceReference: nil,
-                                  ext: PaymentOp.PaymentOpExt.emptyVersion())
-        let op = Operation(sourceAccount: nil, body: Operation.OperationBody.payment(paymentOp))
-        
-        XCTAssertEqual(op.toXDR().base64, "AAAAAAAAAAEAAAAAP0ufW8kXWnr5KS7AE2nkEzMbZe5e6ugp3vomGd4J7RcAAAAArR2Sug24Me9Ww35tJaoZ38UKcdFEQ5QfQvKKbZFbxt8AAAAAALxhAAAAAAAAvGEAAAAAAAC8YQAAAAAAAAAAAAC8YQAAAAAAALxhAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
-    }
 }
 
 // swiftlint:enable line_length force_try

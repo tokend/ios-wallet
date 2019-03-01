@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+gem 'octokit'
+gem 'pry'
+gem 'rake'
+gem 'xdrgen', git: 'https://github.com/tokend/xdrgen.git'

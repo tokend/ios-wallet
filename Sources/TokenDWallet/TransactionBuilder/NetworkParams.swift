@@ -6,8 +6,8 @@ public struct NetworkParams {
     
     // MARK: - Public properties
     
-    let passphrase: String
-    let networkId: Data
+    public let passphrase: String
+    public let networkId: Data
     
     // MARK: -
     

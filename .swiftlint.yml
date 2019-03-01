@@ -1,4 +1,5 @@
 excluded: # paths to ignore during linting. Takes precedence over `included`.
+- Sources/TokenDWallet/Xdr
 - Carthage
 - Pods
 - Example/Pods
@@ -49,6 +50,3 @@ type_name:
 
 nesting:
     level: 2
-
-
-
