@@ -29,6 +29,5 @@ To update XDR classes run the following command:
 rake xdr:generate
 ```
 
-## Author
-
-Distributed Lab
+## Credits
+<a href="https://distributedlab.com/" target="_blank">Distributed Lab</a>, 2019
