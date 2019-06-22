@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of successful application of `CreateAccount` operation
 //  struct CreateAccountSuccess
 //  {
 //      //: Unique unsigned integer identifier of the new account

@@ -5,10 +5,11 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Is used to return the result of operation application
 //  union ManageAssetResult switch (ManageAssetResultCode code)
 //  {
 //  case SUCCESS:
-//      //: Result of successful operation applying
+//      //: Result of successful operation application
 //      ManageAssetSuccess success;
 //  default:
 //      void;

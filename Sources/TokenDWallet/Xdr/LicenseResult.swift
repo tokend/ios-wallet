@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of the License operation application
 //  union LicenseResult switch (LicenseResultCode code)
 //  {
 //  case SUCCESS:

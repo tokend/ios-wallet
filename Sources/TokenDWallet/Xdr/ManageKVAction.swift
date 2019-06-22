@@ -5,7 +5,8 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  enum ManageKVAction
+//  //: Actions that can be performed on `KeyValueEntry`
+//      enum ManageKVAction
 //      {
 //          PUT = 1,
 //          REMOVE = 2

@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `ManageLimitsResult` defines the result of ManageLimitsOp application based on given `ManageLimitsResultCode`
 //  union ManageLimitsResult switch (ManageLimitsResultCode code)
 //  {
 //  case SUCCESS:
 //      struct {
-//          //: `details` represents the additional information of the `ManageLimitsOp` application result
+//          //: `details` represents an additional information of the `ManageLimitsOp` application result
 //          union switch (ManageLimitsAction action)
 //          {
 //          case CREATE:

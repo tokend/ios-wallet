@@ -5,15 +5,16 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  enum ManageKeyValueResultCode
+//  //: Result codes for `ManageKeyValueOp`
+//      enum ManageKeyValueResultCode
 //      {
-//          //: `ManageKeyValueOp` successfully applied
+//          //: `ManageKeyValueOp` is applied successfully
 //          SUCCESS = 0,
 //          //: There is no key value with such key
 //          NOT_FOUND = -1,
-//          //: Value of the key-value entry has not allowed type
+//          //: Value type of the key-value entry is forbidden for the provided key
 //          INVALID_TYPE = -2,
-//          //: uint32 zero value is not allowed
+//          //: zero value is forbidden for the provided key
 //          ZERO_VALUE_NOT_ALLOWED = -3
 //      };
 

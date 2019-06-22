@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `BindExternalSystemAccountIdSuccess` represents details of successful result of operation application
 //  struct BindExternalSystemAccountIdSuccess
 //  {
 //      //: `data` is used to pass data about account from external system ID

@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: RemoveSignerRoleData is used to pass necessary params to remove existing signer role
 //  struct RemoveSignerRoleData
 //  {
-//      //: Identifier of existing signer role
+//      //: Identifier of an existing signer role
 //      uint64 roleID;
 //  
 //      //: reserved for future use

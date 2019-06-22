@@ -5,7 +5,8 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  union SetFeesResult switch (SetFeesResultCode code)
+//  //: Is used to pass result of operation applying
+//      union SetFeesResult switch (SetFeesResultCode code)
 //      {
 //          case SUCCESS:
 //              struct {

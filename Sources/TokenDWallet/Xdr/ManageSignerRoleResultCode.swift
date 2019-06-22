@@ -5,25 +5,26 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of ManageSignerRoleResultCode
 //  enum ManageSignerRoleResultCode
 //  {
-//      //: Means that specified action in `data` of ManageSignerRoleOp was successfully executed
+//      //: Means that the specified action in `data` of ManageSignerRoleOp was successfully executed
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
-//      //: There is no signer role with such id or source cannot manage the role
-//      NOT_FOUND = -1, // does not exists or owner mismatched
-//      //: Not allowed to remove role if it is attached at least to one singer
+//      //: There is no signer role with such id or the source cannot manage a role
+//      NOT_FOUND = -1, // does not exist or owner mismatched
+//      //: It is not allowed to remove role if it is attached to at least one singer
 //      ROLE_IS_USED = -2,
-//      //: Passed details has invalid json structure
+//      //: Passed details have invalid json structure
 //      INVALID_DETAILS = -3,
 //      //: There is no rule with id passed through `ruleIDs`
 //      NO_SUCH_RULE = -4,
-//      //: Not allowed to duplicate ids in `ruleIDs` array
+//      //: It is not allowed to duplicate ids in `ruleIDs` array
 //      RULE_ID_DUPLICATION = -5,
-//      //: Not allowed to pass ids of default rules on `ruleIDs` array
+//      //: It is not allowed to pass ids of default rules on `ruleIDs` array
 //      DEFAULT_RULE_ID_DUPLICATION = -6,
-//      //: Not allowed to pass ruleIDs more than maxSignerRuleCount (by default 128)
+//      //: It is not allowed to pass ruleIDs that are more than maxSignerRuleCount (by default, 128)
 //      TOO_MANY_RULE_IDS = -7
 //  };
 

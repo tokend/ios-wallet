@@ -5,19 +5,20 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateSignerRuleData is used to pass necessary params to create a new signer rule
 //  struct CreateSignerRuleData
 //  {
-//      //: Resource is used to specify entity (for some - with properties) that can be managed through operations
+//      //: Resource is used to specify an entity (for some, with properties) that can be managed through operations
 //      SignerRuleResource resource;
 //      //: Value from enum that can be applied to `resource`
 //      SignerRuleAction action;
-//      //: True if such `action` on such `resource` is prohibited, otherwise allows
+//      //: Indicate whether or not an `action` on the provided `resource` is prohibited
 //      bool forbids;
 //      //: True means that such rule will be automatically added to each new or updated signer role
 //      bool isDefault;
-//      //: True means that no one can manage such rule after creating
+//      //: Indicates whether or not a rule can be modified in the future
 //      bool isReadOnly;
-//      //: Arbitrary stringified json object with details that will be attached to rule
+//      //: Arbitrary stringified json object with details that will be attached to a rule
 //      longstring details;
 //  
 //      // reserved for future use

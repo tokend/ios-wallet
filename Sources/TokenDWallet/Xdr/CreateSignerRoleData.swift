@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateSignerRoleData is used to pass necessary params to create a new signer role
 //  struct CreateSignerRoleData
 //  {
 //      //: Array of ids of existing, unique and not default rules
 //      uint64 ruleIDs<>;
-//      //: True means that no one can manage such rule after creating
+//      //: Indicates whether or not a rule can be modified in the future
 //      bool isReadOnly;
 //      //: Arbitrary stringified json object with details to attach to the role
 //      longstring details;

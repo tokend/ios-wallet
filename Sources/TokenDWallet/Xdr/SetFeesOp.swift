@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  struct SetFeesOp
+//  //: Allows to establish or remove a relationship between a particular fee entry with the different entities
+//      struct SetFeesOp
 //      {
 //          //: Fee entry to set
 //          FeeEntry* fee;
-//          //: `isDelete` indicates that fee should be either set or removed
+//          //: `isDelete` indicates that a fee should be either set or removed
 //          bool isDelete;
 //          //: reserved for future use
 //          union switch (LedgerVersion v)

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of CancelSaleCreationRequest operation application along with the result code
 //  union CancelSaleCreationRequestResult switch (CancelSaleCreationRequestResultCode code)
 //  {
 //      case SUCCESS:

@@ -5,13 +5,14 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be performed on balances
 //  enum ManageBalanceAction
 //  {
 //      //: Create new balance
 //      CREATE = 0,
-//      //: Delete existing balance by ID
+//      //: Delete existing balance by ID. Is reserved and not implemented yet.
 //      DELETE_BALANCE = 1,
-//      //: Ensure that the balance will not be created if the balance of the provided Asset exists and is attached to provided Account
+//      //: Ensures that the balance will not be created if the balance of the provided asset exists and is attached to the provided account
 //      CREATE_UNIQUE = 2
 //  };
 

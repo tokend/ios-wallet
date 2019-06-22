@@ -5,8 +5,9 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Extended result of the review request operation containing details specific to a Create Sale Request
 //  struct SaleExtended {
-//      //: ID of the newly created sale as a result of successful review of Create Sale Request
+//      //: ID of the newly created sale as a result of Create Sale Request successful review
 //      uint64 saleID;
 //  
 //      //: Reserved for future use

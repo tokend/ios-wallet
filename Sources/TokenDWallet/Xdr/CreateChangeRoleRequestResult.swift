@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of operation application 
 //  union CreateChangeRoleRequestResult switch (CreateChangeRoleRequestResultCode code)
 //  {
 //  case SUCCESS:
 //      struct {
-//          //: ID of created or updated request
+//          //: ID of a created or updated request
 //          uint64 requestID;
 //          //: True if request was auto approved (pending tasks == 0),
 //          //: `destinationAccount` must have new account role

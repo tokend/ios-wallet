@@ -5,24 +5,25 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `ManageAssetPairOp` either creates new asset pairs or updates prices or policies of existing [asset pairs](#operation/assetPairResources)
 //  struct ManageAssetPairOp
 //  {
-//      //: Defines a ManageBalanceAction which would be performed on an asset pair
+//      //: Defines a ManageBalanceAction that will be performed on an asset pair
 //      ManageAssetPairAction action;
-//      //: Defines a base asset of the asset pair
+//      //: Defines a base asset of an asset pair
 //      AssetCode base;
-//      //: Defines a base asset of the asset pair
+//      //: Defines a base asset of an asset pair
 //      AssetCode quote;
 //  
-//      //: Price of the asset pair assigned on creation. Can only be updated by the `ManageAssetPair` operation with action `UPDATE_PRICE`
+//      //: New physical price of the asset pair which would be set after successful `ManageAssetPairOp` application
 //      int64 physicalPrice;
 //  
-//      //: Correction of physical price in percents. If physical price is set and restriction by physical price set, mininal price for offer for this pair will be physicalPrice * physicalPriceCorrection
+//      //: New correction of the asset pair physical price in percents
 //      int64 physicalPriceCorrection;
-//      //: Maximal amount of price change in percents
+//      //: New maximal price step of asset pair
 //      int64 maxPriceStep;
 //  
-//      //: Bitmask of asset policies set by creator or corrected by manage asset operations
+//      //: Bitmask of asset policies set by the creator or corrected by manage asset operations
 //      int32 policies;
 //  
 //      //: reserved for future use

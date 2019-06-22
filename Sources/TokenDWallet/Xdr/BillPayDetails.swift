@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Details of a payment reviewable request
 //  struct BillPayDetails {
 //      //: Details of payment
 //      PaymentOp paymentDetails;

@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageAccountRuleOp is used to create, update or remove account rule
 //  struct ManageAccountRuleOp
 //  {
-//      //: data is used to pass one of `ManageAccountRuleAction` with needed params
+//      //: data is used to pass one of `ManageAccountRuleAction` with required params
 //      union switch (ManageAccountRuleAction action)
 //      {
 //      case CREATE:

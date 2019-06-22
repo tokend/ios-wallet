@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be performed with account rule
 //  enum ManageAccountRuleAction
 //  {
 //      CREATE = 0,

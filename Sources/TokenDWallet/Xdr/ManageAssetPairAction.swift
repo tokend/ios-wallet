@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be performed on the asset pair
 //  enum ManageAssetPairAction
 //  {
 //      //: Create new asset pair

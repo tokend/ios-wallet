@@ -5,14 +5,15 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Contains details of successful operation application
 //  struct ManageOfferSuccessResult
 //  {
 //  
-//      //: Offers that got claimed while creating this offer
+//      //: Offers that matched a created offer
 //      ClaimOfferAtom offersClaimed<>;
-//      //: Base asset of the offer
+//      //: Base asset of an offer
 //      AssetCode baseAsset;
-//      //: Quote asset of the offer
+//      //: Quote asset of an offer
 //      AssetCode quoteAsset;
 //      
 //      //: Effect of operation

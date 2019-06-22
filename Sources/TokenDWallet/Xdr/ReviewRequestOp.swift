@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Review Request operation
 //  struct ReviewRequestOp
 //  {
-//      //: ID of the request being reviewed
+//      //: ID of a request that is being reviewed
 //      uint64 requestID;
-//      //: Hash of the request being reviewed
+//      //: Hash of a request that is being reviewed
 //      Hash requestHash;
 //      //: requestDetails is used to pass request type along with details specific to it.
 //      union switch(ReviewableRequestType requestType) {
@@ -26,7 +27,7 @@ import Foundation
 //      default:
 //          void;
 //      } requestDetails;
-//      //: Review action defines action performed on pending ReviewableRequest
+//      //: Review action defines an action performed on the pending ReviewableRequest
 //      ReviewRequestOpAction action;
 //      //: Contains reject reason
 //      longstring reason;

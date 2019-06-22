@@ -11,12 +11,12 @@ import Foundation
 //      struct
 //      {
 //          AccountID accountID;
-//  		union switch (LedgerVersion v)
-//  		{
-//  		case EMPTY_VERSION:
-//  			void;
-//  		}
-//  		ext;
+//          union switch (LedgerVersion v)
+//         {
+//         case EMPTY_VERSION:
+//            void;
+//         }
+//         ext;
 //      } account;
 //  case SIGNER:
 //      struct
@@ -34,36 +34,36 @@ import Foundation
 //  case FEE:
 //      struct {
 //          Hash hash;
-//  		int64 lowerBound;
-//  		int64 upperBound;
-//  		 union switch (LedgerVersion v)
-//  		{
-//  		case EMPTY_VERSION:
-//  			void;
-//  		}
-//  		ext;
+//          int64 lowerBound;
+//          int64 upperBound;
+//          union switch (LedgerVersion v)
+//          {
+//          case EMPTY_VERSION:
+//              void;
+//          }
+//          ext;
 //      } feeState;
 //  case BALANCE:
 //      struct
 //      {
-//  		BalanceID balanceID;
-//  		union switch (LedgerVersion v)
-//  		{
-//  		case EMPTY_VERSION:
-//  			void;
-//  		}
-//  		ext;
+//          BalanceID balanceID;
+//          union switch (LedgerVersion v)
+//          {
+//          case EMPTY_VERSION:
+//              void;
+//          }
+//          ext;
 //      } balance;
 //  case ASSET:
 //      struct
 //      {
-//  		AssetCode code;
-//  		union switch (LedgerVersion v)
-//  		{
-//  		case EMPTY_VERSION:
-//  			void;
-//  		}
-//  		ext;
+//          AssetCode code;
+//          union switch (LedgerVersion v)
+//          {
+//          case EMPTY_VERSION:
+//              void;
+//          }
+//          ext;
 //      } asset;
 //  case REFERENCE_ENTRY:
 //      struct
@@ -98,30 +98,30 @@ import Foundation
 //  		ext;
 //      } accountLimits;
 //  case ASSET_PAIR:
-//  	struct {
-//           AssetCode base;
-//  		 AssetCode quote;
-//  		 union switch (LedgerVersion v)
-//  		{
-//  		case EMPTY_VERSION:
-//  			void;
-//  		}
-//  		ext;
+//      struct {
+//          AssetCode base;
+//          AssetCode quote;
+//          union switch (LedgerVersion v)
+//          {
+//          case EMPTY_VERSION:
+//              void;
+//          }
+//          ext;
 //      } assetPair;
 //  case OFFER_ENTRY:
-//  	struct {
-//  		uint64 offerID;
-//  		AccountID ownerID;
-//  	} offer;
+//      struct {
+//          uint64 offerID;
+//          AccountID ownerID;
+//      } offer;
 //  case REVIEWABLE_REQUEST:
 //      struct {
 //          uint64 requestID;
-//  		union switch (LedgerVersion v)
-//  		{
-//  		case EMPTY_VERSION:
-//  			void;
-//  		}
-//  		ext;
+//          union switch (LedgerVersion v)
+//          {
+//          case EMPTY_VERSION:
+//              void;
+//          }
+//          ext;
 //      } reviewableRequest;
 //  case EXTERNAL_SYSTEM_ACCOUNT_ID:
 //  	struct {
@@ -135,22 +135,22 @@ import Foundation
 //  		ext;
 //  	} externalSystemAccountID;
 //  case SALE:
-//  	struct {
-//  		uint64 saleID;
-//  		union switch (LedgerVersion v)
-//  		{
-//  		case EMPTY_VERSION:
-//  			void;
-//  		}
-//  		ext;
-//  	} sale;
+//      struct {
+//          uint64 saleID;
+//          union switch (LedgerVersion v)
+//          {
+//          case EMPTY_VERSION:
+//              void;
+//          }
+//          ext;
+//      } sale;
 //  case KEY_VALUE:
 //      struct {
 //          longstring key;
 //          union switch (LedgerVersion v)
 //          {
-//          	case EMPTY_VERSION:
-//          		void;
+//          case EMPTY_VERSION:
+//              void;
 //          }
 //          ext;
 //      } keyValue;
@@ -214,16 +214,16 @@ import Foundation
 //          }
 //          ext;
 //      } contract;
-//  case ATOMIC_SWAP_BID:
+//  case ATOMIC_SWAP_ASK:
 //      struct {
-//          uint64 bidID;
+//          uint64 id;
 //          union switch (LedgerVersion v)
 //          {
 //          case EMPTY_VERSION:
 //              void;
 //          }
 //          ext;
-//      } atomicSwapBid;
+//      } atomicSwapAsk;
 //  case ACCOUNT_ROLE:
 //      struct {
 //          uint64 id;
@@ -284,6 +284,25 @@ import Foundation
 //              void;
 //          } ext;
 //      } license;
+//  case POLL:
+//      struct {
+//          uint64 id;
+//  
+//          EmptyExt ext;
+//      } poll;
+//  case VOTE:
+//      struct {
+//          uint64 pollID;
+//          AccountID voterID;
+//  
+//          EmptyExt ext;
+//      } vote;
+//  case ACCOUNT_SPECIFIC_RULE:
+//      struct {
+//          uint64 id;
+//  
+//          EmptyExt ext;
+//      } accountSpecificRule;
 //  };
 
 //  ===========================================================================
@@ -308,13 +327,16 @@ public enum LedgerKey: XDRDiscriminatedUnion {
   case statisticsV2(LedgerKeyStatisticsV2)
   case pendingStatistics(LedgerKeyPendingStatistics)
   case contract(LedgerKeyContract)
-  case atomicSwapBid(LedgerKeyAtomicSwapBid)
+  case atomicSwapAsk(LedgerKeyAtomicSwapAsk)
   case accountRole(LedgerKeyAccountRole)
   case accountRule(LedgerKeyAccountRule)
   case signerRole(LedgerKeySignerRole)
   case signerRule(LedgerKeySignerRule)
   case stamp(LedgerKeyStamp)
   case license(LedgerKeyLicense)
+  case poll(LedgerKeyPoll)
+  case vote(LedgerKeyVote)
+  case accountSpecificRule(LedgerKeyAccountSpecificRule)
 
   public var discriminant: Int32 {
     switch self {
@@ -338,13 +360,16 @@ public enum LedgerKey: XDRDiscriminatedUnion {
     case .statisticsV2: return LedgerEntryType.statisticsV2.rawValue
     case .pendingStatistics: return LedgerEntryType.pendingStatistics.rawValue
     case .contract: return LedgerEntryType.contract.rawValue
-    case .atomicSwapBid: return LedgerEntryType.atomicSwapBid.rawValue
+    case .atomicSwapAsk: return LedgerEntryType.atomicSwapAsk.rawValue
     case .accountRole: return LedgerEntryType.accountRole.rawValue
     case .accountRule: return LedgerEntryType.accountRule.rawValue
     case .signerRole: return LedgerEntryType.signerRole.rawValue
     case .signerRule: return LedgerEntryType.signerRule.rawValue
     case .stamp: return LedgerEntryType.stamp.rawValue
     case .license: return LedgerEntryType.license.rawValue
+    case .poll: return LedgerEntryType.poll.rawValue
+    case .vote: return LedgerEntryType.vote.rawValue
+    case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
     }
   }
 
@@ -374,13 +399,16 @@ public enum LedgerKey: XDRDiscriminatedUnion {
     case .statisticsV2(let data): xdr.append(data.toXDR())
     case .pendingStatistics(let data): xdr.append(data.toXDR())
     case .contract(let data): xdr.append(data.toXDR())
-    case .atomicSwapBid(let data): xdr.append(data.toXDR())
+    case .atomicSwapAsk(let data): xdr.append(data.toXDR())
     case .accountRole(let data): xdr.append(data.toXDR())
     case .accountRule(let data): xdr.append(data.toXDR())
     case .signerRole(let data): xdr.append(data.toXDR())
     case .signerRule(let data): xdr.append(data.toXDR())
     case .stamp(let data): xdr.append(data.toXDR())
     case .license(let data): xdr.append(data.toXDR())
+    case .poll(let data): xdr.append(data.toXDR())
+    case .vote(let data): xdr.append(data.toXDR())
+    case .accountSpecificRule(let data): xdr.append(data.toXDR())
     }
 
     return xdr
@@ -1271,28 +1299,28 @@ public enum LedgerKey: XDRDiscriminatedUnion {
 
     }
   }
-  public struct LedgerKeyAtomicSwapBid: XDREncodable {
-    public var bidID: Uint64
-    public var ext: LedgerKeyAtomicSwapBidExt
+  public struct LedgerKeyAtomicSwapAsk: XDREncodable {
+    public var id: Uint64
+    public var ext: LedgerKeyAtomicSwapAskExt
 
     public init(
-        bidID: Uint64,
-        ext: LedgerKeyAtomicSwapBidExt) {
+        id: Uint64,
+        ext: LedgerKeyAtomicSwapAskExt) {
 
-      self.bidID = bidID
+      self.id = id
       self.ext = ext
     }
 
     public func toXDR() -> Data {
       var xdr = Data()
 
-      xdr.append(self.bidID.toXDR())
+      xdr.append(self.id.toXDR())
       xdr.append(self.ext.toXDR())
 
       return xdr
     }
 
-    public enum LedgerKeyAtomicSwapBidExt: XDRDiscriminatedUnion {
+    public enum LedgerKeyAtomicSwapAskExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
       public var discriminant: Int32 {
@@ -1582,5 +1610,75 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       }
 
     }
+  }
+  public struct LedgerKeyPoll: XDREncodable {
+    public var id: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        id: Uint64,
+        ext: EmptyExt) {
+
+      self.id = id
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.id.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+  }
+  public struct LedgerKeyVote: XDREncodable {
+    public var pollID: Uint64
+    public var voterID: AccountID
+    public var ext: EmptyExt
+
+    public init(
+        pollID: Uint64,
+        voterID: AccountID,
+        ext: EmptyExt) {
+
+      self.pollID = pollID
+      self.voterID = voterID
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.pollID.toXDR())
+      xdr.append(self.voterID.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+  }
+  public struct LedgerKeyAccountSpecificRule: XDREncodable {
+    public var id: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        id: Uint64,
+        ext: EmptyExt) {
+
+      self.id = id
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.id.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
   }
 }

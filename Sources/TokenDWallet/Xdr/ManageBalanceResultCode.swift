@@ -5,26 +5,27 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes for the ManageBalance operation
 //  enum ManageBalanceResultCode
 //  {
 //      // codes considered as "success" for the operation
-//      //: Indicates that `ManageBalanceOp` successfully applied
+//      //: Indicates that `ManageBalanceOp` is successfully applied
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
-//      //: Not allowed to delete balance
+//      //: It is not allowed to delete a balance
 //      MALFORMED = -1,
 //      //: (deprecated)
 //      NOT_FOUND = -2,
-//      //: Cannot find the account provided by `destination` AccountID
+//      //: Cannot find an account provided by the `destination` AccountID
 //      DESTINATION_NOT_FOUND = -3,
-//      //: Cannot find asset by `asset` provided by operation
+//      //: Cannot find an asset with a provided asset code
 //      ASSET_NOT_FOUND = -4,
-//      //: AssetCode `asset` is invalid (e.g. `AssetCode` which not consists of alphanumeric symbols or zeros in `AssetCode` are not trailing)
+//      //: AssetCode `asset` is invalid (e.g. `AssetCode` does not consist of alphanumeric symbols)
 //      INVALID_ASSET = -5,
-//      //: Balance of the provided `asset` already exists and owned by `destination` account
+//      //: Balance of the provided `asset` already exists and is owned by the `destination` account
 //      BALANCE_ALREADY_EXISTS = -6,
-//      //: version specified in request is not supported yet
+//      //: version specified in the request is not supported yet
 //      VERSION_IS_NOT_SUPPORTED_YET = -7
 //  };
 

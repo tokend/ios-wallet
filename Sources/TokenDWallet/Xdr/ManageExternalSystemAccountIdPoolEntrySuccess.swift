@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Success result of operation application
 //  struct ManageExternalSystemAccountIdPoolEntrySuccess
 //  {
-//      //: ID of created external system account ID pool
+//      //: ID of the created external system account ID pool
 //      uint64 poolEntryID;
 //  
 //      //: reserved for future use

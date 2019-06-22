@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: RemoveSignerRuleData is used to pass necessary params to remove existing signer rule
 //  struct RemoveSignerRuleData
 //  {
-//      //: Identifier of existing signer rule
+//      //: Identifier of an existing signer rule
 //      uint64 ruleID;
 //  
 //      // reserved for future use

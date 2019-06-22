@@ -6,11 +6,11 @@ import Foundation
 // === xdr source ============================================================
 
 //  struct PaymentFeeData {
-//      //: Fee kept from source balance
+//      //: Fee to pay by source balance
 //      Fee sourceFee;
 //      //: Fee kept from destination account/balance
 //      Fee destinationFee;
-//      //: Indicates whether or not source of the payment should pay fee for destination
+//      //: Indicates whether or not the source of payment pays the destination fee
 //      bool sourcePaysForDest;
 //  
 //      //: reserved for future use

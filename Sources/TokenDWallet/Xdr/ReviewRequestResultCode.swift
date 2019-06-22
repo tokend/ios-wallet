@@ -5,70 +5,76 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result code of the ReviewRequest operation
 //  enum ReviewRequestResultCode
 //  {
-//      //: Codes considered as "success" for the operation
-//      //: Operation successfuly applied
+//      //: Codes considered as "success" for an operation
+//      //: Operation is applied successfuly 
 //      SUCCESS = 0,
 //  
-//      //: Codes considered as "failure" for the operation
-//      //: Reject reason must be empty on approve and must not be empty on reject/permanent reject
+//      //: Codes considered as "failure" for an operation
+//      //: Reject reason must be empty on approve and not empty on reject/permanent 
 //      INVALID_REASON = -1,
 //      //: Unknown action to perform on ReviewableRequest
 //      INVALID_ACTION = -2,
 //      //: Actual hash of the request and provided hash are mismatched
 //      HASH_MISMATCHED = -3,
-//      //: ReviewableRequest not found
+//      //: ReviewableRequest is not found
 //      NOT_FOUND = -4,
-//      //: Actual type of the reviewable request and provided type are mismatched
+//      //: Actual type of a reviewable request and provided type are mismatched
 //      TYPE_MISMATCHED = -5,
-//      //: Reject not allowed. Only permanent reject should be used
+//      //: Reject is not allowed. Only permanent reject should be used
 //      REJECT_NOT_ALLOWED = -6,
 //      //: External details must be a valid JSON
 //      INVALID_EXTERNAL_DETAILS = -7,
 //      //: Source of ReviewableRequest is blocked
 //      REQUESTOR_IS_BLOCKED = -8,
-//      //: Permanent reject not allowed. Only reject should be used
+//      //: Permanent reject is not allowed. Only reject should be used
 //      PERMANENT_REJECT_NOT_ALLOWED = -9,
 //      //: Trying to remove tasks which are not set
 //      REMOVING_NOT_SET_TASKS = -100,// cannot remove tasks which are not set
 //  
 //      //: Asset requests
-//      //: Trying to create asset which already exists
+//      //: Trying to create an asset that already exists
 //      ASSET_ALREADY_EXISTS = -200,
-//      //: trying to update asset which does not exists
+//      //: Trying to update an asset that does not exist
 //      ASSET_DOES_NOT_EXISTS = -210,
 //  
 //      //: Issuance requests
-//      //: After applying issuance request issued amount will exceed max issuance amount
+//      //: After the issuance request application, issued amount will exceed max issuance amount
 //      MAX_ISSUANCE_AMOUNT_EXCEEDED = -400,
-//      //: Trying to issue more than available for issuance
+//      //: Trying to issue more than it is available for issuance
 //      INSUFFICIENT_AVAILABLE_FOR_ISSUANCE_AMOUNT = -410,
 //      //: Funding account will exceed UINT64_MAX
 //      FULL_LINE = -420,
-//      //: Not allowed to set system tasks
+//      //: It is not allowed to set system tasks
 //      SYSTEM_TASKS_NOT_ALLOWED = -430,
 //      //: Incorrect amount precision
 //      INCORRECT_PRECISION = -440,
 //  
 //      //: Sale creation requests
-//      //: Trying to create sale for base asset which does not exist
+//      //: Trying to create a sale for a base asset that does not exist
 //      BASE_ASSET_DOES_NOT_EXISTS = -500,
-//      //: Trying to create sale with hard cap that will exceed max issuance amount
+//      //: Trying to create a sale with hard cap that will exceed max issuance amount
 //      HARD_CAP_WILL_EXCEED_MAX_ISSUANCE = -510,
-//      //: Trying to create sale with preissued amount less than hard cap
+//      //: Trying to create a sale with preissued amount that is less than the hard cap
 //      INSUFFICIENT_PREISSUED_FOR_HARD_CAP = -520,
-//      //: Trying to create sale for base asset that cannot be found
+//      //: Trying to create a sale for a base asset that cannot be found
 //      BASE_ASSET_NOT_FOUND = -530,
-//      //: Trying to create sale with one of the quote assets not existing
+//      //: There is no asset pair between default quote asset and quote asset
+//      ASSET_PAIR_NOT_FOUND = -540,
+//      //: Trying to create a sale with one of the quote assets that doesn't exist
 //      QUOTE_ASSET_NOT_FOUND = -550,
 //  
 //      //: Change role 
 //      //: Trying to remove zero tasks
 //      NON_ZERO_TASKS_TO_REMOVE_NOT_ALLOWED = -600,
+//      //: There is no account role with provided id
+//      ACCOUNT_ROLE_TO_SET_DOES_NOT_EXIST = -610,
+//  
 //  
 //      //: Update sale details
-//      //: Trying to update details of non existing sale
+//      //: Trying to update details of a non-existing sale
 //      SALE_NOT_FOUND = -700,
 //  
 //      //: Deprecated: Invoice requests
@@ -102,10 +108,14 @@ import Foundation
 //      DESTINATION_ACCOUNT_NOT_FOUND = -1260,
 //  
 //      //: Limits update requests
-//      //: Trying to create limits update request for both account and account type at the same time
+//      //: Trying to create a limits update request for both account and account type at the same time
 //      CANNOT_CREATE_FOR_ACC_ID_AND_ACC_TYPE = 1300,
 //      //: Trying to set invalid limits, i.e. with dayly limit greater than weekly limit
 //      INVALID_LIMITS = 1310,
+//      //: There is no account with passed ID for limits update request
+//      ACCOUNT_NOT_FOUND = -1311,
+//      //: There is no role with passed ID for limits update request
+//      ROLE_NOT_FOUND = -1312,
 //  
 //      //: Deprecated: Contract requests
 //      CONTRACT_DETAILS_TOO_LONG = -1400, // customer details reached length limit
@@ -113,9 +123,11 @@ import Foundation
 //      // Atomic swap
 //      BASE_ASSET_CANNOT_BE_SWAPPED = -1500,
 //      QUOTE_ASSET_CANNOT_BE_SWAPPED = -1501,
-//      ASSETS_ARE_EQUAL = -1502,
-//      ASWAP_BID_UNDERFUNDED = -1503,
-//      ASWAP_PURCHASER_FULL_LINE = -1504
+//      ATOMIC_SWAP_BID_OWNER_FULL_LINE = -1504,
+//  
+//      //KYC
+//      //:Signer data is invalid - either weight is wrong or details are invalid
+//      INVALID_SIGNER_DATA = -1600
 //  
 //  };
 
@@ -143,8 +155,10 @@ public enum ReviewRequestResultCode: Int32, XDREnum {
   case hardCapWillExceedMaxIssuance = -510
   case insufficientPreissuedForHardCap = -520
   case baseAssetNotFound = -530
+  case assetPairNotFound = -540
   case quoteAssetNotFound = -550
   case nonZeroTasksToRemoveNotAllowed = -600
+  case accountRoleToSetDoesNotExist = -610
   case saleNotFound = -700
   case amountMismatched = -1010
   case destinationBalanceMismatched = -1020
@@ -173,10 +187,11 @@ public enum ReviewRequestResultCode: Int32, XDREnum {
   case destinationAccountNotFound = -1260
   case cannotCreateForAccIdAndAccType = 1300
   case invalidLimits = 1310
+  case accountNotFound = -1311
+  case roleNotFound = -1312
   case contractDetailsTooLong = -1400
   case baseAssetCannotBeSwapped = -1500
   case quoteAssetCannotBeSwapped = -1501
-  case assetsAreEqual = -1502
-  case aswapBidUnderfunded = -1503
-  case aswapPurchaserFullLine = -1504
+  case atomicSwapBidOwnerFullLine = -1504
+  case invalidSignerData = -1600
 }

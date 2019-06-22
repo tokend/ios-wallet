@@ -5,12 +5,13 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //:Result of ManageSale operation successful application 
 //  struct ManageSaleResultSuccess
 //  {
-//      //: Indicates  whether or not the ManageSale request was approved and applied on creation
+//      //: Indicates  whether or not the ManageSale request was auto approved and fulfilled
 //      bool fulfilled; // can be used for any reviewable request type created with manage sale operation   
 //  
-//      //: response is used for additional information regarding action performed on sale during operation application
+//      //: response is used for additional information regarding the action performed on sale during operation application
 //      union switch (ManageSaleAction action) {
 //      case CREATE_UPDATE_DETAILS_REQUEST:
 //          uint64 requestID;

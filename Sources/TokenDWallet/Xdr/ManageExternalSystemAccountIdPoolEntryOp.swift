@@ -5,10 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageExternalSystemAccountIdPoolEntryOp is used to create or remove
+//  //: an external system account ID from the external system ID pool
 //  struct ManageExternalSystemAccountIdPoolEntryOp
 //  {
-//      //: actionInput is used to pass one of
-//      //: `ManageExternalSystemAccountIdPoolEntryAction` with needed params
+//      //: `actionInput` is used to pass one of
+//      //: `ManageExternalSystemAccountIdPoolEntryAction` with required params
 //      union switch (ManageExternalSystemAccountIdPoolEntryAction action)
 //      {
 //      case CREATE:

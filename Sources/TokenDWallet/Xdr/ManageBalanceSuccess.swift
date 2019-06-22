@@ -6,7 +6,7 @@ import Foundation
 // === xdr source ============================================================
 
 //  struct ManageBalanceSuccess {
-//      //: ID of the balance which was managed
+//      //: ID of the balance that was managed
 //      BalanceID balanceID;
 //      //: reserved for future use
 //      union switch (LedgerVersion v)

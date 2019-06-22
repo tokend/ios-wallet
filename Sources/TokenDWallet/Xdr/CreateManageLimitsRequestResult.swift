@@ -5,13 +5,14 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `CreateManageLimitsRequestResult` represents the result of the `CreateManageLimitsRequestOp` with corresponding details based on given `CreateManageLimitsRequestResultCode`
 //  union CreateManageLimitsRequestResult switch (CreateManageLimitsRequestResultCode code)
 //  {
 //  case SUCCESS:
 //      struct {
 //          //: ID of the created manage limits request
 //          uint64 manageLimitsRequestID;
-//          //: Boolean indicator that the request was auto approved
+//          //: Indicates whether or not the `limits update request` request was auto approved and fulfilled
 //          bool fulfilled;
 //          //: reserved for future use
 //          union switch (LedgerVersion v)

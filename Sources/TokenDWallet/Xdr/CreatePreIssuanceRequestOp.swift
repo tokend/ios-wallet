@@ -5,13 +5,15 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreatePreIssuanceRequestOp is used to create a reviewable request,
+//  //: which, after admin's approval, will change `availableForIssuance` amount of asset
 //  struct CreatePreIssuanceRequestOp
 //  {
 //      //: Body of PreIssuanceRequest to be created
 //      PreIssuanceRequest request;
 //  
-//      //: (optional) Bit mask whose flags must be cleared in order for PreIssuanceRequest to be approved, which will be used
-//      //: instead of key-value by key `preissuance_tasks`
+//      //: (optional) Bit mask whose flags must be cleared in order for PreIssuanceRequest to be approved, which will be used by key `preissuance_tasks` 
+//      //: instead of key-value
 //      uint32* allTasks;
 //      //: reserved for future use
 //      union switch (LedgerVersion v)

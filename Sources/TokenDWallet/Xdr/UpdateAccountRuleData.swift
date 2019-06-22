@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: UpdateAccountRuleData is used to pass necessary params to update existing account rule
 //  struct UpdateAccountRuleData
 //  {
 //      //: Identifier of existing signer rule

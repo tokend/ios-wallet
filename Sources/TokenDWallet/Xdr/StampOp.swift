@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: StampOp is used to save current ledger hash and current license hash
 //  struct StampOp
 //  {
 //      //: Reserved for future use

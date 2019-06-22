@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `PaymentFeeType` is a subtype of the Fee used for payments
 //  enum PaymentFeeType
 //  {
 //      OUTGOING = 1,

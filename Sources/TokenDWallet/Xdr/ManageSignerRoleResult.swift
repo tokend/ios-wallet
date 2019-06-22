@@ -5,13 +5,13 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of operation application
 //  union ManageSignerRoleResult switch (ManageSignerRoleResultCode code)
 //  {
-//      //: Is used to pass useful params if operation is success
 //      case SUCCESS:
 //          struct
 //          {
-//              //: id of role which was managed
+//              //: id of a role that was managed
 //              uint64 roleID;
 //  
 //              //: reserved for future use
@@ -25,7 +25,7 @@ import Foundation
 //      case RULE_ID_DUPLICATION:
 //      case DEFAULT_RULE_ID_DUPLICATION:
 //      case NO_SUCH_RULE:
-//          //: ID of rule which was duplicated or is default or does not exist
+//          //: ID of a rule that was either duplicated or is default or does not exist
 //          uint64 ruleID;
 //      case TOO_MANY_RULE_IDS:
 //          //: max count of rule ids that can be passed in `ruleIDs` array

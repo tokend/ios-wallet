@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of the CheckSaleState operation along with the result code
 //  union CheckSaleStateResult switch (CheckSaleStateResultCode code)
 //  {
 //  case SUCCESS:

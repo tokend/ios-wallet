@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: SaleCreationRequestQuoteAsset is a structure that contains an asset code with price
 //  struct SaleCreationRequestQuoteAsset {
 //      //: AssetCode of quote asset 
 //      AssetCode quoteAsset; // asset in which participation will be accepted
-//      //: Price of sale base asset in terms of quote
-//      uint64 price; // price for 1 baseAsset in terms of quote asset
+//      //: Price of sale base asset in relation to a quote asset
+//      uint64 price; // price for 1 baseAsset in relation to a quote asset
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)
 //      {

@@ -5,11 +5,50 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  enum LedgerVersion {
-//  	EMPTY_VERSION = 0
+//  enum LedgerVersion
+//  {
+//      EMPTY_VERSION = 0,
+//      CHECK_SET_FEE_ACCOUNT_EXISTING = 1,
+//      FIX_PAYMENT_STATS = 2,
+//      ADD_INVEST_FEE = 3,
+//      ADD_SALE_WHITELISTS = 4,
+//      ASSET_PAIR_RESTRICTIONS = 5,
+//      FIX_CHANGE_TO_NON_EXISTING_ROLE = 6,
+//      FIX_REVERSE_SALE_PAIR = 7,
+//      FIX_NOT_CHECKING_SET_TASKS_PERMISSIONS = 8,
+//      UNLIMITED_ADMIN_COUNT = 9,
+//      FIX_AML_ALERT_ERROR_CODES = 10,
+//      FIX_EXT_SYS_ACC_EXPIRATION_TIME = 11,
+//      FIX_CHANGE_ROLE_REJECT_TASKS = 12,
+//      FIX_SAME_ASSET_PAIR = 13,
+//      ATOMIC_SWAP_RETURNING = 14,
+//      FIX_INVEST_FEE = 15,
+//      ADD_ACC_SPECIFIC_RULE_RESOURCE = 16,
+//      FIX_SIGNER_CHANGES_REMOVE = 17,
+//      FIX_DEPOSIT_STATS = 18,
+//      FIX_CREATE_KYC_RECOVERY_PERMISSIONS = 19
 //  };
 
 //  ===========================================================================
 public enum LedgerVersion: Int32, XDREnum {
   case emptyVersion = 0
+  case checkSetFeeAccountExisting = 1
+  case fixPaymentStats = 2
+  case addInvestFee = 3
+  case addSaleWhitelists = 4
+  case assetPairRestrictions = 5
+  case fixChangeToNonExistingRole = 6
+  case fixReverseSalePair = 7
+  case fixNotCheckingSetTasksPermissions = 8
+  case unlimitedAdminCount = 9
+  case fixAmlAlertErrorCodes = 10
+  case fixExtSysAccExpirationTime = 11
+  case fixChangeRoleRejectTasks = 12
+  case fixSameAssetPair = 13
+  case atomicSwapReturning = 14
+  case fixInvestFee = 15
+  case addAccSpecificRuleResource = 16
+  case fixSignerChangesRemove = 17
+  case fixDepositStats = 18
+  case fixCreateKycRecoveryPermissions = 19
 }

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Details of a request review
 //  struct ReviewDetails {
 //      //: Tasks to add to pending
 //      uint32 tasksToAdd;

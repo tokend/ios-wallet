@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be performed with an external system account ID in the external system ID pool
 //  enum ManageExternalSystemAccountIdPoolEntryAction
 //  {
 //      CREATE = 0,

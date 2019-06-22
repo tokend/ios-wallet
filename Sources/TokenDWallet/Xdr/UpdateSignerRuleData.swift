@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: UpdateSignerRuleData is used to pass necessary params to update an existing signer rule
 //  struct UpdateSignerRuleData
 //  {
-//      //: Identifier of existing signer rule
+//      //: Identifier of an existing signer rule
 //      uint64 ruleID;
-//      //: Resource is used to specify entity (for some - with properties) that can be managed through operations
+//      //: Resource is used to specify entity (for some, with properties) that can be managed through operations
 //      SignerRuleResource resource;
 //      //: Value from enum that can be applied to `resource`
 //      SignerRuleAction action;
@@ -17,7 +18,7 @@ import Foundation
 //      bool forbids;
 //      //: True means that no one can manage such rule after creating
 //      bool isDefault;
-//      //: Arbitrary stringified json object with details that will be attached to rule
+//      //: Arbitrary stringified json object with details that will be attached to a rule
 //      longstring details;
 //  
 //      // reserved for future use

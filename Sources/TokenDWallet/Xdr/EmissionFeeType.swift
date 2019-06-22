@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: (not used) `EmissionFeeType` is a subtype of `ISSUANCE_FEE`
 //  enum EmissionFeeType
 //  {
 //      PRIMARY_MARKET = 1,

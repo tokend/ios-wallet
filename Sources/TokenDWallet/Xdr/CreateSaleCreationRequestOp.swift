@@ -5,14 +5,15 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateSaleCreationRequest operation creates SaleCreationRequest or updates the rejected request
 //  struct CreateSaleCreationRequestOp
 //  {
-//      //: ID of the SaleCreationRequest. If set to 0 - creates a new one
+//      //: ID of the SaleCreationRequest. If set to 0, a new request is created
 //      uint64 requestID;
 //      //: SaleCreationRequest details
 //      SaleCreationRequest request;
-//      //: (optional) Bit mask whose flags must be cleared in order for CreateSale request to be approved, which will be used
-//      //: instead of key-value by key sale_create_tasks:<asset_code>
+//      //: (optional) Bit mask whose flags must be cleared in order for CreateSale request to be approved, which will be used by key sale_create_tasks:<asset_code>
+//      //: instead of key-value
 //      uint32* allTasks;
 //      
 //      //: Reserved for future use

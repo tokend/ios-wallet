@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Review details of a Limits Update request
 //  struct LimitsUpdateDetails { 
 //      //: Limits entry containing new limits to set 
 //      LimitsV2Entry newLimitsV2;

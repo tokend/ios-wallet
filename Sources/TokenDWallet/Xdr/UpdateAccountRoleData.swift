@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: UpdateAccountRoleData is used to pass necessary params to update existing account role
 //  struct UpdateAccountRoleData
 //  {
 //      //: Identifier of existing signer role
 //      uint64 roleID;
-//      //: Arbitrary stringified json object that will be attached to role
+//      //: Arbitrary stringified json object that will be attached to the role
 //      longstring details;
 //      //: Array of ids of existing unique rules
 //      uint64 ruleIDs<>;

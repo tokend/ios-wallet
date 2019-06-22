@@ -5,15 +5,18 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `LimitsCreateDetails` is used in the system configuration to set limits (daily, weekly, montly, annual)
+//  //: for different assets, operations (according to StatsOpType), particular account roles, particular accounts,
+//  //: or globally (only if both parameters particular account role and paticular account are not specified)
 //  struct LimitsCreateDetails
 //  {
-//      //: (optional) ID of the account role to which limits would be applied
+//      //: (optional) ID of an account role that will be imposed with limits
 //      uint64*     accountRole;
-//      //: (optional) ID of the account to which limits would be applied
+//      //: (optional) ID of an account that will be imposed with limits
 //      AccountID*  accountID;
-//      //: Defines an operation type to which limits would be applied. See `enum StatsOpType`
+//      //: Operation type to which limits will be applied. See `enum StatsOpType`
 //      StatsOpType statsOpType;
-//      //: `AssetCode` defines the asset to which limits would be applied
+//      //: `AssetCode` defines an asset to which limits will be applied
 //      AssetCode   assetCode;
 //      //: `isConvertNeeded` indicates whether the asset conversion is needed for the limits entry or not needed.
 //      //: If this field is `true` - limits are applied to all balances of the account (to every asset account owns).

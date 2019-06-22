@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of operation application
 //  union ManageSignerRuleResult switch (ManageSignerRuleResultCode code)
 //  {
 //      case SUCCESS:
 //          struct {
-//              //: id of rule which was managed
+//              //: id of the rule that was managed
 //              uint64 ruleID;
 //  
 //              //: reserved for future use
@@ -21,7 +22,7 @@ import Foundation
 //              ext;
 //          } success;
 //      case RULE_IS_USED:
-//          //: ids of roles which use rule that cannot be removed
+//          //: ids of roles which use a rule that cannot be removed
 //          uint64 roleIDs<>;
 //      default:
 //          void;

@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageSaleOp is used to cancel a sale, or create a reviewable request which, after approval, will update sale details.
 //  struct ManageSaleOp
 //  {
 //      //: ID of the sale to manage
 //      uint64 saleID;
-//      //: data is used to pass ManageSaleAction along with needed parameters
+//      //: data is used to pass ManageSaleAction along with required parameters
 //      union switch (ManageSaleAction action) {
 //      case CREATE_UPDATE_DETAILS_REQUEST:
 //          UpdateSaleDetailsData updateSaleDetailsData;

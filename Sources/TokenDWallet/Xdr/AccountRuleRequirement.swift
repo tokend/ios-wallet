@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Defines requirements for tx or operation which were not fulfilled
 //  struct AccountRuleRequirement
 //  {
 //  	//: defines resources to which access was denied

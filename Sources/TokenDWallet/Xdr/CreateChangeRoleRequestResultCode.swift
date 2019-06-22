@@ -5,10 +5,11 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of CreateChangeRoleRequestOp
 //  enum CreateChangeRoleRequestResultCode
 //  {
-//      //: Means that change role request successfully created
-//      //: or auto approved if pending tasks of the request was zero
+//      //: Change role request has either been successfully created
+//      //: or auto approved
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
@@ -21,14 +22,16 @@ import Foundation
 //      //: Only `destinationAccount` can update change role request
 //      //: `destinationAccount` must be equal source Account
 //      NOT_ALLOWED_TO_UPDATE_REQUEST = -6,
-//      //: Not allowed to change `destinationAccount`, `accountRoleToSet`
+//      //: It is not allowed to change `destinationAccount`, `accountRoleToSet`
 //      //: or set `allTasks` on update change role request
 //      INVALID_CHANGE_ROLE_REQUEST_DATA = -7,
-//      //: `creatorDetails` must be valid json structure
+//      //: `creatorDetails` must be in a valid JSON format
 //      INVALID_CREATOR_DETAILS = -8,
-//      //: There is no value in key-value entry by `change_role_tasks` key
-//      //: configuration does not allow to change role from current to `accountRoleToSet`
-//      CHANGE_ROLE_TASKS_NOT_FOUND = -9
+//      //: There is no key-value entry by `change_role_tasks` key in the system;
+//      //: configuration does not allow changing the role from current to `accountRoleToSet`
+//      CHANGE_ROLE_TASKS_NOT_FOUND = -9,
+//      //: There is no account role with provided id
+//      ACCOUNT_ROLE_TO_SET_DOES_NOT_EXIST = -10
 //  };
 
 //  ===========================================================================
@@ -41,4 +44,5 @@ public enum CreateChangeRoleRequestResultCode: Int32, XDREnum {
   case invalidChangeRoleRequestData = -7
   case invalidCreatorDetails = -8
   case changeRoleTasksNotFound = -9
+  case accountRoleToSetDoesNotExist = -10
 }

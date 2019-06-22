@@ -5,14 +5,16 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateAMLAlertRequest operation creates a reviewable request 
+//  //: that will void the specified amount from target balance after the reviewer's approval
 //  struct CreateAMLAlertRequestOp
 //  {
 //      //: Reference of AMLAlertRequest
 //      string64 reference; // TODO longstring ?
 //      //: Parameters of AMLAlertRequest
 //      AMLAlertRequest amlAlertRequest;
-//      //: (optional) Bit mask whose flags must be cleared in order for AMLAlertRequest to be approved, which will be used
-//      //: instead of key-value by key aml_alert_tasks:<asset_code>
+//      //: (optional) Bit mask whose flags must be cleared in order for AMLAlertRequest to be approved, which will be used by key aml_alert_tasks:<asset_code>
+//      //: instead of key-value
 //      uint32* allTasks;
 //  
 //      //: Reserved for future use

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of successful `CancelSaleCreationRequestOp` application 
 //  struct CancelSaleCreationSuccess {
 //  
 //      //: Reserved for future use

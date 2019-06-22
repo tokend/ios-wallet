@@ -5,14 +5,16 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateIssuanceRequestOp is used to create a reviewable request that, after reviewer's approval,
+//  //: will issue the specified amount of asset to a receiver's balance
 //  struct CreateIssuanceRequestOp
 //  {
 //      //: Issuance request to create
 //      IssuanceRequest request;
 //      //: Reference of the request
 //      string64 reference;
-//      //: (optional) Bit mask whose flags must be cleared in order for IssuanceRequest to be approved, which will be used  
-//      //: instead of key-value by key issuance_tasks:<asset_code>
+//      //: (optional) Bit mask whose flags must be cleared in order for IssuanceRequest to be approved, which will be used by key issuance_tasks:<asset_code>
+//      //: instead of key-value
 //      uint32* allTasks;
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)

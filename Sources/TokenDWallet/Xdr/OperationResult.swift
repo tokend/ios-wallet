@@ -62,12 +62,12 @@ import Foundation
 //          ManageContractResult manageContractResult;
 //      case CANCEL_SALE_REQUEST:
 //          CancelSaleCreationRequestResult cancelSaleCreationRequestResult;
-//      case CREATE_ASWAP_BID_REQUEST:
-//          CreateASwapBidCreationRequestResult createASwapBidCreationRequestResult;
-//      case CANCEL_ASWAP_BID:
-//          CancelASwapBidResult cancelASwapBidResult;
-//      case CREATE_ASWAP_REQUEST:
-//          CreateASwapRequestResult createASwapRequestResult;
+//      case CREATE_ATOMIC_SWAP_ASK_REQUEST:
+//          CreateAtomicSwapAskRequestResult createAtomicSwapAskRequestResult;
+//      case CANCEL_ATOMIC_SWAP_ASK:
+//          CancelAtomicSwapAskResult cancelAtomicSwapAskResult;
+//      case CREATE_ATOMIC_SWAP_BID_REQUEST:
+//          CreateAtomicSwapBidRequestResult createAtomicSwapBidRequestResult;
 //      case MANAGE_ACCOUNT_ROLE:
 //          ManageAccountRoleResult manageAccountRoleResult;
 //      case MANAGE_ACCOUNT_RULE:
@@ -82,6 +82,22 @@ import Foundation
 //          StampResult stampResult;
 //      case LICENSE:
 //          LicenseResult licenseResult;
+//      case MANAGE_POLL:
+//          ManagePollResult managePollResult;
+//      case MANAGE_CREATE_POLL_REQUEST:
+//          ManageCreatePollRequestResult manageCreatePollRequestResult;
+//      case MANAGE_VOTE:
+//          ManageVoteResult manageVoteResult;
+//      case MANAGE_ACCOUNT_SPECIFIC_RULE:
+//          ManageAccountSpecificRuleResult manageAccountSpecificRuleResult;
+//      case CANCEL_CHANGE_ROLE_REQUEST:
+//          CancelChangeRoleRequestResult cancelChangeRoleRequestResult;
+//      case REMOVE_ASSET_PAIR:
+//          RemoveAssetPairResult removeAssetPairResult;
+//      case CREATE_KYC_RECOVERY_REQUEST:
+//          CreateKYCRecoveryRequestResult createKYCRecoveryRequestResult;
+//      case INITIATE_KYC_RECOVERY:
+//          InitiateKYCRecoveryResult initiateKYCRecoveryResult;
 //      }
 //      tr;
 //  case opNO_ENTRY:
@@ -146,9 +162,9 @@ public enum OperationResult: XDRDiscriminatedUnion {
     case manageContractRequest(ManageContractRequestResult)
     case manageContract(ManageContractResult)
     case cancelSaleRequest(CancelSaleCreationRequestResult)
-    case createAswapBidRequest(CreateASwapBidCreationRequestResult)
-    case cancelAswapBid(CancelASwapBidResult)
-    case createAswapRequest(CreateASwapRequestResult)
+    case createAtomicSwapAskRequest(CreateAtomicSwapAskRequestResult)
+    case cancelAtomicSwapAsk(CancelAtomicSwapAskResult)
+    case createAtomicSwapBidRequest(CreateAtomicSwapBidRequestResult)
     case manageAccountRole(ManageAccountRoleResult)
     case manageAccountRule(ManageAccountRuleResult)
     case manageSigner(ManageSignerResult)
@@ -156,6 +172,14 @@ public enum OperationResult: XDRDiscriminatedUnion {
     case manageSignerRule(ManageSignerRuleResult)
     case stamp(StampResult)
     case license(LicenseResult)
+    case managePoll(ManagePollResult)
+    case manageCreatePollRequest(ManageCreatePollRequestResult)
+    case manageVote(ManageVoteResult)
+    case manageAccountSpecificRule(ManageAccountSpecificRuleResult)
+    case cancelChangeRoleRequest(CancelChangeRoleRequestResult)
+    case removeAssetPair(RemoveAssetPairResult)
+    case createKycRecoveryRequest(CreateKYCRecoveryRequestResult)
+    case initiateKycRecovery(InitiateKYCRecoveryResult)
 
     public var discriminant: Int32 {
       switch self {
@@ -185,9 +209,9 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .manageContractRequest: return OperationType.manageContractRequest.rawValue
       case .manageContract: return OperationType.manageContract.rawValue
       case .cancelSaleRequest: return OperationType.cancelSaleRequest.rawValue
-      case .createAswapBidRequest: return OperationType.createAswapBidRequest.rawValue
-      case .cancelAswapBid: return OperationType.cancelAswapBid.rawValue
-      case .createAswapRequest: return OperationType.createAswapRequest.rawValue
+      case .createAtomicSwapAskRequest: return OperationType.createAtomicSwapAskRequest.rawValue
+      case .cancelAtomicSwapAsk: return OperationType.cancelAtomicSwapAsk.rawValue
+      case .createAtomicSwapBidRequest: return OperationType.createAtomicSwapBidRequest.rawValue
       case .manageAccountRole: return OperationType.manageAccountRole.rawValue
       case .manageAccountRule: return OperationType.manageAccountRule.rawValue
       case .manageSigner: return OperationType.manageSigner.rawValue
@@ -195,6 +219,14 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .manageSignerRule: return OperationType.manageSignerRule.rawValue
       case .stamp: return OperationType.stamp.rawValue
       case .license: return OperationType.license.rawValue
+      case .managePoll: return OperationType.managePoll.rawValue
+      case .manageCreatePollRequest: return OperationType.manageCreatePollRequest.rawValue
+      case .manageVote: return OperationType.manageVote.rawValue
+      case .manageAccountSpecificRule: return OperationType.manageAccountSpecificRule.rawValue
+      case .cancelChangeRoleRequest: return OperationType.cancelChangeRoleRequest.rawValue
+      case .removeAssetPair: return OperationType.removeAssetPair.rawValue
+      case .createKycRecoveryRequest: return OperationType.createKycRecoveryRequest.rawValue
+      case .initiateKycRecovery: return OperationType.initiateKycRecovery.rawValue
       }
     }
 
@@ -230,9 +262,9 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .manageContractRequest(let data): xdr.append(data.toXDR())
       case .manageContract(let data): xdr.append(data.toXDR())
       case .cancelSaleRequest(let data): xdr.append(data.toXDR())
-      case .createAswapBidRequest(let data): xdr.append(data.toXDR())
-      case .cancelAswapBid(let data): xdr.append(data.toXDR())
-      case .createAswapRequest(let data): xdr.append(data.toXDR())
+      case .createAtomicSwapAskRequest(let data): xdr.append(data.toXDR())
+      case .cancelAtomicSwapAsk(let data): xdr.append(data.toXDR())
+      case .createAtomicSwapBidRequest(let data): xdr.append(data.toXDR())
       case .manageAccountRole(let data): xdr.append(data.toXDR())
       case .manageAccountRule(let data): xdr.append(data.toXDR())
       case .manageSigner(let data): xdr.append(data.toXDR())
@@ -240,6 +272,14 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .manageSignerRule(let data): xdr.append(data.toXDR())
       case .stamp(let data): xdr.append(data.toXDR())
       case .license(let data): xdr.append(data.toXDR())
+      case .managePoll(let data): xdr.append(data.toXDR())
+      case .manageCreatePollRequest(let data): xdr.append(data.toXDR())
+      case .manageVote(let data): xdr.append(data.toXDR())
+      case .manageAccountSpecificRule(let data): xdr.append(data.toXDR())
+      case .cancelChangeRoleRequest(let data): xdr.append(data.toXDR())
+      case .removeAssetPair(let data): xdr.append(data.toXDR())
+      case .createKycRecoveryRequest(let data): xdr.append(data.toXDR())
+      case .initiateKycRecovery(let data): xdr.append(data.toXDR())
       }
 
       return xdr

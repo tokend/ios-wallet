@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: LicenseSuccess is a result of successful LicenseOp application
 //  struct LicenseSuccess {
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of ManageSale operation application along with result code
 //  union ManageSaleResult switch (ManageSaleResultCode code)
 //  {
 //  case SUCCESS:

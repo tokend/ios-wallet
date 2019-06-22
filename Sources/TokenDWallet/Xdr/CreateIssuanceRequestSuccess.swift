@@ -5,12 +5,13 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //:Result of successful application of CreateIssuanceRequest operation
 //  struct CreateIssuanceRequestSuccess {
-//      //: ID of newly created issuance request
+//      //: ID of a newly created issuance request
 //      uint64 requestID;
 //      //: Account address of the receiver
 //      AccountID receiver;
-//      //: Indicates whether or not the Issuance request was approved and applied on creation
+//      //: Indicates whether or not the Issuance request was auto approved and fulfilled
 //      bool fulfilled;
 //      //: Paid fee
 //      Fee fee;

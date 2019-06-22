@@ -5,7 +5,8 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  enum KeyValueEntryType
+//  //: `KeyValueEntryType` defines the type of value in the key-value entry
+//      enum KeyValueEntryType
 //      {
 //          UINT32 = 1,
 //          STRING = 2,

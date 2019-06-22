@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of applying the review request with result code
 //  union ReviewRequestResult switch (ReviewRequestResultCode code)
 //  {
 //  case SUCCESS:

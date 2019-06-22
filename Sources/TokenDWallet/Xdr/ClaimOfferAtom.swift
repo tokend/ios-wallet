@@ -5,24 +5,25 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Used when offers are taken during the operation
 //  struct ClaimOfferAtom
 //  {
 //      // emitted to identify the offer
-//      //: Address of the account that owns matched offer
+//      //: ID of an account that created the matched offer
 //      AccountID bAccountID;
 //      //: ID of the matched offer
 //      uint64 offerID;
-//      //: Amount in base asset taken during match
+//      //: Amount in base asset taken during the match
 //      int64 baseAmount;
-//      //: Amount in quote asset taked during match
+//      //: Amount in quote asset taked during the match
 //      int64 quoteAmount;
-//      //: Fee paid by offer owner
+//      //: Fee paid by an offer owner
 //      int64 bFeePaid;
-//      //: Fee paid by source of the operation
+//      //: Fee paid by the source of an operation
 //      int64 aFeePaid;
-//      //: Balance in base asset of offer owner
+//      //: Balance in base asset of an offer owner
 //      BalanceID baseBalance;
-//      //: Balance in quote asset of offer owner
+//      //: Balance in quote asset of an offer owner
 //      BalanceID quoteBalance;
 //      //: Match price
 //      int64 currentPrice;

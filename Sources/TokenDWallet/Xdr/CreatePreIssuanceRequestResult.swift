@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of `CreatePreIssuanceRequest` operation application along with the result code
 //  union CreatePreIssuanceRequestResult switch (CreatePreIssuanceRequestResultCode code)
 //  {
 //  case SUCCESS:
@@ -13,8 +14,7 @@ import Foundation
 //      {
 //          //: ID of created or updated request
 //          uint64 requestID;
-//          //: Indicates whether or not request was auto approved (pending tasks == 0),
-//          //: amount was successfully pre issued
+//          //: Indicates whether or not the request was auto approved and fulfilled
 //          bool fulfilled;
 //          //: reserved for future use
 //          union switch (LedgerVersion v)

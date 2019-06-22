@@ -5,12 +5,13 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: PaymentOp is used to transfer some amount of asset from the source balance to destination account/balance
 //  struct PaymentOp
 //  {
 //      //: ID of the source balance of payment
 //      BalanceID sourceBalanceID;
 //  
-//      //: `destination` defines type of the instance which receives the payment based on given PaymentDestinationType
+//      //: `destination` defines the type of instance that receives the payment based on given PaymentDestinationType
 //      union switch (PaymentDestinationType type) {
 //          case ACCOUNT:
 //              AccountID accountID;
@@ -18,15 +19,15 @@ import Foundation
 //              BalanceID balanceID;
 //      } destination;
 //  
-//      //: Amount of a payment
+//      //: Amount of payment
 //      uint64 amount;
 //  
-//      //: `feeData` defines all data about payment fee
+//      //: `feeData` defines all data about the payment fee
 //      PaymentFeeData feeData;
 //  
-//      //: `subject` is user-provided info about real-life subject of the payment
+//      //: `subject` is a user-provided info about the real-life purpose of payment
 //      longstring subject;
-//      //: `reference` is string formed by payment sender. Pair `reference-sender account` is unique.
+//      //: `reference` is a string formed by a payment sender. `Reference-sender account` pair is unique.
 //      longstring reference;
 //  
 //      //: reserved for future use

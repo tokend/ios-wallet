@@ -5,10 +5,11 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of the successful withdrawal request creation
 //  struct CreateWithdrawalSuccess {
-//      //: ID of the newly created WithdrawalRequest
+//      //: ID of a newly created WithdrawalRequest
 //      uint64 requestID;
-//      //: Indicates whether or not the withdrawal request was approved and applied on creation
+//      //: Indicates whether or not the withdrawal request was auto approved and fulfilled
 //      bool fulfilled;
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)

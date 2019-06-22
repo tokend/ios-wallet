@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateAccountRoleData is used to pass necessary params to create a new account role
 //  struct CreateAccountRoleData
 //  {
-//      //: Arbitrary stringified json object that will be attached to role
+//      //: Arbitrary stringified json object that will be attached to the role
 //      longstring details;
 //      //: Array of ids of existing unique rules
 //      uint64 ruleIDs<>;

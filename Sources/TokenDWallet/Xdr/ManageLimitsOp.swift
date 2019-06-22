@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `ManageLimitsOp` is used to update limits set in the system
 //  struct ManageLimitsOp
 //  {
-//      //: `details` defines all details of the operation based on the given `ManageLimitsAction`
+//      //: `details` defines all details of an operation based on given `ManageLimitsAction`
 //      union switch (ManageLimitsAction action)
 //      {
 //      case CREATE:

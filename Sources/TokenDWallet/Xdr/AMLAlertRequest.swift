@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Body of a reviewable AMLAlertRequest, contains parameters regarding AML alert
 //  struct AMLAlertRequest {
 //      //: Target balance to void tokens from
 //      BalanceID balanceID;
@@ -12,7 +13,7 @@ import Foundation
 //      //: Amount to void
 //      uint64 amount;
 //  
-//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by the admin
+//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by an admin
 //      longstring creatorDetails; // details set by requester
 //  
 //      //: Reserved for future use

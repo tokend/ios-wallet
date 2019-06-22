@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageAccountRoleOp is used to create, update or remove account role
 //  struct ManageAccountRoleOp
 //  {
-//      //: data is used to pass one of `ManageAccountRoleAction` with needed params
+//      //: data is used to pass one of `ManageAccountRoleAction` with required params
 //      union switch (ManageAccountRoleAction action)
 //      {
 //      case CREATE:

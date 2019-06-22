@@ -51,8 +51,8 @@ import Foundation
 //          PendingStatisticsEntry pendingStatistics;
 //      case CONTRACT:
 //          ContractEntry contract;
-//      case ATOMIC_SWAP_BID:
-//          AtomicSwapBidEntry atomicSwapBid;
+//      case ATOMIC_SWAP_ASK:
+//          AtomicSwapAskEntry atomicSwapAsk;
 //      case ACCOUNT_ROLE:
 //          AccountRoleEntry accountRole;
 //      case ACCOUNT_RULE:
@@ -65,6 +65,12 @@ import Foundation
 //          LicenseEntry license;
 //      case STAMP:
 //          StampEntry stamp;
+//      case POLL:
+//          PollEntry poll;
+//      case VOTE:
+//          VoteEntry vote;
+//      case ACCOUNT_SPECIFIC_RULE:
+//          AccountSpecificRuleEntry accountSpecificRule;
 //      }
 //      data;
 //  
@@ -124,13 +130,16 @@ public struct LedgerEntry: XDREncodable {
     case statisticsV2(StatisticsV2Entry)
     case pendingStatistics(PendingStatisticsEntry)
     case contract(ContractEntry)
-    case atomicSwapBid(AtomicSwapBidEntry)
+    case atomicSwapAsk(AtomicSwapAskEntry)
     case accountRole(AccountRoleEntry)
     case accountRule(AccountRuleEntry)
     case signerRule(SignerRuleEntry)
     case signerRole(SignerRoleEntry)
     case license(LicenseEntry)
     case stamp(StampEntry)
+    case poll(PollEntry)
+    case vote(VoteEntry)
+    case accountSpecificRule(AccountSpecificRuleEntry)
 
     public var discriminant: Int32 {
       switch self {
@@ -154,13 +163,16 @@ public struct LedgerEntry: XDREncodable {
       case .statisticsV2: return LedgerEntryType.statisticsV2.rawValue
       case .pendingStatistics: return LedgerEntryType.pendingStatistics.rawValue
       case .contract: return LedgerEntryType.contract.rawValue
-      case .atomicSwapBid: return LedgerEntryType.atomicSwapBid.rawValue
+      case .atomicSwapAsk: return LedgerEntryType.atomicSwapAsk.rawValue
       case .accountRole: return LedgerEntryType.accountRole.rawValue
       case .accountRule: return LedgerEntryType.accountRule.rawValue
       case .signerRule: return LedgerEntryType.signerRule.rawValue
       case .signerRole: return LedgerEntryType.signerRole.rawValue
       case .license: return LedgerEntryType.license.rawValue
       case .stamp: return LedgerEntryType.stamp.rawValue
+      case .poll: return LedgerEntryType.poll.rawValue
+      case .vote: return LedgerEntryType.vote.rawValue
+      case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
       }
     }
 
@@ -190,13 +202,16 @@ public struct LedgerEntry: XDREncodable {
       case .statisticsV2(let data): xdr.append(data.toXDR())
       case .pendingStatistics(let data): xdr.append(data.toXDR())
       case .contract(let data): xdr.append(data.toXDR())
-      case .atomicSwapBid(let data): xdr.append(data.toXDR())
+      case .atomicSwapAsk(let data): xdr.append(data.toXDR())
       case .accountRole(let data): xdr.append(data.toXDR())
       case .accountRule(let data): xdr.append(data.toXDR())
       case .signerRule(let data): xdr.append(data.toXDR())
       case .signerRole(let data): xdr.append(data.toXDR())
       case .license(let data): xdr.append(data.toXDR())
       case .stamp(let data): xdr.append(data.toXDR())
+      case .poll(let data): xdr.append(data.toXDR())
+      case .vote(let data): xdr.append(data.toXDR())
+      case .accountSpecificRule(let data): xdr.append(data.toXDR())
       }
 
       return xdr

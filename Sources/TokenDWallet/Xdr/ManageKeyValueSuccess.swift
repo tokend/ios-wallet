@@ -5,7 +5,8 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  struct ManageKeyValueSuccess
+//  //: `ManageKeyValueSuccess` represents details returned after the successful application of `ManageKeyValueOp`
+//      struct ManageKeyValueSuccess
 //      {
 //          //: reserved for future use
 //          union switch (LedgerVersion v)

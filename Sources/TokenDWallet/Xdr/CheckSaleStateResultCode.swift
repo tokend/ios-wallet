@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of CheckSaleState operation
 //  enum CheckSaleStateResultCode
 //  {
 //      // codes considered as "success" for the operation

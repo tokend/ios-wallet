@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `ManageLimitsAction` defines which action can be performed on the Limits entry
 //  enum ManageLimitsAction
 //  {
 //      CREATE = 0,

@@ -5,7 +5,8 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  union ManageKeyValueResult switch (ManageKeyValueResultCode code)
+//  //: `ManageKeyValueResult` represents the result of ManageKeyValueOp
+//      union ManageKeyValueResult switch (ManageKeyValueResultCode code)
 //      {
 //          case SUCCESS:
 //              ManageKeyValueSuccess success;

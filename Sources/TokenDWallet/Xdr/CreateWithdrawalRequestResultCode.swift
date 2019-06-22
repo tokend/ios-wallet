@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateWithdrawalRequest operation result codes
 //  enum CreateWithdrawalRequestResultCode
 //  {
 //      // codes considered as "success" for the operation
@@ -12,17 +13,17 @@ import Foundation
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
-//      //: Trying to create withdrawal with amount of 0
+//      //: Trying to create a withdrawal with a 0 amount 
 //      INVALID_AMOUNT = -1,
-//      //: Creator details either are not valid JSON
+//      //: Creator details are not in a valid JSON format
 //      INVALID_CREATOR_DETAILS = -2,
-//      //: Source balance to withdraw from not found 
+//      //: Source balance to withdraw from is not found 
 //      BALANCE_NOT_FOUND = -3, // balance not found
-//      //: Asset cannot be withdrawn, as AssetPolicy::WITHDRAWABLE is not set
+//      //: Asset cannot be withdrawn because AssetPolicy::WITHDRAWABLE is not set
 //      ASSET_IS_NOT_WITHDRAWABLE = -4,
 //      //: Deprecated
 //      CONVERSION_PRICE_IS_NOT_AVAILABLE = -5, // failed to find conversion price - conversion is not allowed
-//      //: Fee provided in the operation and fee calculated on operation application are mismatched
+//      //: Expected fee and actual fee mismatch
 //      FEE_MISMATCHED = -6,
 //      //: Deprecated
 //      CONVERSION_OVERFLOW = -7,
@@ -30,7 +31,7 @@ import Foundation
 //      CONVERTED_AMOUNT_MISMATCHED = -8,
 //      //: Trying to lock balance, locked amount would exceed UINT64_MAX
 //      BALANCE_LOCK_OVERFLOW = -9,
-//      //: Insufficient balance to withdraw requested amount
+//      //: Insufficient balance to withdraw the requested amount
 //      UNDERFUNDED = -10,
 //      //: Non zero universal amount
 //      INVALID_UNIVERSAL_AMOUNT = -11,
@@ -40,11 +41,11 @@ import Foundation
 //      LIMITS_EXCEEDED = -13,
 //      //: Deprecated
 //      INVALID_PRE_CONFIRMATION_DETAILS = -14, // it's not allowed to pass pre confirmation details
-//      //: Amount withdrawn is smaller than minimal withdrawable amount set in the system
+//      //: Amount withdrawn is smaller than the minimal withdrawable amount set in the system
 //      LOWER_BOUND_NOT_EXCEEDED = -15,
-//      //: Withdrawal tasks are not set in the system, i.e. it's not allowed to perform withdraw
+//      //: Withdrawal tasks are not set in the system, i.e. it's not allowed to perform withdraw operations
 //      WITHDRAWAL_TASKS_NOT_FOUND = -16,
-//      //: Not allowed to set withdrawal tasks on request creation
+//      //: Not allowed to set withdrawal tasks on the request creation
 //      NOT_ALLOWED_TO_SET_WITHDRAWAL_TASKS = -17,
 //      //: Not allowed to set zero tasks
 //      WITHDRAWAL_ZERO_TASKS_NOT_ALLOWED = -18

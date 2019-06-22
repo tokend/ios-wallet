@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: UpdateMaxIssuance is used to update max issuance amount of an asset.
 //  struct UpdateMaxIssuance
 //  {
-//      //: `assetCode` defines an asset entry which would be updated
+//      //: `assetCode` defines an asset entry that will be updated
 //      AssetCode assetCode;
-//      //: new max issuance amount for asset entry
+//      //: new max issuance amount for an asset entry
 //      uint64 maxIssuanceAmount;
 //  
 //      //: reserved for future use

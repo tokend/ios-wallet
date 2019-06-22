@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `ManageAssetPairSuccess` represents a successful result of `ManageAssetPairOp`
 //  struct ManageAssetPairSuccess
 //  {
-//      //: Price of the asset pair after the operation
+//      //: Price of an asset pair after the operation
 //      int64 currentPrice;
 //      //: reserved for future use
 //      union switch (LedgerVersion v)

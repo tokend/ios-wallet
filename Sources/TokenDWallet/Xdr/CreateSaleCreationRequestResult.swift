@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateSaleCreationRequest result along with the result code
 //  union CreateSaleCreationRequestResult switch (CreateSaleCreationRequestResultCode code)
 //  {
 //  case SUCCESS:

@@ -5,12 +5,14 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: DeleteExternalSystemAccountIdPoolEntryActionInput is used to
+//  //: pass necessary params to remove an existing external system account ID in the external system ID pool
 //  struct DeleteExternalSystemAccountIdPoolEntryActionInput
 //  {
-//      //: ID of existing external system account ID pool
+//      //: ID of an existing external system account ID pool
 //      uint64 poolEntryID;
 //  
-//      //: Reserved for the future use
+//      //: Reserved for future use
 //      union switch (LedgerVersion v)
 //      {
 //      case EMPTY_VERSION:

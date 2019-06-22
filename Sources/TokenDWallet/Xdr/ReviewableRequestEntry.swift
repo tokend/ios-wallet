@@ -39,10 +39,14 @@ import Foundation
 //              InvoiceRequest invoiceRequest;
 //          case MANAGE_CONTRACT:
 //              ContractRequest contractRequest;
+//          case CREATE_ATOMIC_SWAP_ASK:
+//              CreateAtomicSwapAskRequest createAtomicSwapAskRequest;
 //          case CREATE_ATOMIC_SWAP_BID:
-//              ASwapBidCreationRequest aSwapBidCreationRequest;
-//          case CREATE_ATOMIC_SWAP:
-//              ASwapRequest aSwapRequest;
+//              CreateAtomicSwapBidRequest createAtomicSwapBidRequest;
+//          case CREATE_POLL:
+//              CreatePollRequest createPollRequest;
+//          case KYC_RECOVERY:
+//              KYCRecoveryRequest kycRecoveryRequest;
 //  	} body;
 //  
 //  	TasksExt tasks;
@@ -123,8 +127,10 @@ public struct ReviewableRequestEntry: XDREncodable {
     case updateSaleDetails(UpdateSaleDetailsRequest)
     case createInvoice(InvoiceRequest)
     case manageContract(ContractRequest)
-    case createAtomicSwapBid(ASwapBidCreationRequest)
-    case createAtomicSwap(ASwapRequest)
+    case createAtomicSwapAsk(CreateAtomicSwapAskRequest)
+    case createAtomicSwapBid(CreateAtomicSwapBidRequest)
+    case createPoll(CreatePollRequest)
+    case kycRecovery(KYCRecoveryRequest)
 
     public var discriminant: Int32 {
       switch self {
@@ -140,8 +146,10 @@ public struct ReviewableRequestEntry: XDREncodable {
       case .updateSaleDetails: return ReviewableRequestType.updateSaleDetails.rawValue
       case .createInvoice: return ReviewableRequestType.createInvoice.rawValue
       case .manageContract: return ReviewableRequestType.manageContract.rawValue
+      case .createAtomicSwapAsk: return ReviewableRequestType.createAtomicSwapAsk.rawValue
       case .createAtomicSwapBid: return ReviewableRequestType.createAtomicSwapBid.rawValue
-      case .createAtomicSwap: return ReviewableRequestType.createAtomicSwap.rawValue
+      case .createPoll: return ReviewableRequestType.createPoll.rawValue
+      case .kycRecovery: return ReviewableRequestType.kycRecovery.rawValue
       }
     }
 
@@ -163,8 +171,10 @@ public struct ReviewableRequestEntry: XDREncodable {
       case .updateSaleDetails(let data): xdr.append(data.toXDR())
       case .createInvoice(let data): xdr.append(data.toXDR())
       case .manageContract(let data): xdr.append(data.toXDR())
+      case .createAtomicSwapAsk(let data): xdr.append(data.toXDR())
       case .createAtomicSwapBid(let data): xdr.append(data.toXDR())
-      case .createAtomicSwap(let data): xdr.append(data.toXDR())
+      case .createPoll(let data): xdr.append(data.toXDR())
+      case .kycRecovery(let data): xdr.append(data.toXDR())
       }
 
       return xdr

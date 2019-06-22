@@ -5,10 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of operation application
 //  union ManageExternalSystemAccountIdPoolEntryResult switch (ManageExternalSystemAccountIdPoolEntryResultCode code)
 //  {
 //  case SUCCESS:
-//      //: `success` if used to pass useful fields after operation applying
 //      ManageExternalSystemAccountIdPoolEntrySuccess success;
 //  default:
 //      void;

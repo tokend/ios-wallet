@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of operation application
 //  union BindExternalSystemAccountIdResult switch (BindExternalSystemAccountIdResultCode code)
 //  {
 //  case SUCCESS:

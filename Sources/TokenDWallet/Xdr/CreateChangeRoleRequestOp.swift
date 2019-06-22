@@ -5,19 +5,22 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `CreateChangeRoleRequestOp` is used to create reviewable requests
+//  //: that, with admin's approval, will change the role of `destinationAccount`
+//  //: from current role to `accountRoleToSet`
 //  struct CreateChangeRoleRequestOp
 //  {
 //      //: Set zero to create new request, set non zero to update existing request
 //      uint64 requestID;
 //  
-//      //: AccountID of account which role will be changed
+//      //: AccountID of an account whose role will be changed
 //      AccountID destinationAccount;
-//      //: ID of account role which will be attached to `destinationAccount`
+//      //: ID of account role that will be attached to `destinationAccount`
 //      uint64 accountRoleToSet;
-//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by the admin
+//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by an admin
 //      longstring creatorDetails;
 //  
-//      //: Bit mask which will be used instead of value from key-value entry by
+//      //: Bit mask that will be used instead of the value from key-value entry by
 //      //: `change_role_tasks:<currentRoleID>:<accountRoleToSet>` key
 //      uint32* allTasks;
 //  

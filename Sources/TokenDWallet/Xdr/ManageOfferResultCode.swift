@@ -12,27 +12,27 @@ import Foundation
 //      SUCCESS = 0,
 //      
 //      // codes considered as "failure" for the operation
-//      //: Quote amount is less than fee or new fee is less than old
+//      //: Either the quote amount is less than the fee or the new fee is less than the old one
 //      MALFORMED = -1,
-//      //: Asset pair does not allow to make offers
+//      //: Asset pair does not allow creating offers with it
 //      PAIR_NOT_TRADED = -2, 
-//      //: Source account of the operation does not own one of the provided balances
+//      //: Source account of an operation does not owns one of the provided balances
 //      BALANCE_NOT_FOUND = -3,
-//      //: One of the balances does not hold the amount that its trying to sell
+//      //: One of the balances does not hold the amount that it is trying to sell
 //      UNDERFUNDED = -4,
-//      //: Offer would cross with another offer of the same user 
+//      //: Offer will cross with another offer of the same user 
 //      CROSS_SELF = -5,
-//      //: Overflow happened during quote amount or fee calculation
+//      //: Overflow happened during the quote amount or fee calculation
 //      OFFER_OVERFLOW = -6,
-//      //: Asset pair does not allow to make offers
+//      //: Either an asset pair does not exist or base and quote assets are the same
 //      ASSET_PAIR_NOT_TRADABLE = -7,
-//      //: Offer price violates physical price restriction
+//      //: Offer price violates the physical price restriction
 //      PHYSICAL_PRICE_RESTRICTION = -8,
-//      //: Offer price violates current price restriction
+//      //: Offer price violates the current price restriction
 //      CURRENT_PRICE_RESTRICTION = -9,
-//      //: Offer with provided offerID not found
+//      //: Offer with provided offerID is not found
 //      NOT_FOUND = -10,
-//      //: Negative fee not allowed
+//      //: Negative fee is not allowed
 //      INVALID_PERCENT_FEE = -11,
 //      //: Price is too small
 //      INSUFFICIENT_PRICE = -12,
@@ -42,9 +42,9 @@ import Foundation
 //      SALE_IS_NOT_STARTED_YET = -14,
 //      //: Sale has already ended
 //      SALE_ALREADY_ENDED = -15,
-//      //: CurrentCap of sale + offer amount will exceed hard cap of the sale
+//      //: CurrentCap of sale + offer amount will exceed the hard cap of the sale
 //      ORDER_VIOLATES_HARD_CAP = -16,
-//      //: Can't participate in own sale
+//      //: Offer creator cannot participate in their own sale
 //      CANT_PARTICIPATE_OWN_SALE = -17,
 //      //: Sale assets and assets for specified balances are mismatched
 //      ASSET_MISMATCHED = -18,
@@ -52,7 +52,7 @@ import Foundation
 //      PRICE_DOES_NOT_MATCH = -19,
 //      //: Price must be positive
 //      PRICE_IS_INVALID = -20,
-//      //: Offer update not allowed
+//      //: Offer update is not allowed
 //      UPDATE_IS_NOT_ALLOWED = -21,
 //      //: Amount must be positive
 //      INVALID_AMOUNT = -22,
@@ -60,14 +60,16 @@ import Foundation
 //      SALE_IS_NOT_ACTIVE = -23,
 //      //: Source must have KYC in order to participate
 //      REQUIRES_KYC = -24,
-//      //: Source account underfunded
+//      //: Source account is underfunded
 //      SOURCE_UNDERFUNDED = -25,
-//      //: Overflow happened during balance lock
+//      //: Overflow happened during the balance lock
 //      SOURCE_BALANCE_LOCK_OVERFLOW = -26,
 //      //: Source account must be verified in order to participate
 //      REQUIRES_VERIFICATION = -27,
 //      //: Precision set in the system and precision of the amount are mismatched
-//      INCORRECT_AMOUNT_PRECISION = -28
+//      INCORRECT_AMOUNT_PRECISION = -28,
+//      //: Sale specific rule forbids to participate in sale for source account
+//      SPECIFIC_RULE_FORBIDS = -29
 //  };
 
 //  ===========================================================================
@@ -101,4 +103,5 @@ public enum ManageOfferResultCode: Int32, XDREnum {
   case sourceBalanceLockOverflow = -26
   case requiresVerification = -27
   case incorrectAmountPrecision = -28
+  case specificRuleForbids = -29
 }

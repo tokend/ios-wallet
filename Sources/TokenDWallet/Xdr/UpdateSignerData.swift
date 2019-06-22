@@ -5,17 +5,18 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: UpdateSignerData is used to pass necessary data to create or update the signer
 //  struct UpdateSignerData
 //  {
-//      //: Public key of signer
+//      //: Public key of a signer
 //      PublicKey publicKey;
-//      //: id of role that will be attached to signer
+//      //: id of the role that will be attached to a signer
 //      uint64 roleID;
 //  
 //      //: weight that signer will have, threshold for all SignerRequirements equals 1000
 //      uint32 weight;
-//      //: If there are some signers with equal identity, only one signer with the biggest weight
-//      //: will be chosen or the first one which satisfied the threshold
+//      //: If there are some signers with equal identity, only one signer will be chosen 
+//      //: (either the one with the biggest weight or the one who was the first to satisfy a threshold) 
 //      uint32 identity;
 //  
 //      //: Arbitrary stringified json object with details that will be attached to signer

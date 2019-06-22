@@ -5,13 +5,15 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `ManageBalanceOp` applies an `action` of the `ManageBalanceAction` type on the balance of a particular `asset` (referenced to by its AssetCode)
+//  //: of the `destination` account (referenced to by its AccountID)
 //  struct ManageBalanceOp
 //  {
-//      //: Defines a ManageBalanceAction action to perform
+//      //: Defines a ManageBalanceAction to be performed. `DELETE_BALANCE` is reserved and not implemented yet.
 //      ManageBalanceAction action;
-//      //: Defines the account whose balance would be managed
+//      //: Defines an account whose balance will be managed
 //      AccountID destination;
-//      //: Defines the asset of the balance to which `action` would be applied
+//      //: Defines an asset code of the balance to which `action` will be applied
 //      AssetCode asset;
 //      union switch (LedgerVersion v)
 //      {

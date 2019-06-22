@@ -5,10 +5,11 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `Fee` is used to unite fixed and percent fee amounts
 //  struct Fee {
 //      //: Fixed amount to pay for the operation
 //  	uint64 fixed;
-//  	//: Percentage of the managed amount
+//  	//: Part of the managed amount in percents
 //  	uint64 percent;
 //  
 //      //: reserved for future use

@@ -5,14 +5,15 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: AssetUpdateRequest is used to update an asset with provided parameters
 //  struct AssetUpdateRequest {
-//      //: Code of asset to update
+//      //: Code of an asset to update
 //      AssetCode code;
-//      //: Arbitrary stringified JSON object that can be used to attach data to be reviewed by the admin
+//      //: Arbitrary stringified JSON object that can be used to attach data to be reviewed by an admin
 //      longstring creatorDetails; // details set by requester
-//      //: New policies to set, will override existing ones
+//      //: New policies to set will override the existing ones
 //      uint32 policies;
-//      //: Used to keep track of rejected requests update. On each rejected AssetUpdateRequest update, sequenceNumber increases
+//      //: Used to keep track of rejected requests update (`SequenceNumber` increases after each rejected AssetUpdateRequest update).
 //      uint32 sequenceNumber;
 //  
 //      //: Reserved for future use

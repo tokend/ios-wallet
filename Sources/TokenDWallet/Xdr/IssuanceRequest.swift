@@ -5,14 +5,15 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Body of reviewable `IssuanceRequest`, contains parameters regarding issuance
 //  struct IssuanceRequest {
-//      //: Code of asset to issue
+//      //: Code of an asset to issue
 //  	AssetCode asset;
 //     //: Amount to issue
 //  	uint64 amount;
-//      //: Balance to issue to
+//      //: Balance to issue on
 //  	BalanceID receiver;
-//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by the admin
+//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by an admin
 //  	longstring creatorDetails; // details of the issuance (External system id, etc.)
 //      //: Total fee to pay, consists of fixed fee and percent fee, calculated automatically
 //  	Fee fee; //totalFee to be payed (calculated automatically)

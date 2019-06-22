@@ -5,7 +5,8 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  union KeyValueEntryValue switch (KeyValueEntryType type)
+//  //: `KeyValueEntryValue` represents the value based on given `KeyValueEntryType`
+//      union KeyValueEntryValue switch (KeyValueEntryType type)
 //      {
 //          case UINT32:
 //              uint32 ui32Value;

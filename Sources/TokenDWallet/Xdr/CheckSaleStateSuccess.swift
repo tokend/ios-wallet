@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of the successful application of CheckSaleState operation
 //  struct CheckSaleStateSuccess
 //  {
 //      //: ID of the sale being checked
 //      uint64 saleID;
-//      //: Additional information regarding resulting effect
+//      //: Additional information regarding eventual result
 //      union switch (CheckSaleStateEffect effect)
 //      {
 //      case CANCELED:

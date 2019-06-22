@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Create issuance request result with result code
 //  union CreateIssuanceRequestResult switch (CreateIssuanceRequestResultCode code)
 //  {
 //  case SUCCESS:

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CheckSaleState operation is used to perform check on sale state - whether the sale was successful or not
 //  struct CheckSaleStateOp
 //  {
 //      //:ID of the sale to check

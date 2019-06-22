@@ -5,10 +5,11 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Details regarding the `Update Sale Details` request
 //  struct UpdateSaleDetailsData {
-//      //: ID of reviewable request. If set to 0 - create request, else - update
+//      //: ID of a reviewable request. If set 0, request is created, else - request is updated
 //      uint64 requestID; // if requestID is 0 - create request, else - update
-//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by the admin
+//      //: Arbitrary stringified json object that can be used to attach data to be reviewed by an admin
 //      longstring creatorDetails;
 //      //: (optional) Bit mask whose flags must be cleared in order for UpdateSaleDetailsRequest to be approved,
 //      //: which will be used instead of key-value by key sale_update_tasks:<asset_code>

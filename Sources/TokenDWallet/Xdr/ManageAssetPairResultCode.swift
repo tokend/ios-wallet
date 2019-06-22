@@ -5,27 +5,31 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes for ManageAssetPair operation
 //  enum ManageAssetPairResultCode
 //  {
 //      // codes considered as "success" for the operation
-//      //: Indicates that `ManageAssetPairOp` was successfully applied
+//      //: Indicates that `ManageAssetPairOp` has been successfully applied
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
-//      //: Failed to find asset pair with given exactly `base` and `quote` not found
+//      //: Failed to find an asset pair with given `base` and `quote` asset codes
 //      NOT_FOUND = -1,
 //      //: Asset pair with given `base` and `quote` asset codes is already present in the system
 //      ALREADY_EXISTS = -2,
-//      //: Invalid input (e.g. physicalPrice < 0 or physicalPriceCorrection < 0 or maxPriceStep is not in interval [0..100])
+//      //: Invalid input (e.g. physicalPrice < 0 or physicalPriceCorrection < 0 or maxPriceStep is not in an interval [0..100])
 //      MALFORMED = -3,
-//      //: AssetCode `base` or `quote` (or both) is invalid (e.g. `AssetCode` which not consists of alphanumeric symbols or zeros in `AssetCode` are not trailing)
+//      //: Either `base` or `quote`  asset code  (or both) is invalid 
+//      //: (e.g. asset code does not consist of alphanumeric symbols)
 //      INVALID_ASSET = -4,
 //      //: `action` is not in the set of valid actions (see `ManageAssetPairAction`)
 //      INVALID_ACTION = -5,
-//      //: Field `policies` is invalid (`policies < 0`)
+//      //: `policies` field is invalid (`policies < 0`)
 //      INVALID_POLICIES = -6,
-//      //: Asset with such code not found
-//      ASSET_NOT_FOUND = -7
+//      //: Asset with such code is not found
+//      ASSET_NOT_FOUND = -7,
+//      //: Not allowed for base and quote asset to be the same
+//      SAME_ASSET = -8
 //  };
 
 //  ===========================================================================
@@ -38,4 +42,5 @@ public enum ManageAssetPairResultCode: Int32, XDREnum {
   case invalidAction = -5
   case invalidPolicies = -6
   case assetNotFound = -7
+  case sameAsset = -8
 }

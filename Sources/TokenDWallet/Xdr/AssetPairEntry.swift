@@ -5,19 +5,30 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `AssetPairEntry` is used in system to group different assets into pairs and set particular policies and properties for them
 //  struct AssetPairEntry
 //  {
+//      //: Code of base asset of the asset pair
 //      AssetCode base;
-//  	AssetCode quote;
+//      //: Code of quote asset of the asset pair
+//      AssetCode quote;
 //  
+//      //: defines an asset pair price as quote asset divided by base asset (i.e., amount of quote asset per 1 base asset)
 //      int64 currentPrice;
+//      //: Price of the asset pair assigned on creation. Can only be updated by application
+//      //: the `ManageAssetPair` operation with action `UPDATE_PRICE`
 //      int64 physicalPrice;
 //  
-//  	int64 physicalPriceCorrection; // correction of physical price in percents. If physical price is set and restriction by physical price set, mininal price for offer for this pair will be physicalPrice * physicalPriceCorrection
-//  	int64 maxPriceStep; // max price step in percent. User is allowed to set offer with price < (1 - maxPriceStep)*currentPrice and > (1 + maxPriceStep)*currentPrice
+//      //: Price of the asset pair assigned on creation. Can only be updated by application
+//      //: the `ManageAssetPair` operation with action `UPDATE_PRICE`
+//      int64 physicalPriceCorrection;
 //  
+//      //: Max price step in percent. User is allowed to set offer only if both of
+//      //: `price < (1 - maxPriceStep) * currentPrice` and `price > (1 + maxPriceStep) * currentPrice` are `true`
+//      int64 maxPriceStep;
 //  
-//  	int32 policies;
+//      //: Bitmask of asset policies set by creator or corrected by `ManageAssetPair` operations
+//      int32 policies;
 //  
 //      // reserved for future use
 //      union switch (LedgerVersion v)

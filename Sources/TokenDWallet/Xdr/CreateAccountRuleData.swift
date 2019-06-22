@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateAccountRuleData is used to pass necessary params to create a new account rule
 //  struct CreateAccountRuleData
 //  {
-//      //: Resource is used to specify entity (for some - with properties) that can be managed through operations
+//      //: Resource is used to specify an entity (for some - with properties) that can be managed through operations
 //      AccountRuleResource resource;
 //      //: Value from enum that can be applied to `resource`
 //      AccountRuleAction action;

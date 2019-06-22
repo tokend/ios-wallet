@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: UpdateSignerRoleData is used to pass necessary params to update an existing signer role
 //  struct UpdateSignerRoleData
 //  {
-//      //: ID of existing signer role
+//      //: ID of an existing signer role
 //      uint64 roleID;
 //      //: Array of ids of existing, unique and not default rules
 //      uint64 ruleIDs<>;

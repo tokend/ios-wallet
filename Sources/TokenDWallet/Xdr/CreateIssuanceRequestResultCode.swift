@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of the CreateIssuanceRequestOp
 //  enum CreateIssuanceRequestResultCode
 //  {
 //      // codes considered as "success" for the operation
@@ -12,15 +13,15 @@ import Foundation
 //      SUCCESS = 0,
 //      
 //      // codes considered as "failure" for the operation
-//      //: Asset to issue not found
+//      //: Asset to issue is not found
 //      ASSET_NOT_FOUND = -1,
-//      //: Trying to create issuance request with negative/zero amount
+//      //: Trying to create an issuance request with negative/zero amount
 //      INVALID_AMOUNT = -2,
 //      //: Request with the same reference already exists
 //      REFERENCE_DUPLICATION = -3,
-//      //: Target balance not found or asset of the target balance and asset in the request mismatched
+//      //: Either the target balance is not found or there is a mismatch between the target balance asset and an asset in the request 
 //      NO_COUNTERPARTY = -4,
-//      //: Source of the operation is not an owner of the asset 
+//      //: Source of operation is not an owner of the asset 
 //      NOT_AUTHORIZED = -5,
 //      //: Issued amount plus amount to issue will exceed max issuance amount
 //      EXCEEDS_MAX_ISSUANCE_AMOUNT = -6,
@@ -28,15 +29,15 @@ import Foundation
 //      RECEIVER_FULL_LINE = -7,
 //      //: Creator details are not valid JSON
 //      INVALID_CREATOR_DETAILS = -8,
-//      //: Fee is greater than amount to issue
+//      //: Fee is greater than the amount to issue
 //      FEE_EXCEEDS_AMOUNT = -9,
 //      //: Deprecated
 //      REQUIRES_KYC = -10,
 //      //: Deprecated
 //      REQUIRES_VERIFICATION = -11, //asset requires receiver to be verified
-//      //: Issuance tasks are not set in the system, i.e. it's not allowed to perform issuance
+//      //: Issuance tasks are not set in the system (i.e. performing issuance is not allowed)
 //      ISSUANCE_TASKS_NOT_FOUND = -12,
-//      //: Not allowed to set system tasks: 1, 2, 4
+//      //: It is not allowed to set system tasks: 1, 2, 4
 //      SYSTEM_TASKS_NOT_ALLOWED = -13,
 //      //: Amount precision and asset precision are mismatched
 //      INVALID_AMOUNT_PRECISION = -14

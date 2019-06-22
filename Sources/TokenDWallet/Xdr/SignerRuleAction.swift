@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be applied to a signer rule resource
 //  enum SignerRuleAction
 //  {
 //      ANY = 1,
@@ -20,7 +21,11 @@ import Foundation
 //      PARTICIPATE = 11,
 //      BIND = 12,
 //      UPDATE_MAX_ISSUANCE = 13,
-//      CHECK = 14
+//      CHECK = 14,
+//      CLOSE = 15,
+//      UPDATE_END_TIME = 16,
+//      CREATE_WITH_TASKS = 17,
+//      CREATE_FOR_OTHER_WITH_TASKS = 18
 //  };
 
 //  ===========================================================================
@@ -39,4 +44,8 @@ public enum SignerRuleAction: Int32, XDREnum {
   case bind = 12
   case updateMaxIssuance = 13
   case check = 14
+  case close = 15
+  case updateEndTime = 16
+  case createWithTasks = 17
+  case createForOtherWithTasks = 18
 }

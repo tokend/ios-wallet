@@ -5,12 +5,13 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Entry for additional information regarding sub sale closing
 //  struct CheckSubSaleClosedResult {
 //      //: Balance in base asset of the closed sale
 //      BalanceID saleBaseBalance;
 //      //: Balance in one of the quote assets of the closed sale
 //      BalanceID saleQuoteBalance;
-//      //: Result of the individual offer made during the sale and completed on it's close
+//      //: Result of an individual offer made during the sale and completed on its close
 //      ManageOfferSuccessResult saleDetails;
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)

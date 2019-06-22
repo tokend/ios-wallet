@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `FeeType` represents different types of fees for different operations (e.g. fee charged on withdrawal or on investment)
 //  enum FeeType
 //  {
 //      PAYMENT_FEE = 0,

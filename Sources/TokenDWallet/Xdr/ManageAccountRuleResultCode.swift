@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of ManageAccountRuleResultCode
 //  enum ManageAccountRuleResultCode
 //  {
 //      //: Means that specified action in `data` of ManageAccountRuleOp was successfully performed
@@ -13,7 +14,7 @@ import Foundation
 //      // codes considered as "failure" for the operation
 //      //: There is no account rule with such id
 //      NOT_FOUND = -1,
-//      //: Not allowed to remove rule if it is used at least in one role
+//      //: It is not allowed to remove the rule if it is used at least in one role
 //      RULE_IS_USED = -2,
 //      //: Passed details has invalid json structure
 //      INVALID_DETAILS = -3

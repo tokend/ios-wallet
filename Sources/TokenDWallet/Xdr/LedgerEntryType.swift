@@ -32,12 +32,16 @@ import Foundation
 //      CONTRACT = 25,
 //      ACCOUNT_ROLE = 26,
 //      ACCOUNT_RULE = 27,
-//      ATOMIC_SWAP_BID = 28,
+//      ATOMIC_SWAP_ASK = 28,
 //      TRANSACTION = 29, // is used for account rule resource
 //      SIGNER_RULE = 30,
 //      SIGNER_ROLE = 31,
 //      STAMP = 32,
-//      LICENSE = 33
+//      LICENSE = 33,
+//      POLL = 34,
+//      VOTE = 35,
+//      ACCOUNT_SPECIFIC_RULE = 36,
+//      INITIATE_KYC_RECOVERY = 37
 //  };
 
 //  ===========================================================================
@@ -67,10 +71,14 @@ public enum LedgerEntryType: Int32, XDREnum {
   case contract = 25
   case accountRole = 26
   case accountRule = 27
-  case atomicSwapBid = 28
+  case atomicSwapAsk = 28
   case transaction = 29
   case signerRule = 30
   case signerRole = 31
   case stamp = 32
   case license = 33
+  case poll = 34
+  case vote = 35
+  case accountSpecificRule = 36
+  case initiateKycRecovery = 37
 }

@@ -5,15 +5,17 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  struct ManageKeyValueOp
+//  //: `ManageKeyValueOp` is used to create the manage key-value operation which, if applied successfully, will update the key-value entry present in the system
+//      struct ManageKeyValueOp
 //      {
 //          //: `key` is the key for KeyValueEntry
 //          longstring key;
-//          //: `action` defines an action applied to the KeyValue based on the given ManageKVAction
+//          //: `action` defines an action applied to the KeyValue based on given ManageKVAction
+//          //: * Action `PUT` stores new value for a particular key
+//          //: * Action `REMOVE` removes the value by a particular key
 //          union switch(ManageKVAction action)
 //          {
 //              case PUT:
-//                   //: Value to store
 //                   KeyValueEntryValue value;
 //              case REMOVE:
 //                  void;

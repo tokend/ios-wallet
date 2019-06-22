@@ -5,16 +5,17 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateManageLimitsRequestOp is used to create a reviewable request which, after approval, will update the limits set in the system
 //  struct CreateManageLimitsRequestOp
 //  {
-//      //: Body of the UpdateLimits reviewable request to be created
+//      //: Body of the `UpdateLimits` reviewable request to be created
 //      LimitsUpdateRequest manageLimitsRequest;
 //  
-//      //: (optional) Bit mask whose flags must be cleared in order for ManageLimits request to be approved, which will be used
-//      //: instead of value from key-value pair by key `limits_update_tasks`
+//      //: (optional) Bit mask whose flags must be cleared in order for ManageLimits request to be approved, which will be used instead of value from the key-value pair 
+//      //: by key `limits_update_tasks`
 //      uint32* allTasks;
-//      //: ID of the LimitsUpdateRequest\n
-//      //: If `requestID == 0` - operation creates new `LimitsUpdateRequest`, otherwise - updates existing one
+//      //: ID of the LimitsUpdateRequest
+//      //: If `requestID == 0`, operation creates a new limits entry; otherwise, it updates the existing one
 //      uint64 requestID;
 //  
 //      //: reserved for future use

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of `ManageOfferOp`
 //  union ManageOfferResult switch (ManageOfferResultCode code)
 //  {
 //  case SUCCESS:

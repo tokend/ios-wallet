@@ -5,8 +5,9 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Review details of a Withdraw Request
 //  struct WithdrawalDetails {
-//      //: External details updated on Withdraw review
+//      //: External details updated on a Withdraw review
 //      string externalDetails<>;
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)

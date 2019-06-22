@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Details of AML Alert 
 //  struct AMLAlertDetails {
 //      //: Comment on reason of AML Alert
 //      string comment<>;

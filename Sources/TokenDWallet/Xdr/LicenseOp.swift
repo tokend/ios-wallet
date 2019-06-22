@@ -5,13 +5,14 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: License operation is used to increase the allowed number of admins and due date
 //  struct LicenseOp
 //  {
 //      //: Allowed number of admins to set in the system
 //      uint64 adminCount;
 //      //: Expiration date of the license
 //      uint64 dueDate;
-//      //: Hash of stamped ledger  
+//      //: Hash of a stamped ledger  
 //      Hash ledgerHash;
 //      //: Hash of the previous license
 //      Hash prevLicenseHash;

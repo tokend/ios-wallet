@@ -5,10 +5,11 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of successful application of `CreateAMLAlertRequest` operation
 //  struct CreateAMLAlertRequestSuccess {
-//      //: ID of the newly created reviewable request
+//      //: ID of a newly created reviewable request
 //      uint64 requestID;
-//      //: Indicates  whether or not the AMLAlert request was approved and applied on creation
+//      //: Indicates  whether or not the AMLAlert request was auto approved and fulfilled 
 //      bool fulfilled;
 //      //: Reserved for future use
 //       union switch (LedgerVersion v)

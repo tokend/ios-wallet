@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of `CreateAMLAlertRequest` operation application along with the result code
 //  union CreateAMLAlertRequestResult switch (CreateAMLAlertRequestResultCode code)
 //  {
 //      case SUCCESS:

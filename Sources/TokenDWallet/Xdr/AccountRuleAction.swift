@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be applied to account rule resource
 //  enum AccountRuleAction
 //  {
 //      ANY = 1,
@@ -21,7 +22,11 @@ import Foundation
 //      BIND = 12,
 //      UPDATE_MAX_ISSUANCE = 13,
 //      CHECK = 14,
-//      CANCEL = 15
+//      CANCEL = 15,
+//      CLOSE = 16,
+//      REMOVE = 17,
+//      UPDATE_END_TIME = 18,
+//      CREATE_FOR_OTHER_WITH_TASKS = 19
 //  };
 
 //  ===========================================================================
@@ -41,4 +46,8 @@ public enum AccountRuleAction: Int32, XDREnum {
   case updateMaxIssuance = 13
   case check = 14
   case cancel = 15
+  case close = 16
+  case remove = 17
+  case updateEndTime = 18
+  case createForOtherWithTasks = 19
 }

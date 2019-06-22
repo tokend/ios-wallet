@@ -5,6 +5,8 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `FeeEntry` is used in the system configuration to set fees for different assets, operations (according to FeeType), particular account roles, particular accounts,
+//  //: or globally (only if both parameters particular account role and paticular account are not specified).
 //  struct FeeEntry
 //  {
 //      //: Type of a particular fee depending on the operation (e.g., PAYMENT_FEE for payment operation, WITHDRAWAL_FEE for withdrawal operation, etc.)
@@ -17,9 +19,9 @@ import Foundation
 //      //: Percent from the operation amount that will be charged for the corresponding operation
 //      int64 percentFee;
 //  
-//      //: (optional) Account from which fee would be charged
+//      //: (optional) Account for which a fee is set in the system
 //      AccountID* accountID;
-//      //: (optional) Account role from which fee would be charged
+//      //: (optional) Account for which a fee is set in the system
 //      uint64*    accountRole;
 //      //: Defines a `subtype` of a fee if such exists (e.g., `OUTGOING` or `INCOMING` for `PAYMENT_FEE`)
 //      int64 subtype;

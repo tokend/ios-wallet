@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateAccountOp is used to create new account
 //  struct CreateAccountOp
 //  {
 //      //: ID of account to be created
@@ -12,10 +13,10 @@ import Foundation
 //      //: ID of an another account that introduced this account into the system.
 //      //: If account with such ID does not exist or it's Admin Account. Referrer won't be set.
 //      AccountID* referrer;
-//      //: ID of role which would be attached to account
+//      //: ID of the role that will be attached to an account
 //      uint64 roleID;
 //  
-//      //: Array of data about created signers for `destination` account
+//      //: Array of data about 'destination' account signers to be created
 //      UpdateSignerData signersData<>;
 //  
 //      //: reserved for future use

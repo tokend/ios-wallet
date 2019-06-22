@@ -5,21 +5,22 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of ManageAccountRoleResultCode
 //  enum ManageAccountRoleResultCode
 //  {
-//      //: Means that specified action in `data` of ManageAccountRoleOp was successfully performed
+//      //: This means that the specified action in `data` of ManageAccountRoleOp was successfully performed
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
 //      //: There is no account role with such id
 //      NOT_FOUND = -1,
-//      //: Not allowed to remove role if it is attached at least to one account
+//      //: THe role cannot be removed if it is attached to at least one account
 //      ROLE_IS_USED = -2,
-//      //: Passed details has invalid json structure
+//      //: Passed details has an invalid json structure
 //      INVALID_DETAILS = -3,
 //      //: There is no rule with id passed through `ruleIDs`
 //      NO_SUCH_RULE = -4,
-//      //: Not allowed to duplicate ids in `ruleIDs` array
+//      //: It is not allowed to duplicate ids in `ruleIDs` array
 //      RULE_ID_DUPLICATION = -5
 //  };
 

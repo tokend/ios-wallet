@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: RemoveAccountRoleData is used to pass necessary params to remove an existing account role
 //  struct RemoveAccountRoleData
 //  {
-//      //: Identifier of existing account role
+//      //: Identifier of an existing account role
 //      uint64 roleID;
 //  
 //      //: reserved for future use

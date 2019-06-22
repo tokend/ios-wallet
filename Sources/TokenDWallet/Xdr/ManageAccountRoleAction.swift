@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be performed with the account role
 //  enum ManageAccountRoleAction
 //  {
 //      CREATE = 0,

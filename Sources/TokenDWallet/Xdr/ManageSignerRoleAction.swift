@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be performed on a signer role
 //  enum ManageSignerRoleAction
 //  {
 //      CREATE = 0,

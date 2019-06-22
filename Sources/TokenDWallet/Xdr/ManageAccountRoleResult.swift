@@ -5,12 +5,13 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of the operation performed 
 //  union ManageAccountRoleResult switch (ManageAccountRoleResultCode code)
 //  {
 //      case SUCCESS:
-//          //: Is used to pass useful params if operation is success
+//          //: Is used to pass useful params if the operation is successful
 //          struct {
-//              //: id of role which was managed
+//              //: id of the role that was managed
 //              uint64 roleID;
 //  
 //              //: reserved for future use
@@ -23,7 +24,7 @@ import Foundation
 //          } success;
 //      case RULE_ID_DUPLICATION:
 //      case NO_SUCH_RULE:
-//          //: ID of rule which was duplicated or does not exist
+//          //: ID of a rule that was either duplicated or does not exist
 //          uint64 ruleID;
 //      default:
 //          void;

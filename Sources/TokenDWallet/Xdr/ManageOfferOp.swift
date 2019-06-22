@@ -5,30 +5,31 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageOfferOp is used to create or delete offer
 //  struct ManageOfferOp
 //  {
-//      //: Balance for base asset of offer maker
+//      //: Balance for base asset of an offer creator
 //      BalanceID baseBalance; 
 //      
-//      //: Balance for quote asset of offer maker
+//      //: Balance for quote asset of an offer creator
 //      BalanceID quoteBalance; 
 //      
-//      //: Direction of the offer
+//      //: Direction of an offer (to buy or to sell)
 //      bool isBuy;
 //      
-//      //: Amount in base asset to buy or sell. If set to 0 - deletes the offer
+//      //: Amount in base asset to buy or sell (to delete an offer, set 0)
 //      int64 amount; 
 //      
-//      //: Price of base asset in terms of quote asset
+//      //: Price of base asset in the ratio of quote asset
 //      int64 price;
 //      
 //      //: Fee in quote asset to pay 
 //      int64 fee;
 //      
-//      //: ID of the offer to manage. 0 to create a new offer, otherwise edit an existing offer
+//      //: ID of an offer to be managed. 0 to create a new offer, otherwise to edit an existing offer
 //      uint64 offerID;
 //      
-//      //: ID of the orderBook to find match or to put offer in.
+//      //: ID of an orderBook to put an offer in and to find a match in
 //      uint64 orderBookID;
 //       
 //      //: Reserved for future use

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of operation application
 //  union ManageSignerResult switch (ManageSignerResultCode code)
 //  {
 //  case SUCCESS:

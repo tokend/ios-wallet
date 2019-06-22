@@ -28,6 +28,8 @@ import Foundation
 //      {
 //      case EMPTY_VERSION:
 //          void;
+//      case ADD_SALE_WHITELISTS:
+//          void;
 //      }
 //      ext;
 //  };
@@ -112,10 +114,12 @@ public struct SaleEntry: XDREncodable {
 
   public enum SaleEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
+    case addSaleWhitelists()
 
     public var discriminant: Int32 {
       switch self {
       case .emptyVersion: return LedgerVersion.emptyVersion.rawValue
+      case .addSaleWhitelists: return LedgerVersion.addSaleWhitelists.rawValue
       }
     }
 
@@ -126,6 +130,7 @@ public struct SaleEntry: XDREncodable {
 
       switch self {
       case .emptyVersion(): xdr.append(Data())
+      case .addSaleWhitelists(): xdr.append(Data())
       }
 
       return xdr

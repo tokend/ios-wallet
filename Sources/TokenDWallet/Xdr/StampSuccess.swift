@@ -5,8 +5,9 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: StampSuccess is used to pass saved ledger hash and license hash
 //  struct StampSuccess {
-//      //: ledger hash saved into db
+//      //: ledger hash saved into a database
 //      Hash ledgerHash;
 //  
 //      //: current license hash

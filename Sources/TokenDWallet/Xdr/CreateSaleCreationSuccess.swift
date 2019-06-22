@@ -5,12 +5,13 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of the successful application of CreateSaleCreationRequest operation
 //  struct CreateSaleCreationSuccess {
 //      //: ID of the SaleCreation request
 //      uint64 requestID;
-//      //: ID of the new created sale (if request was fulfilled)
+//      //: ID of a newly created sale (if the sale creation request has been auto approved)
 //      uint64 saleID;
-//      //: Indicates whether or not the sale creation request was approved and applied on creation
+//      //: Indicates whether or not the sale creation request was auto approved and fulfilled
 //      bool fulfilled;
 //      union switch (LedgerVersion v)
 //      {

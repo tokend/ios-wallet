@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Defines the type of destination of the payment
 //  enum PaymentDestinationType {
 //      ACCOUNT = 0,
 //      BALANCE = 1

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result of applying CreateWithdrawalRequst operation along with the result code
 //  union CreateWithdrawalRequestResult switch (CreateWithdrawalRequestResultCode code)
 //  {
 //      case SUCCESS:

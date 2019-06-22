@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: RemoveSignerData is used to pass necessary data to remove a signer
 //  struct RemoveSignerData
 //  {
-//      //: Public key of existing signer
+//      //: Public key of an existing signer
 //      PublicKey publicKey;
 //  
 //      //: reserved for future extension

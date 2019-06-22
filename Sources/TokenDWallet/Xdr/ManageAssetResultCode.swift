@@ -5,50 +5,51 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of ManageAssetOp
 //  enum ManageAssetResultCode
 //  {
 //      //: Specified action in `data` of ManageSignerOp was successfully performed
 //      SUCCESS = 0,                       // request was successfully created/updated/canceled
 //  
-//      // codes considered as "failure" for the operation
+//      // codes considered as "failure" for an operation
 //      //: There is no `CREATE_ASSET` or `UPDATE_ASSET` request with such id
-//      REQUEST_NOT_FOUND = -1,           // failed to find asset request with such id
+//      REQUEST_NOT_FOUND = -1,           // failed to find an asset request with such id
 //      //: only asset pre issuer can manage asset
 //      INVALID_SIGNATURE = -2,
-//      //: Not allowed to create asset with code which already used for an another asset
+//      //: It is not allowed to create an asset with a code that is already used for another asset
 //      ASSET_ALREADY_EXISTS = -3,	      // asset with such code already exist
-//      //: Not allowed to set max issuance amount that
-//      //: less than the sum of issued, pending issuance and available for issuance
+//      //: It is not allowed to set max issuance amount that is
+//      //: less than the sum of issued, pending issuance and available for issuance amounts
 //      INVALID_MAX_ISSUANCE_AMOUNT = -4, // max issuance amount is 0
-//      //: Not allowed to use asset code which is empty or contains space
+//      //: It is not allowed to use an asset code that is empty or contains space
 //      INVALID_CODE = -5,                // asset code is invalid (empty or contains space)
-//      //: Not allowed to set pre issuer equal to existing pre issuer
-//      INVALID_PRE_ISSUER = -6,          // pre issuer is the same as existing
-//      //: Not allowed to set policies which are not declared
+//      //: It is not allowed to set a pre issuer that is the same as an existing one
+//      INVALID_PRE_ISSUER = -6,          // pre issuer is the same as an existing one
+//      //: It is not allowed to set policies that are not declared
 //      INVALID_POLICIES = -7,            // asset policies (has flag which does not belong to AssetPolicies enum)
 //      //: There is no asset with such code
 //      ASSET_NOT_FOUND = -8,             // asset does not exists
 //      //: Request for such asset already exists
 //      REQUEST_ALREADY_EXISTS = -9,      // request for creation of unique entry already exists
-//      //: Not allowed to create two or more assets with `STATS_QUOTE_ASSET` policy
+//      //: It is not allowed to create two or more assets with `STATS_QUOTE_ASSET` policy
 //      STATS_ASSET_ALREADY_EXISTS = -10, // statistics quote asset already exists
-//      //: Not allowed to set pre issued amount that greater than max issuance amount
+//      //: It is not allowed to set a pre issued amount that is greater than the max issuance amount
 //      INITIAL_PREISSUED_EXCEEDS_MAX_ISSUANCE = -11, // initial pre issued amount exceeds max issuance amount
-//      //: Not allowed to use details with invalid json structure
+//      //: It is not allowed to use details with invalid json structure
 //      INVALID_CREATOR_DETAILS = -12,                        // details must be a valid json
-//      //: Not allowed to set trailing digits count greater than maximum trailing digits count (6 at the moment)
+//      //: It is not allowed to set a trailing digits count greater than the maximum trailing digits count (6 at the moment)
 //      INVALID_TRAILING_DIGITS_COUNT = -13,          // invalid number of trailing digits
 //      //: Pre issued amount precision and asset precision are mismatched
 //      INVALID_PREISSUED_AMOUNT_PRECISION = -14,
 //      //: Maximum issuance amount precision and asset precision are mismatched
 //      INVALID_MAX_ISSUANCE_AMOUNT_PRECISION = -15,
-//      //: There is no value in key value by `asset_create_tasks` key,
-//      //: configuration does not allow to create asset
+//      //: There is no value in the key value by `asset_create_tasks` key
+//      //: (i.e., it is not allowed to perform asset creation)
 //      ASSET_CREATE_TASKS_NOT_FOUND = -16,
 //      //: There is no value in key value by `asset_update_tasks` key,
-//      //: configuration does not allow to update asset
+//      //:  (i.e., it is not allowed to perform asset update)
 //      ASSET_UPDATE_TASKS_NOT_FOUND = -17,
-//      //: Not allowed to set allTasks on update of rejected request.
+//      //: It is not allowed to set `allTasks` on the update of a rejected request.
 //      NOT_ALLOWED_TO_SET_TASKS_ON_UPDATE = -18
 //  };
 

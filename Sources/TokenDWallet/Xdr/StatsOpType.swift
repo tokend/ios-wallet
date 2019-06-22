@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `StatsOpType` is a type of operation for which statistics is maintained
 //  enum StatsOpType
 //  {
 //      PAYMENT_OUT = 1,

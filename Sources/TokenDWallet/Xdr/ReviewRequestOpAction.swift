@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Actions that can be performed on request that is being reviewed
 //  enum ReviewRequestOpAction {
 //      //: Approve request
 //      APPROVE = 1,

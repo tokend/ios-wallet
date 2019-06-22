@@ -5,16 +5,18 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CreateExternalSystemAccountIdPoolEntryActionInput is used to
+//  //: pass necessary params to create a new external system account ID in the external system ID pool
 //  struct CreateExternalSystemAccountIdPoolEntryActionInput
 //  {
 //      //: Type of external system, selected arbitrarily
 //      int32 externalSystemType;
 //      //: Data for external system binding
 //      longstring data;
-//      //: External system ID of creator
+//      //: External system ID of the creator
 //      uint64 parent;
 //  
-//      //: Reserved for the future use
+//      //: Reserved for future use
 //      union switch (LedgerVersion v)
 //      {
 //      case EMPTY_VERSION:

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `ManageAssetPairResult` defines the result of `ManageBalanceOp` based on given `ManageAssetPairResultCode`
 //  union ManageAssetPairResult switch (ManageAssetPairResultCode code)
 //  {
 //  case SUCCESS:

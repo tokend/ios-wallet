@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageSignerOp is used to create, update or remove a signer
 //  struct ManageSignerOp
 //  {
-//      //: data is used to pass one of `ManageSignerAction` with needed params
+//      //: data is used to pass one of `ManageSignerAction` with required params
 //      union switch (ManageSignerAction action)
 //      {
 //      case CREATE:

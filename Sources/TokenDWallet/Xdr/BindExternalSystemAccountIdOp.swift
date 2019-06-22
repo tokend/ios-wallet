@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: BindExternalSystemAccountIdOp is used to bind a particular account to the external system account which is represented by account ID taken from the pool
 //  struct BindExternalSystemAccountIdOp
 //  {
 //      //: Type of external system to bind

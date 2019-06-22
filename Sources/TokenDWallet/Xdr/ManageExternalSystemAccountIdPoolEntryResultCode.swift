@@ -5,16 +5,17 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of ManageExternalSystemAccountIdPoolEntryOp
 //  enum ManageExternalSystemAccountIdPoolEntryResultCode
 //  {
 //      //: Specified action in `actionInput` of ManageExternalSystemAccountIdPoolEntryOp
-//      //: was successfully performed
+//      //: was performed successfully 
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
-//      //: Not allowed to pass empty `data`
+//      //: It is not allowed to pass empty `data`
 //      MALFORMED = -1,
-//      //: Not allowed to create external system account ID pool with duplicated
+//      //: It is not allowed to create external system account ID pool with duplicated
 //      //: data and external system type
 //      ALREADY_EXISTS = -2,
 //      //: There is no external system account ID pool with passed ID

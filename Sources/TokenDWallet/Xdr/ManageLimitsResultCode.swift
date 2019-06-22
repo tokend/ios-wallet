@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes for ManageLimits operation
 //  enum ManageLimitsResultCode
 //  {
 //      // codes considered as "success" for the operation
@@ -12,12 +13,12 @@ import Foundation
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
-//      //: (reserved for future use) Invalid input
-//      MALFORMED = -1,
-//      //: Limits entry not found
+//      //: There is no account with passed ID
+//      ACCOUNT_NOT_FOUND = -1,
+//      //: Limits entry is not found
 //      NOT_FOUND = -2,
-//      //: (reserved for future use) Limits entry already exists
-//      ALREADY_EXISTS = -3,
+//      //: There is no role with passed ID
+//      ROLE_NOT_FOUND = -3,
 //      //: Limits cannot be created for account ID and account role simultaneously
 //      CANNOT_CREATE_FOR_ACC_ID_AND_ACC_TYPE = -4, // FIXME ACC_ROLE ?
 //      //: Limits entry is invalid (e.g. weeklyOut is less than dailyOut)
@@ -27,9 +28,9 @@ import Foundation
 //  ===========================================================================
 public enum ManageLimitsResultCode: Int32, XDREnum {
   case success = 0
-  case malformed = -1
+  case accountNotFound = -1
   case notFound = -2
-  case alreadyExists = -3
+  case roleNotFound = -3
   case cannotCreateForAccIdAndAccType = -4
   case invalidLimits = -5
 }

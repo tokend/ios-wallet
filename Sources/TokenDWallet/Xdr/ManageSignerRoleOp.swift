@@ -5,9 +5,10 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageSignerRoleOp is used to create, update or remove a signer role
 //  struct ManageSignerRoleOp
 //  {
-//      //: data is used to pass one of `ManageSignerRoleAction` with needed params
+//      //: data is used to pass one of `ManageSignerRoleAction` with required params
 //      union switch (ManageSignerRoleAction action)
 //      {
 //      case CREATE:

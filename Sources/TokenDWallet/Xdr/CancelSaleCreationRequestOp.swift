@@ -5,9 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CancelSaleCreationRequest operation is used to cancel sale creation request.
+//  //: If successful, request with the corresponding ID will be deleted
+//  //: SaleCreationRequest with provided ID
 //  struct CancelSaleCreationRequestOp
 //  {
-//      //: ID of the SaleCreation request to cancel
+//      //: ID of the SaleCreation request to be canceled
 //      uint64 requestID;
 //  
 //      //: Reserved for future use

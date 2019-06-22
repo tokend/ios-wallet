@@ -5,13 +5,14 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: `PaymentResponse` defines the response on the corresponding PaymentOp
 //  struct PaymentResponse {
 //      //: ID of the destination account
 //      AccountID destination;
 //      //: ID of the destination balance
 //      BalanceID destinationBalanceID;
 //  
-//      //: Code of the asset used in payment
+//      //: Code of an asset used in payment
 //      AssetCode asset;
 //      //: Amount sent by the sender
 //      uint64 sourceSentUniversal;

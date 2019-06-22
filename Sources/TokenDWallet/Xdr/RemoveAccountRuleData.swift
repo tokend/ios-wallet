@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: RemoveAccountRuleData is used to pass necessary params to remove existing account rule
 //  struct RemoveAccountRuleData
 //  {
 //      //: Identifier of existing account rule

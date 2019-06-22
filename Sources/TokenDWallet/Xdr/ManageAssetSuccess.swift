@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Is used to pass useful params after the successful operation application
 //  struct ManageAssetSuccess
 //  {
-//      //: ID of request which was created in the operation applying process
+//      //: ID of the request that was created in the process of operation application 
 //      uint64 requestID;
-//      //: True means that request was applied and execution flow was successful
+//      //: True means that the request was applied and execution flow was successful
 //      bool fulfilled;
 //      //: reserved for future use
 //      union switch (LedgerVersion v)

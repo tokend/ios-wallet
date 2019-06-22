@@ -2,7 +2,7 @@ PODS:
   - DLCryptoKit (2.0.1):
     - DLOpenSSL
   - DLOpenSSL (1.0.2)
-  - TokenDWallet (3.0.1):
+  - TokenDWallet (3.0.2):
     - DLCryptoKit (>= 2.0.1)
 
 DEPENDENCIES:
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   DLCryptoKit: 491c522583e92c90c09c06bf1192ef741022af33
   DLOpenSSL: 78d928228cb6d95fcaa354f4f9aba041ccf95457
-  TokenDWallet: 499280096da18151c8044d9231081c8acca4e6d2
+  TokenDWallet: 0c7564bf9b388b2c39df4ef2999c4bc3d923f30d
 
 PODFILE CHECKSUM: 2ff703f484f93022caae12590846b6530f3c4419
 

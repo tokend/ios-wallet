@@ -5,22 +5,29 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageAssetOp is used to:
+//  //: * create or update `CREATE_ASSET` request;
+//  //: * create or update `UPDATE_ASSET` request;
+//  //: * cancel `CREATE_ASSET` or `UPDATE_ASSET` request
+//  //: * change asset pre issuer
+//  //: * update max issuance of an asset
 //  struct ManageAssetOp
 //  {
-//      //: Use zero to create request, non zero to manage existing request
+//      //: ID of a reviewable request
+//      //: If `requestID == 0`, operation creates a new reviewable request; otherwise, it updates the existing one 
 //      uint64 requestID;
 //  
-//      //: data is used to pass one of `ManageAssetAction` with needed params
+//      //: data is used to pass one of `ManageAssetAction` with required params
 //      union switch (ManageAssetAction action)
 //      {
 //      case CREATE_ASSET_CREATION_REQUEST:
-//          //: Is used to pass needed fields for `CREATE_ASSET`
+//          //: Is used to pass required fields for `CREATE_ASSET`
 //          struct
 //          {
-//              //: Is used needed to pass needed fields to create asset entry
+//              //: Is used to pass required fields to create an asset entry
 //              AssetCreationRequest createAsset;
-//              //: (optional) Bit mask whose flags must be cleared in order for `CREATE_ASSET` request to be approved, which will be used
-//              //: instead of key-value by key `asset_create_tasks`
+//              //: (optional) Bit mask whose flags must be cleared in order for `CREATE_ASSET` request to be approved, which will be used by key `asset_create_tasks`
+//              //: instead of key-value
 //              uint32* allTasks;
 //  
 //              //: reserved for future use
@@ -35,7 +42,7 @@ import Foundation
 //          //: Is used to pass needed fields for `UPDATE_ASSET`
 //          struct
 //          {
-//              //: Is used needed to pass needed fields to update asset entry
+//              //: Is used to pass required fields to update an asset entry
 //              AssetUpdateRequest updateAsset;
 //              //: (optional) Bit mask whose flags must be cleared in order for `UPDATE_ASSET` request to be approved, which will be used
 //              //: instead of key-value by key `asset_update_tasks`
@@ -50,10 +57,10 @@ import Foundation
 //              ext;
 //          } createAssetUpdateRequest;
 //      case CANCEL_ASSET_REQUEST:
-//          //: Reserved for the future use
+//          //: Reserved for future use
 //          CancelAssetRequest cancelRequest;
 //      case CHANGE_PREISSUED_ASSET_SIGNER:
-//          //: Is used to pass needed fields to change asset pre issuer
+//          //: Is used to pass required fields to change an asset pre issuer
 //          AssetChangePreissuedSigner changePreissuedSigner;
 //      case UPDATE_MAX_ISSUANCE:
 //          //: Is used to update max issuance of asset

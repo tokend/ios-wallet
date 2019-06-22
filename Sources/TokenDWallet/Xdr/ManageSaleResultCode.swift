@@ -5,11 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes for ManageSaleOperation
 //  enum ManageSaleResultCode
 //  {
-//      //: Operation successfully applied
+//      //: Operation is successfully applied
 //      SUCCESS = 0,
-//      //: Sale with provided ID not found
+//      //: Sale with provided ID is not found
 //      SALE_NOT_FOUND = -1, // sale not found
 //  
 //      // errors related to action "CREATE_UPDATE_DETAILS_REQUEST"
@@ -17,11 +18,11 @@ import Foundation
 //      INVALID_CREATOR_DETAILS = -2, // newDetails field is invalid JSON
 //      //: Request to update sale with provided ID already exists
 //      UPDATE_DETAILS_REQUEST_ALREADY_EXISTS = -3,
-//      //: UpdateSaleDetails request with provided ID not found
+//      //: UpdateSaleDetails request with provided ID is not found
 //      UPDATE_DETAILS_REQUEST_NOT_FOUND = -4,
-//      //: Not allowed to set allTasks for pending reviewable request
+//      //: It is not allowed to set allTasks for a pending reviewable request
 //      NOT_ALLOWED_TO_SET_TASKS_ON_UPDATE = -5, // not allowed to set allTasks on request update
-//      //: Update sale details tasks are not set in the system, i.e. it's not allowed to perform sale details update
+//      //: Update sale details tasks are not set in the system, i.e. it's not allowed to perform the update of sale details 
 //      SALE_UPDATE_DETAILS_TASKS_NOT_FOUND = -6
 //  };
 

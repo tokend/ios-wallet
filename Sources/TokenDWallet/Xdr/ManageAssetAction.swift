@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: ManageAssetAction is used to specify an action to be performed with an asset or asset create/update request
 //  enum ManageAssetAction
 //  {
 //      CREATE_ASSET_CREATION_REQUEST = 0,

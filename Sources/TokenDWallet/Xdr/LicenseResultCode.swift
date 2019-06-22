@@ -5,17 +5,18 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result code of the License operation application 
 //  enum LicenseResultCode
 //  {
 //      //: License submit was successful, provided adminCount and dueDate were set in the system
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
-//      //: Provided ledger hash and license hash were not stamped and missing in the system.
+//      //: Provided ledger hash and license hash were not stamped and are missing in the system.
 //      INVALID_STAMP = -1,
 //      //: Provided due date is in the past.
 //      INVALID_DUE_DATE = -2,
-//      //: Not enough valid signatures to submit license (required at least one valid signature)
+//      //: Not enough valid signatures to submit a license (at least one valid signature is required)
 //      INVALID_SIGNATURE = -3
 //  };
 

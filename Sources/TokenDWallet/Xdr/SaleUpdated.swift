@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Entry for additional information regarding sale update
 //  struct SaleUpdated {
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)

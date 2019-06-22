@@ -5,10 +5,11 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Entry for additional information regarding sale closing
 //  struct CheckSaleClosedResult {
 //      //: AccountID of the sale owner
 //      AccountID saleOwner;
-//      //: Array of the sale participation results 
+//      //: Array of individual's contribution details
 //      CheckSubSaleClosedResult results<>;
 //      //: Reserved for future use
 //      union switch (LedgerVersion v)

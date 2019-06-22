@@ -5,16 +5,17 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: Result codes of BindExternalSystemAccountIdOp
 //  enum BindExternalSystemAccountIdResultCode
 //  {
 //      // codes considered as "success" for the operation
-//      //: Source account successfully bound to external system ID taken from pool
+//      //: Source account has been successfully bound to external system ID taken from the pool
 //      SUCCESS = 0,
 //  
 //      // codes considered as "failure" for the operation
 //      //: (deprecated)
 //      MALFORMED = -1,
-//      //: There is no available IDs from external system in pool for such external system type
+//      //: There is no available external system account ID pool entry for such external system type
 //      NO_AVAILABLE_ID = -2
 //  };
 

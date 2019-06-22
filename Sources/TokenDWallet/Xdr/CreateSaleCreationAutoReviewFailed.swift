@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: specifies details on why an auto review has failed
 //  struct CreateSaleCreationAutoReviewFailed {
 //      //: auto review result
 //      ReviewRequestResult reviewRequestRequest;

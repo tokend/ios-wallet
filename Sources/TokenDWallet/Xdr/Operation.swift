@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: An operation is the lowest unit of work that a transaction does
 //  struct Operation
 //  {
 //      //: sourceAccount is the account used to run the operation
@@ -66,12 +67,12 @@ import Foundation
 //          ManageContractOp manageContractOp;
 //      case CANCEL_SALE_REQUEST:
 //          CancelSaleCreationRequestOp cancelSaleCreationRequestOp;
-//      case CREATE_ASWAP_BID_REQUEST:
-//          CreateASwapBidCreationRequestOp createASwapBidCreationRequestOp;
-//      case CANCEL_ASWAP_BID:
-//          CancelASwapBidOp cancelASwapBidOp;
-//      case CREATE_ASWAP_REQUEST:
-//          CreateASwapRequestOp createASwapRequestOp;
+//      case CREATE_ATOMIC_SWAP_ASK_REQUEST:
+//          CreateAtomicSwapAskRequestOp createAtomicSwapAskRequestOp;
+//      case CANCEL_ATOMIC_SWAP_ASK:
+//          CancelAtomicSwapAskOp cancelAtomicSwapAskOp;
+//      case CREATE_ATOMIC_SWAP_BID_REQUEST:
+//          CreateAtomicSwapBidRequestOp createAtomicSwapBidRequestOp;
 //      case MANAGE_ACCOUNT_ROLE:
 //          ManageAccountRoleOp manageAccountRoleOp;
 //      case MANAGE_ACCOUNT_RULE:
@@ -86,6 +87,22 @@ import Foundation
 //          StampOp stampOp;
 //      case LICENSE:
 //          LicenseOp licenseOp;
+//      case MANAGE_CREATE_POLL_REQUEST:
+//          ManageCreatePollRequestOp manageCreatePollRequestOp;
+//      case MANAGE_POLL:
+//          ManagePollOp managePollOp;
+//      case MANAGE_VOTE:
+//          ManageVoteOp manageVoteOp;
+//      case MANAGE_ACCOUNT_SPECIFIC_RULE:
+//          ManageAccountSpecificRuleOp manageAccountSpecificRuleOp;
+//      case CANCEL_CHANGE_ROLE_REQUEST:
+//          CancelChangeRoleRequestOp cancelChangeRoleRequestOp;
+//      case REMOVE_ASSET_PAIR:
+//          RemoveAssetPairOp removeAssetPairOp;
+//      case INITIATE_KYC_RECOVERY:
+//          InitiateKYCRecoveryOp initiateKYCRecoveryOp;
+//      case CREATE_KYC_RECOVERY_REQUEST:
+//          CreateKYCRecoveryRequestOp createKYCRecoveryRequestOp;
 //      }
 //      body;
 //  };
@@ -139,9 +156,9 @@ public struct Operation: XDREncodable {
     case manageContractRequest(ManageContractRequestOp)
     case manageContract(ManageContractOp)
     case cancelSaleRequest(CancelSaleCreationRequestOp)
-    case createAswapBidRequest(CreateASwapBidCreationRequestOp)
-    case cancelAswapBid(CancelASwapBidOp)
-    case createAswapRequest(CreateASwapRequestOp)
+    case createAtomicSwapAskRequest(CreateAtomicSwapAskRequestOp)
+    case cancelAtomicSwapAsk(CancelAtomicSwapAskOp)
+    case createAtomicSwapBidRequest(CreateAtomicSwapBidRequestOp)
     case manageAccountRole(ManageAccountRoleOp)
     case manageAccountRule(ManageAccountRuleOp)
     case manageSigner(ManageSignerOp)
@@ -149,6 +166,14 @@ public struct Operation: XDREncodable {
     case manageSignerRule(ManageSignerRuleOp)
     case stamp(StampOp)
     case license(LicenseOp)
+    case manageCreatePollRequest(ManageCreatePollRequestOp)
+    case managePoll(ManagePollOp)
+    case manageVote(ManageVoteOp)
+    case manageAccountSpecificRule(ManageAccountSpecificRuleOp)
+    case cancelChangeRoleRequest(CancelChangeRoleRequestOp)
+    case removeAssetPair(RemoveAssetPairOp)
+    case initiateKycRecovery(InitiateKYCRecoveryOp)
+    case createKycRecoveryRequest(CreateKYCRecoveryRequestOp)
 
     public var discriminant: Int32 {
       switch self {
@@ -178,9 +203,9 @@ public struct Operation: XDREncodable {
       case .manageContractRequest: return OperationType.manageContractRequest.rawValue
       case .manageContract: return OperationType.manageContract.rawValue
       case .cancelSaleRequest: return OperationType.cancelSaleRequest.rawValue
-      case .createAswapBidRequest: return OperationType.createAswapBidRequest.rawValue
-      case .cancelAswapBid: return OperationType.cancelAswapBid.rawValue
-      case .createAswapRequest: return OperationType.createAswapRequest.rawValue
+      case .createAtomicSwapAskRequest: return OperationType.createAtomicSwapAskRequest.rawValue
+      case .cancelAtomicSwapAsk: return OperationType.cancelAtomicSwapAsk.rawValue
+      case .createAtomicSwapBidRequest: return OperationType.createAtomicSwapBidRequest.rawValue
       case .manageAccountRole: return OperationType.manageAccountRole.rawValue
       case .manageAccountRule: return OperationType.manageAccountRule.rawValue
       case .manageSigner: return OperationType.manageSigner.rawValue
@@ -188,6 +213,14 @@ public struct Operation: XDREncodable {
       case .manageSignerRule: return OperationType.manageSignerRule.rawValue
       case .stamp: return OperationType.stamp.rawValue
       case .license: return OperationType.license.rawValue
+      case .manageCreatePollRequest: return OperationType.manageCreatePollRequest.rawValue
+      case .managePoll: return OperationType.managePoll.rawValue
+      case .manageVote: return OperationType.manageVote.rawValue
+      case .manageAccountSpecificRule: return OperationType.manageAccountSpecificRule.rawValue
+      case .cancelChangeRoleRequest: return OperationType.cancelChangeRoleRequest.rawValue
+      case .removeAssetPair: return OperationType.removeAssetPair.rawValue
+      case .initiateKycRecovery: return OperationType.initiateKycRecovery.rawValue
+      case .createKycRecoveryRequest: return OperationType.createKycRecoveryRequest.rawValue
       }
     }
 
@@ -223,9 +256,9 @@ public struct Operation: XDREncodable {
       case .manageContractRequest(let data): xdr.append(data.toXDR())
       case .manageContract(let data): xdr.append(data.toXDR())
       case .cancelSaleRequest(let data): xdr.append(data.toXDR())
-      case .createAswapBidRequest(let data): xdr.append(data.toXDR())
-      case .cancelAswapBid(let data): xdr.append(data.toXDR())
-      case .createAswapRequest(let data): xdr.append(data.toXDR())
+      case .createAtomicSwapAskRequest(let data): xdr.append(data.toXDR())
+      case .cancelAtomicSwapAsk(let data): xdr.append(data.toXDR())
+      case .createAtomicSwapBidRequest(let data): xdr.append(data.toXDR())
       case .manageAccountRole(let data): xdr.append(data.toXDR())
       case .manageAccountRule(let data): xdr.append(data.toXDR())
       case .manageSigner(let data): xdr.append(data.toXDR())
@@ -233,6 +266,14 @@ public struct Operation: XDREncodable {
       case .manageSignerRule(let data): xdr.append(data.toXDR())
       case .stamp(let data): xdr.append(data.toXDR())
       case .license(let data): xdr.append(data.toXDR())
+      case .manageCreatePollRequest(let data): xdr.append(data.toXDR())
+      case .managePoll(let data): xdr.append(data.toXDR())
+      case .manageVote(let data): xdr.append(data.toXDR())
+      case .manageAccountSpecificRule(let data): xdr.append(data.toXDR())
+      case .cancelChangeRoleRequest(let data): xdr.append(data.toXDR())
+      case .removeAssetPair(let data): xdr.append(data.toXDR())
+      case .initiateKycRecovery(let data): xdr.append(data.toXDR())
+      case .createKycRecoveryRequest(let data): xdr.append(data.toXDR())
       }
 
       return xdr

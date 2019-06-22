@@ -35,14 +35,22 @@ import Foundation
 //      PAYOUT = 32,
 //      MANAGE_ACCOUNT_ROLE = 33,
 //      MANAGE_ACCOUNT_RULE = 34,
-//      CREATE_ASWAP_BID_REQUEST = 35,
-//      CANCEL_ASWAP_BID = 36,
-//      CREATE_ASWAP_REQUEST = 37,
+//      CREATE_ATOMIC_SWAP_ASK_REQUEST = 35,
+//      CANCEL_ATOMIC_SWAP_ASK = 36,
+//      CREATE_ATOMIC_SWAP_BID_REQUEST = 37,
 //      MANAGE_SIGNER = 38,
 //      MANAGE_SIGNER_ROLE = 39,
 //      MANAGE_SIGNER_RULE = 40,
 //      STAMP = 41,
-//      LICENSE = 42
+//      LICENSE = 42,
+//      MANAGE_CREATE_POLL_REQUEST = 43,
+//      MANAGE_POLL = 44,
+//      MANAGE_VOTE = 45,
+//      MANAGE_ACCOUNT_SPECIFIC_RULE = 46,
+//      CANCEL_CHANGE_ROLE_REQUEST = 47,
+//      INITIATE_KYC_RECOVERY = 48,
+//      CREATE_KYC_RECOVERY_REQUEST = 49,
+//      REMOVE_ASSET_PAIR = 50
 //  };
 
 //  ===========================================================================
@@ -75,12 +83,20 @@ public enum OperationType: Int32, XDREnum {
   case payout = 32
   case manageAccountRole = 33
   case manageAccountRule = 34
-  case createAswapBidRequest = 35
-  case cancelAswapBid = 36
-  case createAswapRequest = 37
+  case createAtomicSwapAskRequest = 35
+  case cancelAtomicSwapAsk = 36
+  case createAtomicSwapBidRequest = 37
   case manageSigner = 38
   case manageSignerRole = 39
   case manageSignerRule = 40
   case stamp = 41
   case license = 42
+  case manageCreatePollRequest = 43
+  case managePoll = 44
+  case manageVote = 45
+  case manageAccountSpecificRule = 46
+  case cancelChangeRoleRequest = 47
+  case initiateKycRecovery = 48
+  case createKycRecoveryRequest = 49
+  case removeAssetPair = 50
 }

@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: CancelAssetRequest is used to cancel an `UPDATE_ASSET` or `CREATE_ASSET` request
 //  struct CancelAssetRequest
 //  {
 //      //: reserved for future use

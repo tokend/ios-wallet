@@ -5,13 +5,14 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: AssetChangePreissuedSigner is used to update a pre issued asset signer
 //  struct AssetChangePreissuedSigner
 //  {
-//      //: code of the asset to update
+//      //: code of an asset to update
 //      AssetCode code;
-//      //: Public key of signer which will be new pre issuer
+//      //: Public key of a signer that will be the new pre issuer
 //      AccountID accountID;
-//      //: Content signature of pre issuer signer
+//      //: Content signature of a pre issuer signer
 //      //: Content equals hash of `<code>:<accountID>`
 //      DecoratedSignature signature;
 //  

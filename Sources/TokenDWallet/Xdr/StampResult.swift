@@ -5,6 +5,7 @@ import Foundation
 
 // === xdr source ============================================================
 
+//  //: StampResult is a result of Stamp operation application
 //  union StampResult switch (StampResultCode code)
 //  {
 //  case SUCCESS:
