@@ -21,9 +21,7 @@ public class TransactionModel {
     public let timeBounds: TimeBounds
     public let salt: Salt
     
-    // MARK: - Private properties
-    
-    private var signatures: [DecoratedSignature] = []
+    public private(set) var signatures: [DecoratedSignature] = []
     
     // MARK: -
     
