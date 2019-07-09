@@ -69,7 +69,7 @@ public class TransactionModel {
     /// Method signs transaction with signature
     /// - Parameters:
     ///     - signature: Decorated signature which is used to sign transaction
-    public func addSignature(signature: DecoratedSignature) throws {
+    public func addSignature(signature: DecoratedSignature) {
         self.signatures.append(signature)
     }
     
