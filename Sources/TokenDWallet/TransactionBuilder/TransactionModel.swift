@@ -66,6 +66,13 @@ public class TransactionModel {
         self.signatures.append(decoratedSignature)
     }
     
+    /// Method signs transaction with signature
+    /// - Parameters:
+    ///     - signature: Decorated signature which is used to sign transaction
+    public func addSignature(signature: DecoratedSignature) throws {
+        self.signatures.append(signature)
+    }
+    
     /// Method retruns transaction's envelope
     /// - Returns: `TransactionEnvelope`
     public func getEnvelope() -> TransactionEnvelope {

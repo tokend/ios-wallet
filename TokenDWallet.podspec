@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'TokenDWallet'
-  s.version          = '3.0.3'
+  s.version          = '3.0.4'
   s.summary          = 'Wallet utilities for TokenD.'
   s.homepage         = 'https://github.com/tokend/ios-wallet'
   s.license          = { type: 'Apache License, Version 2.0', file: 'LICENSE' }
