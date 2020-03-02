@@ -25,9 +25,9 @@ class XDREncodingTests: XCTestCase {
             case c = -1
         }
         
-        XCTAssertEqual(TestEnum.a.rawValue.toXDR().base64, "AAAAAA==")
-        XCTAssertEqual(TestEnum.b.rawValue.toXDR().base64, "AAAAAQ==")
-        XCTAssertEqual(TestEnum.c.rawValue.toXDR().base64, "/////w==")
+        XCTAssertEqual(TestEnum.a.toXDR().base64, "AAAAAA==")
+        XCTAssertEqual(TestEnum.b.toXDR().base64, "AAAAAQ==")
+        XCTAssertEqual(TestEnum.c.toXDR().base64, "/////w==")
     }
     
     func testOptional() {
@@ -62,8 +62,19 @@ class XDREncodingTests: XCTestCase {
         // Dinamic size
         let data = [Int64(1)]
         XCTAssertEqual(data.toXDR().base64, "AAAAAQAAAAAAAAAB")
+        struct XDRArrayFixed1<WrappedElement: XDRCodable>: XDRArrayFixed {
+            typealias Element = WrappedElement
+            
+            static var length: Int { return 1 }
+            
+            var wrapped: [WrappedElement]
+            
+            init() {
+                self.wrapped = [WrappedElement]()
+            }
+        }
         // Fixed size
-        XCTAssertEqual(XDRArrayFixed(data).toXDR().base64, "AAAAAAAAAAE=")
+        XCTAssertEqual(try! XDRArrayFixed1(data).toXDR().base64, "AAAAAAAAAAE=")
     }
     
     func testDescriminatedUnion() {

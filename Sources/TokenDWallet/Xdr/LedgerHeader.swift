@@ -52,7 +52,7 @@ public struct LedgerHeader: XDREncodable {
   public var baseReserve: Uint32
   public var maxTxSetSize: Uint32
   public var txExpirationPeriod: Int64
-  public var skipList: XDRArrayFixed<Hash>
+//  public var skipList: XDRArrayFixed<Hash>
   public var ext: LedgerHeaderExt
 
   public init(
@@ -67,7 +67,7 @@ public struct LedgerHeader: XDREncodable {
       baseReserve: Uint32,
       maxTxSetSize: Uint32,
       txExpirationPeriod: Int64,
-      skipList: XDRArrayFixed<Hash>,
+//      skipList: XDRArrayFixed<Hash>,
       ext: LedgerHeaderExt) {
 
     self.ledgerVersion = ledgerVersion
@@ -81,7 +81,7 @@ public struct LedgerHeader: XDREncodable {
     self.baseReserve = baseReserve
     self.maxTxSetSize = maxTxSetSize
     self.txExpirationPeriod = txExpirationPeriod
-    self.skipList = skipList
+//    self.skipList = skipList
     self.ext = ext
   }
 
@@ -99,7 +99,7 @@ public struct LedgerHeader: XDREncodable {
     xdr.append(self.baseReserve.toXDR())
     xdr.append(self.maxTxSetSize.toXDR())
     xdr.append(self.txExpirationPeriod.toXDR())
-    xdr.append(self.skipList.toXDR())
+//    xdr.append(self.skipList.toXDR())
     xdr.append(self.ext.toXDR())
 
     return xdr
