@@ -19,7 +19,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct Hello: XDREncodable {
+public struct Hello: XDRCodable {
   public var ledgerVersion: Uint32
   public var overlayVersion: Uint32
   public var overlayMinVersion: Uint32
@@ -66,5 +66,17 @@ public struct Hello: XDREncodable {
     xdr.append(self.nonce.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ledgerVersion = try Uint32(xdrData: &xdrData)
+    self.overlayVersion = try Uint32(xdrData: &xdrData)
+    self.overlayMinVersion = try Uint32(xdrData: &xdrData)
+    self.networkID = try Hash(xdrData: &xdrData)
+    self.versionStr = try String(xdrData: &xdrData)
+    self.listeningPort = try Int32(xdrData: &xdrData)
+    self.peerID = try NodeID(xdrData: &xdrData)
+    self.cert = try AuthCert(xdrData: &xdrData)
+    self.nonce = try Uint256(xdrData: &xdrData)
   }
 }

@@ -47,6 +47,12 @@ import Foundation
 //              CreatePollRequest createPollRequest;
 //          case KYC_RECOVERY:
 //              KYCRecoveryRequest kycRecoveryRequest;
+//  		case MANAGE_OFFER:
+//  			ManageOfferRequest manageOfferRequest;
+//  		case CREATE_PAYMENT:
+//  			CreatePaymentRequest createPaymentRequest;
+//          case PERFORM_REDEMPTION:
+//              RedemptionRequest redemptionRequest;
 //  	} body;
 //  
 //  	TasksExt tasks;
@@ -61,7 +67,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ReviewableRequestEntry: XDREncodable {
+public struct ReviewableRequestEntry: XDRCodable {
   public var requestID: Uint64
   public var hash: Hash
   public var requestor: AccountID
@@ -114,6 +120,23 @@ public struct ReviewableRequestEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.hash = try Hash(xdrData: &xdrData)
+    self.requestor = try AccountID(xdrData: &xdrData)
+    self.rejectReason = try Longstring(xdrData: &xdrData)
+    self.reviewer = try AccountID(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.reference = try String64(xdrData: &xdrData)
+    } else {
+      self.reference = nil
+    }
+    self.createdAt = try Int64(xdrData: &xdrData)
+    self.body = try ReviewableRequestEntryBody(xdrData: &xdrData)
+    self.tasks = try TasksExt(xdrData: &xdrData)
+    self.ext = try ReviewableRequestEntryExt(xdrData: &xdrData)
+  }
+
   public enum ReviewableRequestEntryBody: XDRDiscriminatedUnion {
     case createAsset(AssetCreationRequest)
     case updateAsset(AssetUpdateRequest)
@@ -131,6 +154,9 @@ public struct ReviewableRequestEntry: XDREncodable {
     case createAtomicSwapBid(CreateAtomicSwapBidRequest)
     case createPoll(CreatePollRequest)
     case kycRecovery(KYCRecoveryRequest)
+    case manageOffer(ManageOfferRequest)
+    case createPayment(CreatePaymentRequest)
+    case performRedemption(RedemptionRequest)
 
     public var discriminant: Int32 {
       switch self {
@@ -150,6 +176,9 @@ public struct ReviewableRequestEntry: XDREncodable {
       case .createAtomicSwapBid: return ReviewableRequestType.createAtomicSwapBid.rawValue
       case .createPoll: return ReviewableRequestType.createPoll.rawValue
       case .kycRecovery: return ReviewableRequestType.kycRecovery.rawValue
+      case .manageOffer: return ReviewableRequestType.manageOffer.rawValue
+      case .createPayment: return ReviewableRequestType.createPayment.rawValue
+      case .performRedemption: return ReviewableRequestType.performRedemption.rawValue
       }
     }
 
@@ -175,9 +204,78 @@ public struct ReviewableRequestEntry: XDREncodable {
       case .createAtomicSwapBid(let data): xdr.append(data.toXDR())
       case .createPoll(let data): xdr.append(data.toXDR())
       case .kycRecovery(let data): xdr.append(data.toXDR())
+      case .manageOffer(let data): xdr.append(data.toXDR())
+      case .createPayment(let data): xdr.append(data.toXDR())
+      case .performRedemption(let data): xdr.append(data.toXDR())
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ReviewableRequestType.createAsset.rawValue:
+        let data = try AssetCreationRequest(xdrData: &xdrData)
+        self = .createAsset(data)
+      case ReviewableRequestType.updateAsset.rawValue:
+        let data = try AssetUpdateRequest(xdrData: &xdrData)
+        self = .updateAsset(data)
+      case ReviewableRequestType.createPreIssuance.rawValue:
+        let data = try PreIssuanceRequest(xdrData: &xdrData)
+        self = .createPreIssuance(data)
+      case ReviewableRequestType.createIssuance.rawValue:
+        let data = try IssuanceRequest(xdrData: &xdrData)
+        self = .createIssuance(data)
+      case ReviewableRequestType.createWithdraw.rawValue:
+        let data = try WithdrawalRequest(xdrData: &xdrData)
+        self = .createWithdraw(data)
+      case ReviewableRequestType.createSale.rawValue:
+        let data = try SaleCreationRequest(xdrData: &xdrData)
+        self = .createSale(data)
+      case ReviewableRequestType.updateLimits.rawValue:
+        let data = try LimitsUpdateRequest(xdrData: &xdrData)
+        self = .updateLimits(data)
+      case ReviewableRequestType.createAmlAlert.rawValue:
+        let data = try AMLAlertRequest(xdrData: &xdrData)
+        self = .createAmlAlert(data)
+      case ReviewableRequestType.changeRole.rawValue:
+        let data = try ChangeRoleRequest(xdrData: &xdrData)
+        self = .changeRole(data)
+      case ReviewableRequestType.updateSaleDetails.rawValue:
+        let data = try UpdateSaleDetailsRequest(xdrData: &xdrData)
+        self = .updateSaleDetails(data)
+      case ReviewableRequestType.createInvoice.rawValue:
+        let data = try InvoiceRequest(xdrData: &xdrData)
+        self = .createInvoice(data)
+      case ReviewableRequestType.manageContract.rawValue:
+        let data = try ContractRequest(xdrData: &xdrData)
+        self = .manageContract(data)
+      case ReviewableRequestType.createAtomicSwapAsk.rawValue:
+        let data = try CreateAtomicSwapAskRequest(xdrData: &xdrData)
+        self = .createAtomicSwapAsk(data)
+      case ReviewableRequestType.createAtomicSwapBid.rawValue:
+        let data = try CreateAtomicSwapBidRequest(xdrData: &xdrData)
+        self = .createAtomicSwapBid(data)
+      case ReviewableRequestType.createPoll.rawValue:
+        let data = try CreatePollRequest(xdrData: &xdrData)
+        self = .createPoll(data)
+      case ReviewableRequestType.kycRecovery.rawValue:
+        let data = try KYCRecoveryRequest(xdrData: &xdrData)
+        self = .kycRecovery(data)
+      case ReviewableRequestType.manageOffer.rawValue:
+        let data = try ManageOfferRequest(xdrData: &xdrData)
+        self = .manageOffer(data)
+      case ReviewableRequestType.createPayment.rawValue:
+        let data = try CreatePaymentRequest(xdrData: &xdrData)
+        self = .createPayment(data)
+      case ReviewableRequestType.performRedemption.rawValue:
+        let data = try RedemptionRequest(xdrData: &xdrData)
+        self = .performRedemption(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }
@@ -200,6 +298,16 @@ public struct ReviewableRequestEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

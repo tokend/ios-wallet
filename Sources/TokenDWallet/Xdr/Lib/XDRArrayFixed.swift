@@ -1,40 +1,57 @@
 import Foundation
 
-public struct XDRArrayFixed<T: XDREncodable>: Sequence {
-    public private(set) var list: [T]
+public protocol XDRArrayFixed: XDRCodable, Sequence where Element: XDRCodable {
+    static var length: Int { get }
+    var wrapped: [Element] { get set }
     
-    public init(_ array: [T]) {
-        self.list = array
-    }
-    
-    public subscript(_ index: Int) -> T {
-        return list[index]
-    }
-    
-    public func makeIterator() -> AnyIterator<T> {
-        var index = 0
+    init()
+    init(_ array: [Element]) throws
+}
+
+extension XDRArrayFixed {
+    public init(_ array: [Element]) throws {
+        self.init()
         
+        if array.count > Self.length {
+            throw XDRErrors.wrongDataLength
+        }
+        
+        self.wrapped = array
+    }
+    
+    public init(xdrData: inout Data) throws {
+        self.init()
+        for _ in 1...Self.length {
+            self.wrapped.append(try Element(xdrData: &xdrData))
+        }
+    }
+    
+    public subscript(_ index: Int) -> Element {
+        return wrapped[index]
+    }
+    
+    public func makeIterator() -> AnyIterator<Element> {
+        var index = 0
+
         return AnyIterator {
-            let element: T? = index < self.list.count ? self[index] : nil
+            let element: Element? = index < self.wrapped.count ? self[index] : nil
             index += 1
-            
+
             return element
         }
     }
-}
-
-extension XDRArrayFixed: XDREncodable, CustomDebugStringConvertible {
+    
     public func toXDR() -> Data {
         var xdr = Data()
-        
+
         forEach {
             xdr.append($0.toXDR())
         }
-        
+
         return xdr
     }
-    
+
     public var debugDescription: String {
-        return list.debugDescription
+        return wrapped.debugDescription
     }
 }

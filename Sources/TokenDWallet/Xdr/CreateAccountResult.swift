@@ -41,4 +41,19 @@ public enum CreateAccountResult: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CreateAccountResultCode.success.rawValue:
+      let data = try CreateAccountSuccess(xdrData: &xdrData)
+      self = .success(data)
+    case CreateAccountResultCode.invalidSignerData.rawValue:
+      let data = try ManageSignerResultCode(xdrData: &xdrData)
+      self = .invalidSignerData(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

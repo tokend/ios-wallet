@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SCPBallot: XDREncodable {
+public struct SCPBallot: XDRCodable {
   public var counter: Uint32
   public var value: Value
 
@@ -31,5 +31,10 @@ public struct SCPBallot: XDREncodable {
     xdr.append(self.value.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.counter = try Uint32(xdrData: &xdrData)
+    self.value = try Value(xdrData: &xdrData)
   }
 }

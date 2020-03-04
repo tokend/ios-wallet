@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SCPEnvelope: XDREncodable {
+public struct SCPEnvelope: XDRCodable {
   public var statement: SCPStatement
   public var signature: Signature
 
@@ -31,5 +31,10 @@ public struct SCPEnvelope: XDREncodable {
     xdr.append(self.signature.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.statement = try SCPStatement(xdrData: &xdrData)
+    self.signature = try Signature(xdrData: &xdrData)
   }
 }

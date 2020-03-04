@@ -21,7 +21,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CancelPollRequestData: XDREncodable {
+public struct CancelPollRequestData: XDRCodable {
   public var requestID: Uint64
   public var ext: CancelPollRequestDataExt
 
@@ -40,6 +40,11 @@ public struct CancelPollRequestData: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.ext = try CancelPollRequestDataExt(xdrData: &xdrData)
   }
 
   public enum CancelPollRequestDataExt: XDRDiscriminatedUnion {
@@ -61,6 +66,16 @@ public struct CancelPollRequestData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

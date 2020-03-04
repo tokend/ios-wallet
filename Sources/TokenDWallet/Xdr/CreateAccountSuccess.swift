@@ -21,7 +21,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateAccountSuccess: XDREncodable {
+public struct CreateAccountSuccess: XDRCodable {
   public var sequentialID: Uint64
   public var ext: CreateAccountSuccessExt
 
@@ -40,6 +40,11 @@ public struct CreateAccountSuccess: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.sequentialID = try Uint64(xdrData: &xdrData)
+    self.ext = try CreateAccountSuccessExt(xdrData: &xdrData)
   }
 
   public enum CreateAccountSuccessExt: XDRDiscriminatedUnion {
@@ -61,6 +66,16 @@ public struct CreateAccountSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -13,7 +13,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SCPQuorumSet: XDREncodable {
+public struct SCPQuorumSet: XDRCodable {
   public var threshold: Uint32
   public var validators: [PublicKey]
   public var innerSets: [SCPQuorumSet]
@@ -36,5 +36,19 @@ public struct SCPQuorumSet: XDREncodable {
     xdr.append(self.innerSets.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.threshold = try Uint32(xdrData: &xdrData)
+    let lengthvalidators = try Int32(xdrData: &xdrData)
+    self.validators = [PublicKey]()
+    for _ in 1...lengthvalidators {
+      self.validators.append(try PublicKey(xdrData: &xdrData))
+    }
+    let lengthinnerSets = try Int32(xdrData: &xdrData)
+    self.innerSets = [SCPQuorumSet]()
+    for _ in 1...lengthinnerSets {
+      self.innerSets.append(try SCPQuorumSet(xdrData: &xdrData))
+    }
   }
 }

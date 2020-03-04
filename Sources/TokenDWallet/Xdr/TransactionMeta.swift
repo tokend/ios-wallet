@@ -32,4 +32,20 @@ public enum TransactionMeta: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerVersion.emptyVersion.rawValue:
+      let lengthoperations = try Int32(xdrData: &xdrData)
+      var data = [OperationMeta]()
+      for _ in 1...lengthoperations {
+        data.append(try OperationMeta(xdrData: &xdrData))
+      }
+      self = .emptyVersion(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

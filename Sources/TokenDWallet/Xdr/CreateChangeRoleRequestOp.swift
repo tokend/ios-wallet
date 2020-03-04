@@ -33,7 +33,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateChangeRoleRequestOp: XDREncodable {
+public struct CreateChangeRoleRequestOp: XDRCodable {
   public var requestID: Uint64
   public var destinationAccount: AccountID
   public var accountRoleToSet: Uint64
@@ -70,6 +70,19 @@ public struct CreateChangeRoleRequestOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.destinationAccount = try AccountID(xdrData: &xdrData)
+    self.accountRoleToSet = try Uint64(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.allTasks = try Uint32(xdrData: &xdrData)
+    } else {
+      self.allTasks = nil
+    }
+    self.ext = try CreateChangeRoleRequestOpExt(xdrData: &xdrData)
+  }
+
   public enum CreateChangeRoleRequestOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -89,6 +102,16 @@ public struct CreateChangeRoleRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

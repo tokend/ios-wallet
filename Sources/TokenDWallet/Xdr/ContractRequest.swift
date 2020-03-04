@@ -24,7 +24,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ContractRequest: XDREncodable {
+public struct ContractRequest: XDRCodable {
   public var customer: AccountID
   public var escrow: AccountID
   public var creatorDetails: Longstring
@@ -61,6 +61,15 @@ public struct ContractRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.customer = try AccountID(xdrData: &xdrData)
+    self.escrow = try AccountID(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    self.startTime = try Uint64(xdrData: &xdrData)
+    self.endTime = try Uint64(xdrData: &xdrData)
+    self.ext = try ContractRequestExt(xdrData: &xdrData)
+  }
+
   public enum ContractRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -80,6 +89,16 @@ public struct ContractRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

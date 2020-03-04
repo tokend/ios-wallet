@@ -9,7 +9,9 @@ import Foundation
 //  	BASIC_SALE = 1, // sale creator specifies price for each quote asset
 //  	CROWD_FUNDING = 2, // sale creator does not specify price,
 //  	                  // price is defined on sale close based on amount of base asset to be sold and amount of quote assets collected
-//      FIXED_PRICE=3
+//      FIXED_PRICE=3,
+//  
+//      IMMEDIATE=4
 //  };
 
 //  ===========================================================================
@@ -17,4 +19,5 @@ public enum SaleType: Int32, XDREnum {
   case basicSale = 1
   case crowdFunding = 2
   case fixedPrice = 3
+  case immediate = 4
 }

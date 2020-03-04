@@ -40,4 +40,19 @@ public enum CreateSaleCreationRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CreateSaleCreationRequestResultCode.success.rawValue:
+      let data = try CreateSaleCreationSuccess(xdrData: &xdrData)
+      self = .success(data)
+    case CreateSaleCreationRequestResultCode.autoReviewFailed.rawValue:
+      let data = try CreateSaleCreationAutoReviewFailed(xdrData: &xdrData)
+      self = .autoReviewFailed(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

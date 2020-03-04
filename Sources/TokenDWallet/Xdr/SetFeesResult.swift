@@ -43,7 +43,19 @@ public enum SetFeesResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct SetFeesResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case SetFeesResultCode.success.rawValue:
+      let data = try SetFeesResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct SetFeesResultSuccess: XDRCodable {
     public var ext: SetFeesResultSuccessExt
 
     public init(
@@ -58,6 +70,10 @@ public enum SetFeesResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.ext = try SetFeesResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum SetFeesResultSuccessExt: XDRDiscriminatedUnion {
@@ -79,6 +95,16 @@ public enum SetFeesResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

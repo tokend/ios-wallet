@@ -89,6 +89,55 @@ import Foundation
 //          //: reserved for future extension
 //          EmptyExt ext;
 //      } createPoll;
+//  case MANAGE_OFFER:
+//      struct
+//      {
+//          //: type of base asset
+//          uint64 baseAssetType;
+//          //: type of quote asset
+//          uint64 quoteAssetType;
+//  
+//          //: code of base asset
+//          AssetCode baseAssetCode;
+//          //: code of quote asset
+//          AssetCode quoteAssetCode;
+//  
+//          bool isBuy;
+//          //: 0 means creation,
+//          //: 1 means removing,
+//          //: 2 means participate in sale,
+//          //: 3 means remove participation in sale,
+//          //: UINT32_MAX means any action.
+//          uint32 manageAction;
+//  
+//          //: ID of the order book.
+//          uint64 orderBookID;
+//  
+//          //: reserved for future extension
+//          EmptyExt ext;
+//      } manageOffer;
+//  case CREATE_PAYMENT:
+//      struct
+//      {
+//          //: Code of asset in which payment is being made
+//          AssetCode assetCode;
+//          //: Type of asset in which payment is being made
+//          uint64 assetType;
+//  
+//          //: reserved for future extension
+//          EmptyExt ext;
+//      } createPayment;
+//  case PERFORM_REDEMPTION:
+//      struct
+//      {
+//          //: Code of asset in which redemption is being made
+//          AssetCode assetCode;
+//          //: Type of asset in which redemption is being made
+//          uint64 assetType;
+//  
+//          //: reserved for future extension
+//          EmptyExt ext;
+//      } performRedemption;
 //  default:
 //      //: reserved for future extension
 //      EmptyExt ext;
@@ -102,6 +151,9 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
   case createAtomicSwapAsk(ReviewableRequestResourceCreateAtomicSwapAskExt)
   case createAtomicSwapBid(ReviewableRequestResourceCreateAtomicSwapBidExt)
   case createPoll(ReviewableRequestResourceCreatePoll)
+  case manageOffer(ReviewableRequestResourceManageOffer)
+  case createPayment(ReviewableRequestResourceCreatePayment)
+  case performRedemption(ReviewableRequestResourcePerformRedemption)
 
   public var discriminant: Int32 {
     switch self {
@@ -111,6 +163,9 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
     case .createAtomicSwapAsk: return ReviewableRequestType.createAtomicSwapAsk.rawValue
     case .createAtomicSwapBid: return ReviewableRequestType.createAtomicSwapBid.rawValue
     case .createPoll: return ReviewableRequestType.createPoll.rawValue
+    case .manageOffer: return ReviewableRequestType.manageOffer.rawValue
+    case .createPayment: return ReviewableRequestType.createPayment.rawValue
+    case .performRedemption: return ReviewableRequestType.performRedemption.rawValue
     }
   }
 
@@ -126,11 +181,50 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
     case .createAtomicSwapAsk(let data): xdr.append(data.toXDR())
     case .createAtomicSwapBid(let data): xdr.append(data.toXDR())
     case .createPoll(let data): xdr.append(data.toXDR())
+    case .manageOffer(let data): xdr.append(data.toXDR())
+    case .createPayment(let data): xdr.append(data.toXDR())
+    case .performRedemption(let data): xdr.append(data.toXDR())
     }
 
     return xdr
   }
-  public struct ReviewableRequestResourceCreateSale: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ReviewableRequestType.createSale.rawValue:
+      let data = try ReviewableRequestResourceCreateSale(xdrData: &xdrData)
+      self = .createSale(data)
+    case ReviewableRequestType.createIssuance.rawValue:
+      let data = try ReviewableRequestResourceCreateIssuance(xdrData: &xdrData)
+      self = .createIssuance(data)
+    case ReviewableRequestType.createWithdraw.rawValue:
+      let data = try ReviewableRequestResourceCreateWithdraw(xdrData: &xdrData)
+      self = .createWithdraw(data)
+    case ReviewableRequestType.createAtomicSwapAsk.rawValue:
+      let data = try ReviewableRequestResourceCreateAtomicSwapAskExt(xdrData: &xdrData)
+      self = .createAtomicSwapAsk(data)
+    case ReviewableRequestType.createAtomicSwapBid.rawValue:
+      let data = try ReviewableRequestResourceCreateAtomicSwapBidExt(xdrData: &xdrData)
+      self = .createAtomicSwapBid(data)
+    case ReviewableRequestType.createPoll.rawValue:
+      let data = try ReviewableRequestResourceCreatePoll(xdrData: &xdrData)
+      self = .createPoll(data)
+    case ReviewableRequestType.manageOffer.rawValue:
+      let data = try ReviewableRequestResourceManageOffer(xdrData: &xdrData)
+      self = .manageOffer(data)
+    case ReviewableRequestType.createPayment.rawValue:
+      let data = try ReviewableRequestResourceCreatePayment(xdrData: &xdrData)
+      self = .createPayment(data)
+    case ReviewableRequestType.performRedemption.rawValue:
+      let data = try ReviewableRequestResourcePerformRedemption(xdrData: &xdrData)
+      self = .performRedemption(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ReviewableRequestResourceCreateSale: XDRCodable {
     public var type: Uint64
     public var ext: EmptyExt
 
@@ -151,8 +245,13 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.type = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct ReviewableRequestResourceCreateIssuance: XDREncodable {
+  public struct ReviewableRequestResourceCreateIssuance: XDRCodable {
     public var assetCode: AssetCode
     public var assetType: Uint64
     public var ext: EmptyExt
@@ -177,8 +276,14 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct ReviewableRequestResourceCreateWithdraw: XDREncodable {
+  public struct ReviewableRequestResourceCreateWithdraw: XDRCodable {
     public var assetCode: AssetCode
     public var assetType: Uint64
     public var ext: EmptyExt
@@ -201,6 +306,12 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
     }
 
   }
@@ -228,7 +339,20 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
       return xdr
     }
 
-    public struct ReviewableRequestResourceCreateAtomicSwapAskExtCreateAtomicSwapAsk: XDREncodable {
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.atomicSwapReturning.rawValue:
+        let data = try ReviewableRequestResourceCreateAtomicSwapAskExtCreateAtomicSwapAsk(xdrData: &xdrData)
+        self = .atomicSwapReturning(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
+    public struct ReviewableRequestResourceCreateAtomicSwapAskExtCreateAtomicSwapAsk: XDRCodable {
       public var assetCode: AssetCode
       public var assetType: Uint64
       public var ext: EmptyExt
@@ -251,6 +375,12 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
         xdr.append(self.ext.toXDR())
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        self.assetCode = try AssetCode(xdrData: &xdrData)
+        self.assetType = try Uint64(xdrData: &xdrData)
+        self.ext = try EmptyExt(xdrData: &xdrData)
       }
 
     }
@@ -279,7 +409,20 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
       return xdr
     }
 
-    public struct ReviewableRequestResourceCreateAtomicSwapBidExtCreateAtomicSwapBid: XDREncodable {
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.atomicSwapReturning.rawValue:
+        let data = try ReviewableRequestResourceCreateAtomicSwapBidExtCreateAtomicSwapBid(xdrData: &xdrData)
+        self = .atomicSwapReturning(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
+    public struct ReviewableRequestResourceCreateAtomicSwapBidExtCreateAtomicSwapBid: XDRCodable {
       public var assetCode: AssetCode
       public var assetType: Uint64
       public var ext: EmptyExt
@@ -304,9 +447,15 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        self.assetCode = try AssetCode(xdrData: &xdrData)
+        self.assetType = try Uint64(xdrData: &xdrData)
+        self.ext = try EmptyExt(xdrData: &xdrData)
+      }
+
     }
   }
-  public struct ReviewableRequestResourceCreatePoll: XDREncodable {
+  public struct ReviewableRequestResourceCreatePoll: XDRCodable {
     public var permissionType: Uint32
     public var ext: EmptyExt
 
@@ -325,6 +474,132 @@ public enum ReviewableRequestResource: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.permissionType = try Uint32(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct ReviewableRequestResourceManageOffer: XDRCodable {
+    public var baseAssetType: Uint64
+    public var quoteAssetType: Uint64
+    public var baseAssetCode: AssetCode
+    public var quoteAssetCode: AssetCode
+    public var isBuy: Bool
+    public var manageAction: Uint32
+    public var orderBookID: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        baseAssetType: Uint64,
+        quoteAssetType: Uint64,
+        baseAssetCode: AssetCode,
+        quoteAssetCode: AssetCode,
+        isBuy: Bool,
+        manageAction: Uint32,
+        orderBookID: Uint64,
+        ext: EmptyExt) {
+
+      self.baseAssetType = baseAssetType
+      self.quoteAssetType = quoteAssetType
+      self.baseAssetCode = baseAssetCode
+      self.quoteAssetCode = quoteAssetCode
+      self.isBuy = isBuy
+      self.manageAction = manageAction
+      self.orderBookID = orderBookID
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.baseAssetType.toXDR())
+      xdr.append(self.quoteAssetType.toXDR())
+      xdr.append(self.baseAssetCode.toXDR())
+      xdr.append(self.quoteAssetCode.toXDR())
+      xdr.append(self.isBuy.toXDR())
+      xdr.append(self.manageAction.toXDR())
+      xdr.append(self.orderBookID.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.baseAssetType = try Uint64(xdrData: &xdrData)
+      self.quoteAssetType = try Uint64(xdrData: &xdrData)
+      self.baseAssetCode = try AssetCode(xdrData: &xdrData)
+      self.quoteAssetCode = try AssetCode(xdrData: &xdrData)
+      self.isBuy = try Bool(xdrData: &xdrData)
+      self.manageAction = try Uint32(xdrData: &xdrData)
+      self.orderBookID = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct ReviewableRequestResourceCreatePayment: XDRCodable {
+    public var assetCode: AssetCode
+    public var assetType: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        assetCode: AssetCode,
+        assetType: Uint64,
+        ext: EmptyExt) {
+
+      self.assetCode = assetCode
+      self.assetType = assetType
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.assetCode.toXDR())
+      xdr.append(self.assetType.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct ReviewableRequestResourcePerformRedemption: XDRCodable {
+    public var assetCode: AssetCode
+    public var assetType: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        assetCode: AssetCode,
+        assetType: Uint64,
+        ext: EmptyExt) {
+
+      self.assetCode = assetCode
+      self.assetType = assetType
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.assetCode.toXDR())
+      xdr.append(self.assetType.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
     }
 
   }

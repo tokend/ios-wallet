@@ -35,4 +35,16 @@ public enum ManageExternalSystemAccountIdPoolEntryResult: XDRDiscriminatedUnion 
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageExternalSystemAccountIdPoolEntryResultCode.success.rawValue:
+      let data = try ManageExternalSystemAccountIdPoolEntrySuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

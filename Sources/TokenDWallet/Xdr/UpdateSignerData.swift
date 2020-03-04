@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct UpdateSignerData: XDREncodable {
+public struct UpdateSignerData: XDRCodable {
   public var publicKey: PublicKey
   public var roleID: Uint64
   public var weight: Uint32
@@ -62,5 +62,14 @@ public struct UpdateSignerData: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.publicKey = try PublicKey(xdrData: &xdrData)
+    self.roleID = try Uint64(xdrData: &xdrData)
+    self.weight = try Uint32(xdrData: &xdrData)
+    self.identity = try Uint32(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 }

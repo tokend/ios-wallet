@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct PaymentFeeData: XDREncodable {
+public struct PaymentFeeData: XDRCodable {
   public var sourceFee: Fee
   public var destinationFee: Fee
   public var sourcePaysForDest: Bool
@@ -52,6 +52,13 @@ public struct PaymentFeeData: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.sourceFee = try Fee(xdrData: &xdrData)
+    self.destinationFee = try Fee(xdrData: &xdrData)
+    self.sourcePaysForDest = try Bool(xdrData: &xdrData)
+    self.ext = try PaymentFeeDataExt(xdrData: &xdrData)
+  }
+
   public enum PaymentFeeDataExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -71,6 +78,16 @@ public struct PaymentFeeData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

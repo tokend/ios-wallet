@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct LicenseEntry: XDREncodable {
+public struct LicenseEntry: XDRCodable {
   public var adminCount: Uint64
   public var dueDate: Uint64
   public var ledgerHash: Hash
@@ -60,6 +60,19 @@ public struct LicenseEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.adminCount = try Uint64(xdrData: &xdrData)
+    self.dueDate = try Uint64(xdrData: &xdrData)
+    self.ledgerHash = try Hash(xdrData: &xdrData)
+    self.prevLicenseHash = try Hash(xdrData: &xdrData)
+    let lengthsignatures = try Int32(xdrData: &xdrData)
+    self.signatures = [DecoratedSignature]()
+    for _ in 1...lengthsignatures {
+      self.signatures.append(try DecoratedSignature(xdrData: &xdrData))
+    }
+    self.ext = try LicenseEntryExt(xdrData: &xdrData)
+  }
+
   public enum LicenseEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -79,6 +92,16 @@ public struct LicenseEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

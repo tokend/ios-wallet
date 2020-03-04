@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SingleChoiceVote: XDREncodable {
+public struct SingleChoiceVote: XDRCodable {
   public var choice: Uint32
   public var ext: EmptyExt
 
@@ -31,5 +31,10 @@ public struct SingleChoiceVote: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.choice = try Uint32(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 }

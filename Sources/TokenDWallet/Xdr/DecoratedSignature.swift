@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct DecoratedSignature: XDREncodable {
+public struct DecoratedSignature: XDRCodable {
   public var hint: SignatureHint
   public var signature: Signature
 
@@ -31,5 +31,10 @@ public struct DecoratedSignature: XDREncodable {
     xdr.append(self.signature.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.hint = try SignatureHint(xdrData: &xdrData)
+    self.signature = try Signature(xdrData: &xdrData)
   }
 }

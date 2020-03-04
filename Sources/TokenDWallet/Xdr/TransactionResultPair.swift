@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct TransactionResultPair: XDREncodable {
+public struct TransactionResultPair: XDRCodable {
   public var transactionHash: Hash
   public var result: TransactionResult
 
@@ -31,5 +31,10 @@ public struct TransactionResultPair: XDREncodable {
     xdr.append(self.result.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.transactionHash = try Hash(xdrData: &xdrData)
+    self.result = try TransactionResult(xdrData: &xdrData)
   }
 }

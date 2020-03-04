@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageAssetPairSuccess: XDREncodable {
+public struct ManageAssetPairSuccess: XDRCodable {
   public var currentPrice: Int64
   public var ext: ManageAssetPairSuccessExt
 
@@ -39,6 +39,11 @@ public struct ManageAssetPairSuccess: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.currentPrice = try Int64(xdrData: &xdrData)
+    self.ext = try ManageAssetPairSuccessExt(xdrData: &xdrData)
   }
 
   public enum ManageAssetPairSuccessExt: XDRDiscriminatedUnion {
@@ -60,6 +65,16 @@ public struct ManageAssetPairSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

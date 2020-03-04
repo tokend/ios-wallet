@@ -15,7 +15,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct TimeBounds: XDREncodable {
+public struct TimeBounds: XDRCodable {
   public var minTime: Uint64
   public var maxTime: Uint64
 
@@ -34,5 +34,10 @@ public struct TimeBounds: XDREncodable {
     xdr.append(self.maxTime.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.minTime = try Uint64(xdrData: &xdrData)
+    self.maxTime = try Uint64(xdrData: &xdrData)
   }
 }

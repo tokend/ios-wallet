@@ -29,7 +29,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageExternalSystemAccountIdPoolEntryOp: XDREncodable {
+public struct ManageExternalSystemAccountIdPoolEntryOp: XDRCodable {
   public var actionInput: ManageExternalSystemAccountIdPoolEntryOpActionInput
   public var ext: ManageExternalSystemAccountIdPoolEntryOpExt
 
@@ -48,6 +48,11 @@ public struct ManageExternalSystemAccountIdPoolEntryOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.actionInput = try ManageExternalSystemAccountIdPoolEntryOpActionInput(xdrData: &xdrData)
+    self.ext = try ManageExternalSystemAccountIdPoolEntryOpExt(xdrData: &xdrData)
   }
 
   public enum ManageExternalSystemAccountIdPoolEntryOpActionInput: XDRDiscriminatedUnion {
@@ -74,6 +79,21 @@ public struct ManageExternalSystemAccountIdPoolEntryOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageExternalSystemAccountIdPoolEntryAction.create.rawValue:
+        let data = try CreateExternalSystemAccountIdPoolEntryActionInput(xdrData: &xdrData)
+        self = .create(data)
+      case ManageExternalSystemAccountIdPoolEntryAction.remove.rawValue:
+        let data = try DeleteExternalSystemAccountIdPoolEntryActionInput(xdrData: &xdrData)
+        self = .remove(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageExternalSystemAccountIdPoolEntryOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -94,6 +114,16 @@ public struct ManageExternalSystemAccountIdPoolEntryOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

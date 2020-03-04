@@ -22,7 +22,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct Fee: XDREncodable {
+public struct Fee: XDRCodable {
   public var fixed: Uint64
   public var percent: Uint64
   public var ext: FeeExt
@@ -47,6 +47,12 @@ public struct Fee: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.fixed = try Uint64(xdrData: &xdrData)
+    self.percent = try Uint64(xdrData: &xdrData)
+    self.ext = try FeeExt(xdrData: &xdrData)
+  }
+
   public enum FeeExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -66,6 +72,16 @@ public struct Fee: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

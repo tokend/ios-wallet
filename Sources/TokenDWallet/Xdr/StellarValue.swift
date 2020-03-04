@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct StellarValue: XDREncodable {
+public struct StellarValue: XDRCodable {
   public var txSetHash: Hash
   public var closeTime: Uint64
   public var upgrades: [UpgradeType]
@@ -56,6 +56,17 @@ public struct StellarValue: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.txSetHash = try Hash(xdrData: &xdrData)
+    self.closeTime = try Uint64(xdrData: &xdrData)
+    let lengthupgrades = try Int32(xdrData: &xdrData)
+    self.upgrades = [UpgradeType]()
+    for _ in 1...lengthupgrades {
+      self.upgrades.append(try UpgradeType(xdrData: &xdrData))
+    }
+    self.ext = try StellarValueExt(xdrData: &xdrData)
+  }
+
   public enum StellarValueExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -75,6 +86,16 @@ public struct StellarValue: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

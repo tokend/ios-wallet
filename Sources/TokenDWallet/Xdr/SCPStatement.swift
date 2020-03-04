@@ -45,7 +45,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SCPStatement: XDREncodable {
+public struct SCPStatement: XDRCodable {
   public var nodeID: NodeID
   public var slotIndex: Uint64
   public var pledges: SCPStatementPledges
@@ -68,6 +68,12 @@ public struct SCPStatement: XDREncodable {
     xdr.append(self.pledges.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.nodeID = try NodeID(xdrData: &xdrData)
+    self.slotIndex = try Uint64(xdrData: &xdrData)
+    self.pledges = try SCPStatementPledges(xdrData: &xdrData)
   }
 
   public enum SCPStatementPledges: XDRDiscriminatedUnion {
@@ -100,7 +106,28 @@ public struct SCPStatement: XDREncodable {
       return xdr
     }
 
-    public struct SCPStatementPrepare: XDREncodable {
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case SCPStatementType.prepare.rawValue:
+        let data = try SCPStatementPrepare(xdrData: &xdrData)
+        self = .prepare(data)
+      case SCPStatementType.confirm.rawValue:
+        let data = try SCPStatementConfirm(xdrData: &xdrData)
+        self = .confirm(data)
+      case SCPStatementType.externalize.rawValue:
+        let data = try SCPStatementExternalize(xdrData: &xdrData)
+        self = .externalize(data)
+      case SCPStatementType.nominate.rawValue:
+        let data = try SCPNomination(xdrData: &xdrData)
+        self = .nominate(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
+    public struct SCPStatementPrepare: XDRCodable {
       public var quorumSetHash: Hash
       public var ballot: SCPBallot
       public var prepared: SCPBallot?
@@ -137,8 +164,25 @@ public struct SCPStatement: XDREncodable {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        self.quorumSetHash = try Hash(xdrData: &xdrData)
+        self.ballot = try SCPBallot(xdrData: &xdrData)
+        if (try Bool(xdrData: &xdrData)) {
+          self.prepared = try SCPBallot(xdrData: &xdrData)
+        } else {
+          self.prepared = nil
+        }
+        if (try Bool(xdrData: &xdrData)) {
+          self.preparedPrime = try SCPBallot(xdrData: &xdrData)
+        } else {
+          self.preparedPrime = nil
+        }
+        self.nC = try Uint32(xdrData: &xdrData)
+        self.nH = try Uint32(xdrData: &xdrData)
+      }
+
     }
-    public struct SCPStatementConfirm: XDREncodable {
+    public struct SCPStatementConfirm: XDRCodable {
       public var ballot: SCPBallot
       public var nPrepared: Uint32
       public var nCommit: Uint32
@@ -171,8 +215,16 @@ public struct SCPStatement: XDREncodable {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        self.ballot = try SCPBallot(xdrData: &xdrData)
+        self.nPrepared = try Uint32(xdrData: &xdrData)
+        self.nCommit = try Uint32(xdrData: &xdrData)
+        self.nH = try Uint32(xdrData: &xdrData)
+        self.quorumSetHash = try Hash(xdrData: &xdrData)
+      }
+
     }
-    public struct SCPStatementExternalize: XDREncodable {
+    public struct SCPStatementExternalize: XDRCodable {
       public var commit: SCPBallot
       public var nH: Uint32
       public var commitQuorumSetHash: Hash
@@ -195,6 +247,12 @@ public struct SCPStatement: XDREncodable {
         xdr.append(self.commitQuorumSetHash.toXDR())
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        self.commit = try SCPBallot(xdrData: &xdrData)
+        self.nH = try Uint32(xdrData: &xdrData)
+        self.commitQuorumSetHash = try Hash(xdrData: &xdrData)
       }
 
     }

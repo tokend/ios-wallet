@@ -7,7 +7,7 @@ import Foundation
 
 //  //: SaleCreationRequestQuoteAsset is a structure that contains an asset code with price
 //  struct SaleCreationRequestQuoteAsset {
-//      //: AssetCode of quote asset 
+//      //: AssetCode of quote asset
 //      AssetCode quoteAsset; // asset in which participation will be accepted
 //      //: Price of sale base asset in relation to a quote asset
 //      uint64 price; // price for 1 baseAsset in relation to a quote asset
@@ -21,7 +21,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SaleCreationRequestQuoteAsset: XDREncodable {
+public struct SaleCreationRequestQuoteAsset: XDRCodable {
   public var quoteAsset: AssetCode
   public var price: Uint64
   public var ext: SaleCreationRequestQuoteAssetExt
@@ -46,6 +46,12 @@ public struct SaleCreationRequestQuoteAsset: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.quoteAsset = try AssetCode(xdrData: &xdrData)
+    self.price = try Uint64(xdrData: &xdrData)
+    self.ext = try SaleCreationRequestQuoteAssetExt(xdrData: &xdrData)
+  }
+
   public enum SaleCreationRequestQuoteAssetExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -65,6 +71,16 @@ public struct SaleCreationRequestQuoteAsset: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

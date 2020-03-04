@@ -35,7 +35,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct OfferEntry: XDREncodable {
+public struct OfferEntry: XDRCodable {
   public var offerID: Uint64
   public var orderBookID: Uint64
   public var ownerID: AccountID
@@ -108,6 +108,24 @@ public struct OfferEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.offerID = try Uint64(xdrData: &xdrData)
+    self.orderBookID = try Uint64(xdrData: &xdrData)
+    self.ownerID = try AccountID(xdrData: &xdrData)
+    self.isBuy = try Bool(xdrData: &xdrData)
+    self.base = try AssetCode(xdrData: &xdrData)
+    self.quote = try AssetCode(xdrData: &xdrData)
+    self.baseBalance = try BalanceID(xdrData: &xdrData)
+    self.quoteBalance = try BalanceID(xdrData: &xdrData)
+    self.baseAmount = try Int64(xdrData: &xdrData)
+    self.quoteAmount = try Int64(xdrData: &xdrData)
+    self.createdAt = try Uint64(xdrData: &xdrData)
+    self.fee = try Int64(xdrData: &xdrData)
+    self.percentFee = try Int64(xdrData: &xdrData)
+    self.price = try Int64(xdrData: &xdrData)
+    self.ext = try OfferEntryExt(xdrData: &xdrData)
+  }
+
   public enum OfferEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -127,6 +145,16 @@ public struct OfferEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

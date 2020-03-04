@@ -17,7 +17,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct VoteEntry: XDREncodable {
+public struct VoteEntry: XDRCodable {
   public var pollID: Uint64
   public var voterID: AccountID
   public var data: VoteData
@@ -44,5 +44,12 @@ public struct VoteEntry: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.pollID = try Uint64(xdrData: &xdrData)
+    self.voterID = try AccountID(xdrData: &xdrData)
+    self.data = try VoteData(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 }

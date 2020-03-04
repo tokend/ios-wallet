@@ -22,7 +22,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateAccountSaleRuleData: XDREncodable {
+public struct CreateAccountSaleRuleData: XDRCodable {
   public var accountID: AccountID?
   public var forbids: Bool
   public var ext: CreateAccountSaleRuleDataExt
@@ -47,6 +47,16 @@ public struct CreateAccountSaleRuleData: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    if (try Bool(xdrData: &xdrData)) {
+      self.accountID = try AccountID(xdrData: &xdrData)
+    } else {
+      self.accountID = nil
+    }
+    self.forbids = try Bool(xdrData: &xdrData)
+    self.ext = try CreateAccountSaleRuleDataExt(xdrData: &xdrData)
+  }
+
   public enum CreateAccountSaleRuleDataExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -66,6 +76,16 @@ public struct CreateAccountSaleRuleData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

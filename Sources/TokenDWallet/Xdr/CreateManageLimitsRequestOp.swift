@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateManageLimitsRequestOp: XDREncodable {
+public struct CreateManageLimitsRequestOp: XDRCodable {
   public var manageLimitsRequest: LimitsUpdateRequest
   public var allTasks: Uint32?
   public var requestID: Uint64
@@ -56,6 +56,17 @@ public struct CreateManageLimitsRequestOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.manageLimitsRequest = try LimitsUpdateRequest(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.allTasks = try Uint32(xdrData: &xdrData)
+    } else {
+      self.allTasks = nil
+    }
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.ext = try CreateManageLimitsRequestOpExt(xdrData: &xdrData)
+  }
+
   public enum CreateManageLimitsRequestOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -75,6 +86,16 @@ public struct CreateManageLimitsRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

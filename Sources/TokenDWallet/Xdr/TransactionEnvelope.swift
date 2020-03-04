@@ -13,7 +13,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct TransactionEnvelope: XDREncodable {
+public struct TransactionEnvelope: XDRCodable {
   public var tx: Transaction
   public var signatures: [DecoratedSignature]
 
@@ -32,5 +32,14 @@ public struct TransactionEnvelope: XDREncodable {
     xdr.append(self.signatures.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.tx = try Transaction(xdrData: &xdrData)
+    let lengthsignatures = try Int32(xdrData: &xdrData)
+    self.signatures = [DecoratedSignature]()
+    for _ in 1...lengthsignatures {
+      self.signatures.append(try DecoratedSignature(xdrData: &xdrData))
+    }
   }
 }

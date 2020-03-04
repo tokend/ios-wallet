@@ -24,7 +24,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageInvoiceRequestOp: XDREncodable {
+public struct ManageInvoiceRequestOp: XDRCodable {
   public var details: ManageInvoiceRequestOpDetails
   public var ext: ManageInvoiceRequestOpExt
 
@@ -43,6 +43,11 @@ public struct ManageInvoiceRequestOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.details = try ManageInvoiceRequestOpDetails(xdrData: &xdrData)
+    self.ext = try ManageInvoiceRequestOpExt(xdrData: &xdrData)
   }
 
   public enum ManageInvoiceRequestOpDetails: XDRDiscriminatedUnion {
@@ -69,6 +74,21 @@ public struct ManageInvoiceRequestOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageInvoiceRequestAction.create.rawValue:
+        let data = try InvoiceCreationRequest(xdrData: &xdrData)
+        self = .create(data)
+      case ManageInvoiceRequestAction.remove.rawValue:
+        let data = try Uint64(xdrData: &xdrData)
+        self = .remove(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageInvoiceRequestOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -89,6 +109,16 @@ public struct ManageInvoiceRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

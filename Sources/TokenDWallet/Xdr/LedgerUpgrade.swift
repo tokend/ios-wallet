@@ -42,4 +42,22 @@ public enum LedgerUpgrade: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerUpgradeType.version.rawValue:
+      let data = try Uint32(xdrData: &xdrData)
+      self = .version(data)
+    case LedgerUpgradeType.maxTxSetSize.rawValue:
+      let data = try Uint32(xdrData: &xdrData)
+      self = .maxTxSetSize(data)
+    case LedgerUpgradeType.txExpirationPeriod.rawValue:
+      let data = try Int64(xdrData: &xdrData)
+      self = .txExpirationPeriod(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

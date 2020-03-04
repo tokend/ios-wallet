@@ -21,6 +21,12 @@ import Foundation
 //          AtomicSwapAskExtended atomicSwapAskExtended;
 //      case CREATE_POLL:
 //          CreatePollExtended createPoll;
+//      case MANAGE_OFFER:
+//          ManageOfferResult manageOfferResult;
+//      case CREATE_PAYMENT:
+//          PaymentResult paymentResult;
+//      case PERFORM_REDEMPTION:
+//          CreateRedemptionRequestResult createRedemptionResult;
 //      } typeExt;
 //  
 //      //: Reserved for future use
@@ -33,7 +39,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ExtendedResult: XDREncodable {
+public struct ExtendedResult: XDRCodable {
   public var fulfilled: Bool
   public var typeExt: ExtendedResultTypeExt
   public var ext: ExtendedResultExt
@@ -58,12 +64,21 @@ public struct ExtendedResult: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.fulfilled = try Bool(xdrData: &xdrData)
+    self.typeExt = try ExtendedResultTypeExt(xdrData: &xdrData)
+    self.ext = try ExtendedResultExt(xdrData: &xdrData)
+  }
+
   public enum ExtendedResultTypeExt: XDRDiscriminatedUnion {
     case createSale(SaleExtended)
     case none()
     case createAtomicSwapBid(AtomicSwapBidExtended)
     case createAtomicSwapAsk(AtomicSwapAskExtended)
     case createPoll(CreatePollExtended)
+    case manageOffer(ManageOfferResult)
+    case createPayment(PaymentResult)
+    case performRedemption(CreateRedemptionRequestResult)
 
     public var discriminant: Int32 {
       switch self {
@@ -72,6 +87,9 @@ public struct ExtendedResult: XDREncodable {
       case .createAtomicSwapBid: return ReviewableRequestType.createAtomicSwapBid.rawValue
       case .createAtomicSwapAsk: return ReviewableRequestType.createAtomicSwapAsk.rawValue
       case .createPoll: return ReviewableRequestType.createPoll.rawValue
+      case .manageOffer: return ReviewableRequestType.manageOffer.rawValue
+      case .createPayment: return ReviewableRequestType.createPayment.rawValue
+      case .performRedemption: return ReviewableRequestType.performRedemption.rawValue
       }
     }
 
@@ -86,9 +104,43 @@ public struct ExtendedResult: XDREncodable {
       case .createAtomicSwapBid(let data): xdr.append(data.toXDR())
       case .createAtomicSwapAsk(let data): xdr.append(data.toXDR())
       case .createPoll(let data): xdr.append(data.toXDR())
+      case .manageOffer(let data): xdr.append(data.toXDR())
+      case .createPayment(let data): xdr.append(data.toXDR())
+      case .performRedemption(let data): xdr.append(data.toXDR())
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ReviewableRequestType.createSale.rawValue:
+        let data = try SaleExtended(xdrData: &xdrData)
+        self = .createSale(data)
+      case ReviewableRequestType.none.rawValue: self = .none()
+      case ReviewableRequestType.createAtomicSwapBid.rawValue:
+        let data = try AtomicSwapBidExtended(xdrData: &xdrData)
+        self = .createAtomicSwapBid(data)
+      case ReviewableRequestType.createAtomicSwapAsk.rawValue:
+        let data = try AtomicSwapAskExtended(xdrData: &xdrData)
+        self = .createAtomicSwapAsk(data)
+      case ReviewableRequestType.createPoll.rawValue:
+        let data = try CreatePollExtended(xdrData: &xdrData)
+        self = .createPoll(data)
+      case ReviewableRequestType.manageOffer.rawValue:
+        let data = try ManageOfferResult(xdrData: &xdrData)
+        self = .manageOffer(data)
+      case ReviewableRequestType.createPayment.rawValue:
+        let data = try PaymentResult(xdrData: &xdrData)
+        self = .createPayment(data)
+      case ReviewableRequestType.performRedemption.rawValue:
+        let data = try CreateRedemptionRequestResult(xdrData: &xdrData)
+        self = .performRedemption(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }
@@ -111,6 +163,16 @@ public struct ExtendedResult: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

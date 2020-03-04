@@ -24,7 +24,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ClosePollData: XDREncodable {
+public struct ClosePollData: XDRCodable {
   public var result: PollResult
   public var details: Longstring
   public var ext: ClosePollDataExt
@@ -49,6 +49,12 @@ public struct ClosePollData: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.result = try PollResult(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    self.ext = try ClosePollDataExt(xdrData: &xdrData)
+  }
+
   public enum ClosePollDataExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -68,6 +74,16 @@ public struct ClosePollData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

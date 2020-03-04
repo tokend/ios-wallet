@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ReferenceEntry: XDREncodable {
+public struct ReferenceEntry: XDRCodable {
   public var sender: AccountID
   public var reference: String64
   public var ext: ReferenceEntryExt
@@ -45,6 +45,12 @@ public struct ReferenceEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.sender = try AccountID(xdrData: &xdrData)
+    self.reference = try String64(xdrData: &xdrData)
+    self.ext = try ReferenceEntryExt(xdrData: &xdrData)
+  }
+
   public enum ReferenceEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -64,6 +70,16 @@ public struct ReferenceEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

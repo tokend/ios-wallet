@@ -28,7 +28,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreatePollRequestResponse: XDREncodable {
+public struct CreatePollRequestResponse: XDRCodable {
   public var requestID: Uint64
   public var fulfilled: Bool
   public var pollID: Uint64?
@@ -57,6 +57,17 @@ public struct CreatePollRequestResponse: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.fulfilled = try Bool(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.pollID = try Uint64(xdrData: &xdrData)
+    } else {
+      self.pollID = nil
+    }
+    self.ext = try CreatePollRequestResponseExt(xdrData: &xdrData)
+  }
+
   public enum CreatePollRequestResponseExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -76,6 +87,16 @@ public struct CreatePollRequestResponse: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

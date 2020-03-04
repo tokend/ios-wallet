@@ -17,7 +17,8 @@ import Foundation
 //      OPERATION_FEE = 6,
 //      PAYOUT_FEE = 7,
 //      ATOMIC_SWAP_SALE_FEE = 8,
-//      ATOMIC_SWAP_PURCHASE_FEE = 9
+//      ATOMIC_SWAP_PURCHASE_FEE = 9,
+//      SWAP_FEE = 10
 //  };
 
 //  ===========================================================================
@@ -32,4 +33,5 @@ public enum FeeType: Int32, XDREnum {
   case payoutFee = 7
   case atomicSwapSaleFee = 8
   case atomicSwapPurchaseFee = 9
+  case swapFee = 10
 }

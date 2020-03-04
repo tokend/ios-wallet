@@ -47,7 +47,19 @@ public enum ManageAccountSpecificRuleResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct ManageAccountSpecificRuleResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageAccountSpecificRuleResultCode.success.rawValue:
+      let data = try ManageAccountSpecificRuleResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ManageAccountSpecificRuleResultSuccess: XDRCodable {
     public var ruleID: Uint64
     public var ext: ManageAccountSpecificRuleResultSuccessExt
 
@@ -66,6 +78,11 @@ public enum ManageAccountSpecificRuleResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.ruleID = try Uint64(xdrData: &xdrData)
+      self.ext = try ManageAccountSpecificRuleResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum ManageAccountSpecificRuleResultSuccessExt: XDRDiscriminatedUnion {
@@ -87,6 +104,16 @@ public enum ManageAccountSpecificRuleResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

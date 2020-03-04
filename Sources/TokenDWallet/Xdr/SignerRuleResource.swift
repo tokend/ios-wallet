@@ -156,6 +156,17 @@ import Foundation
 //              EmptyExt ext;
 //          } accountSpecificRule;
 //      } accountSpecificRuleExt;
+//  case SWAP:
+//      struct
+//      {
+//          //: code of the asset
+//          AssetCode assetCode;
+//          //: type of the asset
+//          uint64 assetType;
+//  
+//          //: reserved for future extension
+//          EmptyExt ext;
+//      } swap;
 //  default:
 //      //: reserved for future extension
 //      EmptyExt ext;
@@ -177,6 +188,7 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
   case vote(SignerRuleResourceVote)
   case initiateKycRecovery(SignerRuleResourceInitiateKYCRecovery)
   case accountSpecificRule(SignerRuleResourceAccountSpecificRuleExt)
+  case swap(SignerRuleResourceSwap)
 
   public var discriminant: Int32 {
     switch self {
@@ -194,6 +206,7 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
     case .vote: return LedgerEntryType.vote.rawValue
     case .initiateKycRecovery: return LedgerEntryType.initiateKycRecovery.rawValue
     case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
+    case .swap: return LedgerEntryType.swap.rawValue
     }
   }
 
@@ -217,11 +230,64 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
     case .vote(let data): xdr.append(data.toXDR())
     case .initiateKycRecovery(let data): xdr.append(data.toXDR())
     case .accountSpecificRule(let data): xdr.append(data.toXDR())
+    case .swap(let data): xdr.append(data.toXDR())
     }
 
     return xdr
   }
-  public struct SignerRuleResourceReviewableRequest: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerEntryType.reviewableRequest.rawValue:
+      let data = try SignerRuleResourceReviewableRequest(xdrData: &xdrData)
+      self = .reviewableRequest(data)
+    case LedgerEntryType.asset.rawValue:
+      let data = try SignerRuleResourceAsset(xdrData: &xdrData)
+      self = .asset(data)
+    case LedgerEntryType.any.rawValue: self = .any()
+    case LedgerEntryType.offerEntry.rawValue:
+      let data = try SignerRuleResourceOffer(xdrData: &xdrData)
+      self = .offerEntry(data)
+    case LedgerEntryType.sale.rawValue:
+      let data = try SignerRuleResourceSale(xdrData: &xdrData)
+      self = .sale(data)
+    case LedgerEntryType.atomicSwapAsk.rawValue:
+      let data = try SignerRuleResourceAtomicSwapAsk(xdrData: &xdrData)
+      self = .atomicSwapAsk(data)
+    case LedgerEntryType.signerRule.rawValue:
+      let data = try SignerRuleResourceSignerRule(xdrData: &xdrData)
+      self = .signerRule(data)
+    case LedgerEntryType.signerRole.rawValue:
+      let data = try SignerRuleResourceSignerRole(xdrData: &xdrData)
+      self = .signerRole(data)
+    case LedgerEntryType.signer.rawValue:
+      let data = try SignerRuleResourceSigner(xdrData: &xdrData)
+      self = .signer(data)
+    case LedgerEntryType.keyValue.rawValue:
+      let data = try SignerRuleResourceKeyValue(xdrData: &xdrData)
+      self = .keyValue(data)
+    case LedgerEntryType.poll.rawValue:
+      let data = try SignerRuleResourcePoll(xdrData: &xdrData)
+      self = .poll(data)
+    case LedgerEntryType.vote.rawValue:
+      let data = try SignerRuleResourceVote(xdrData: &xdrData)
+      self = .vote(data)
+    case LedgerEntryType.initiateKycRecovery.rawValue:
+      let data = try SignerRuleResourceInitiateKYCRecovery(xdrData: &xdrData)
+      self = .initiateKycRecovery(data)
+    case LedgerEntryType.accountSpecificRule.rawValue:
+      let data = try SignerRuleResourceAccountSpecificRuleExt(xdrData: &xdrData)
+      self = .accountSpecificRule(data)
+    case LedgerEntryType.swap.rawValue:
+      let data = try SignerRuleResourceSwap(xdrData: &xdrData)
+      self = .swap(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct SignerRuleResourceReviewableRequest: XDRCodable {
     public var details: ReviewableRequestResource
     public var tasksToAdd: Uint64
     public var tasksToRemove: Uint64
@@ -254,8 +320,16 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.details = try ReviewableRequestResource(xdrData: &xdrData)
+      self.tasksToAdd = try Uint64(xdrData: &xdrData)
+      self.tasksToRemove = try Uint64(xdrData: &xdrData)
+      self.allTasks = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceAsset: XDREncodable {
+  public struct SignerRuleResourceAsset: XDRCodable {
     public var assetCode: AssetCode
     public var assetType: Uint64
     public var ext: EmptyExt
@@ -280,8 +354,14 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceOffer: XDREncodable {
+  public struct SignerRuleResourceOffer: XDRCodable {
     public var baseAssetType: Uint64
     public var quoteAssetType: Uint64
     public var baseAssetCode: AssetCode
@@ -318,8 +398,17 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.baseAssetType = try Uint64(xdrData: &xdrData)
+      self.quoteAssetType = try Uint64(xdrData: &xdrData)
+      self.baseAssetCode = try AssetCode(xdrData: &xdrData)
+      self.quoteAssetCode = try AssetCode(xdrData: &xdrData)
+      self.isBuy = try Bool(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceSale: XDREncodable {
+  public struct SignerRuleResourceSale: XDRCodable {
     public var saleID: Uint64
     public var saleType: Uint64
     public var ext: EmptyExt
@@ -344,8 +433,14 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.saleID = try Uint64(xdrData: &xdrData)
+      self.saleType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceAtomicSwapAsk: XDREncodable {
+  public struct SignerRuleResourceAtomicSwapAsk: XDRCodable {
     public var assetType: Uint64
     public var assetCode: AssetCode
     public var ext: EmptyExt
@@ -370,8 +465,14 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceSignerRule: XDREncodable {
+  public struct SignerRuleResourceSignerRule: XDRCodable {
     public var isDefault: Bool
     public var ext: EmptyExt
 
@@ -392,8 +493,13 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.isDefault = try Bool(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceSignerRole: XDREncodable {
+  public struct SignerRuleResourceSignerRole: XDRCodable {
     public var roleID: Uint64
     public var ext: EmptyExt
 
@@ -414,8 +520,13 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.roleID = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceSigner: XDREncodable {
+  public struct SignerRuleResourceSigner: XDRCodable {
     public var roleID: Uint64
     public var ext: EmptyExt
 
@@ -436,8 +547,13 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.roleID = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceKeyValue: XDREncodable {
+  public struct SignerRuleResourceKeyValue: XDRCodable {
     public var keyPrefix: Longstring
     public var ext: EmptyExt
 
@@ -458,8 +574,13 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.keyPrefix = try Longstring(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourcePoll: XDREncodable {
+  public struct SignerRuleResourcePoll: XDRCodable {
     public var pollID: Uint64
     public var permissionType: Uint32
     public var ext: EmptyExt
@@ -484,8 +605,14 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.pollID = try Uint64(xdrData: &xdrData)
+      self.permissionType = try Uint32(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceVote: XDREncodable {
+  public struct SignerRuleResourceVote: XDRCodable {
     public var pollID: Uint64
     public var permissionType: Uint32
     public var ext: EmptyExt
@@ -510,8 +637,14 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.pollID = try Uint64(xdrData: &xdrData)
+      self.permissionType = try Uint32(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct SignerRuleResourceInitiateKYCRecovery: XDREncodable {
+  public struct SignerRuleResourceInitiateKYCRecovery: XDRCodable {
     public var roleID: Uint64
     public var ext: EmptyExt
 
@@ -530,6 +663,11 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.roleID = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
     }
 
   }
@@ -557,7 +695,20 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
-    public struct SignerRuleResourceAccountSpecificRuleExtAccountSpecificRule: XDREncodable {
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.addAccSpecificRuleResource.rawValue:
+        let data = try SignerRuleResourceAccountSpecificRuleExtAccountSpecificRule(xdrData: &xdrData)
+        self = .addAccSpecificRuleResource(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
+    public struct SignerRuleResourceAccountSpecificRuleExtAccountSpecificRule: XDRCodable {
       public var ledgerKey: LedgerKey
       public var ext: EmptyExt
 
@@ -578,6 +729,43 @@ public enum SignerRuleResource: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        self.ledgerKey = try LedgerKey(xdrData: &xdrData)
+        self.ext = try EmptyExt(xdrData: &xdrData)
+      }
+
     }
+  }
+  public struct SignerRuleResourceSwap: XDRCodable {
+    public var assetCode: AssetCode
+    public var assetType: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        assetCode: AssetCode,
+        assetType: Uint64,
+        ext: EmptyExt) {
+
+      self.assetCode = assetCode
+      self.assetType = assetType
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.assetCode.toXDR())
+      xdr.append(self.assetType.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
 }

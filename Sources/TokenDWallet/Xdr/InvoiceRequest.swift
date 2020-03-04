@@ -26,7 +26,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct InvoiceRequest: XDREncodable {
+public struct InvoiceRequest: XDRCodable {
   public var asset: AssetCode
   public var amount: Uint64
   public var senderBalance: BalanceID
@@ -71,6 +71,21 @@ public struct InvoiceRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.asset = try AssetCode(xdrData: &xdrData)
+    self.amount = try Uint64(xdrData: &xdrData)
+    self.senderBalance = try BalanceID(xdrData: &xdrData)
+    self.receiverBalance = try BalanceID(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.contractID = try Uint64(xdrData: &xdrData)
+    } else {
+      self.contractID = nil
+    }
+    self.isApproved = try Bool(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    self.ext = try InvoiceRequestExt(xdrData: &xdrData)
+  }
+
   public enum InvoiceRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -90,6 +105,16 @@ public struct InvoiceRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

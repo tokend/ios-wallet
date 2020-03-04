@@ -47,4 +47,25 @@ public enum LedgerEntryChange: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerEntryChangeType.created.rawValue:
+      let data = try LedgerEntry(xdrData: &xdrData)
+      self = .created(data)
+    case LedgerEntryChangeType.updated.rawValue:
+      let data = try LedgerEntry(xdrData: &xdrData)
+      self = .updated(data)
+    case LedgerEntryChangeType.removed.rawValue:
+      let data = try LedgerKey(xdrData: &xdrData)
+      self = .removed(data)
+    case LedgerEntryChangeType.state.rawValue:
+      let data = try LedgerEntry(xdrData: &xdrData)
+      self = .state(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

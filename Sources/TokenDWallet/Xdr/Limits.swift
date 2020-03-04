@@ -22,7 +22,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct Limits: XDREncodable {
+public struct Limits: XDRCodable {
   public var dailyOut: Int64
   public var weeklyOut: Int64
   public var monthlyOut: Int64
@@ -55,6 +55,14 @@ public struct Limits: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.dailyOut = try Int64(xdrData: &xdrData)
+    self.weeklyOut = try Int64(xdrData: &xdrData)
+    self.monthlyOut = try Int64(xdrData: &xdrData)
+    self.annualOut = try Int64(xdrData: &xdrData)
+    self.ext = try LimitsExt(xdrData: &xdrData)
+  }
+
   public enum LimitsExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -74,6 +82,16 @@ public struct Limits: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

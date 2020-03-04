@@ -14,6 +14,7 @@
 		7D8C0B06FEDBFDD4F6A860AA /* libPods-TokenDWallet_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46DC2F103B0418D6E33CA14A /* libPods-TokenDWallet_Tests.a */; };
 		7FABEA6F20FF4EE30005E751 /* ECDSASignDecoratedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FABEA6E20FF4EE30005E751 /* ECDSASignDecoratedTests.swift */; };
 		7FABEA7120FF54E60005E751 /* TransactionModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FABEA7020FF54E60005E751 /* TransactionModelTests.swift */; };
+		C47C788D240D75900068C152 /* XDRDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C788C240D75900068C152 /* XDRDecodingTests.swift */; };
 		C4C0EF6B2094B57700DAC6C4 /* XDREncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0EF6A2094B57700DAC6C4 /* XDREncodingTests.swift */; };
 		C4C0EF7F2097053200DAC6C4 /* Base32CheckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0EF7D209704D300DAC6C4 /* Base32CheckTests.swift */; };
 		C4C0EFAC20971CDC00DAC6C4 /* XDRTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0EFAA20971CB400DAC6C4 /* XDRTypesTests.swift */; };
@@ -47,6 +48,7 @@
 		7FABEA6E20FF4EE30005E751 /* ECDSASignDecoratedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECDSASignDecoratedTests.swift; sourceTree = "<group>"; };
 		7FABEA7020FF54E60005E751 /* TransactionModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionModelTests.swift; sourceTree = "<group>"; };
 		9A7D0DDACE2712C49B8FB4B1 /* Pods-TokenDWallet_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TokenDWallet_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TokenDWallet_Tests/Pods-TokenDWallet_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		C47C788C240D75900068C152 /* XDRDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDRDecodingTests.swift; sourceTree = "<group>"; };
 		C4C0EF6A2094B57700DAC6C4 /* XDREncodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDREncodingTests.swift; sourceTree = "<group>"; };
 		C4C0EF7D209704D300DAC6C4 /* Base32CheckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base32CheckTests.swift; sourceTree = "<group>"; };
 		C4C0EFAA20971CB400DAC6C4 /* XDRTypesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDRTypesTests.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				7FABEA6E20FF4EE30005E751 /* ECDSASignDecoratedTests.swift */,
 				7FABEA7020FF54E60005E751 /* TransactionModelTests.swift */,
 				C4C0EF6A2094B57700DAC6C4 /* XDREncodingTests.swift */,
+				C47C788C240D75900068C152 /* XDRDecodingTests.swift */,
 				C4C0EFAA20971CB400DAC6C4 /* XDRTypesTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
@@ -364,6 +367,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FABEA7120FF54E60005E751 /* TransactionModelTests.swift in Sources */,
+				C47C788D240D75900068C152 /* XDRDecodingTests.swift in Sources */,
 				C4C0EF7F2097053200DAC6C4 /* Base32CheckTests.swift in Sources */,
 				C4C0EFAC20971CDC00DAC6C4 /* XDRTypesTests.swift in Sources */,
 				C4C0EF6B2094B57700DAC6C4 /* XDREncodingTests.swift in Sources */,

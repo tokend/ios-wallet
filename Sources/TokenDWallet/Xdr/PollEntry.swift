@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct PollEntry: XDREncodable {
+public struct PollEntry: XDRCodable {
   public var id: Uint64
   public var permissionType: Uint32
   public var numberOfChoices: Uint32
@@ -82,5 +82,19 @@ public struct PollEntry: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.id = try Uint64(xdrData: &xdrData)
+    self.permissionType = try Uint32(xdrData: &xdrData)
+    self.numberOfChoices = try Uint32(xdrData: &xdrData)
+    self.data = try PollData(xdrData: &xdrData)
+    self.startTime = try Uint64(xdrData: &xdrData)
+    self.endTime = try Uint64(xdrData: &xdrData)
+    self.ownerID = try AccountID(xdrData: &xdrData)
+    self.resultProviderID = try AccountID(xdrData: &xdrData)
+    self.voteConfirmationRequired = try Bool(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 }

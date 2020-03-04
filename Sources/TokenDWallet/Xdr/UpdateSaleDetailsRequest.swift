@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct UpdateSaleDetailsRequest: XDREncodable {
+public struct UpdateSaleDetailsRequest: XDRCodable {
   public var saleID: Uint64
   public var creatorDetails: Longstring
   public var sequenceNumber: Uint32
@@ -52,6 +52,13 @@ public struct UpdateSaleDetailsRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.saleID = try Uint64(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    self.sequenceNumber = try Uint32(xdrData: &xdrData)
+    self.ext = try UpdateSaleDetailsRequestExt(xdrData: &xdrData)
+  }
+
   public enum UpdateSaleDetailsRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -71,6 +78,16 @@ public struct UpdateSaleDetailsRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

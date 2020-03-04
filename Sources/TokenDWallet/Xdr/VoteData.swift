@@ -34,4 +34,16 @@ public enum VoteData: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case PollType.singleChoice.rawValue:
+      let data = try SingleChoiceVote(xdrData: &xdrData)
+      self = .singleChoice(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

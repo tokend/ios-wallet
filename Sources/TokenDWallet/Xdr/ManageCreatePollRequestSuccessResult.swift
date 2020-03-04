@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageCreatePollRequestSuccessResult: XDREncodable {
+public struct ManageCreatePollRequestSuccessResult: XDRCodable {
   public var details: ManageCreatePollRequestSuccessResultDetails
   public var ext: ManageCreatePollRequestSuccessResultExt
 
@@ -46,6 +46,11 @@ public struct ManageCreatePollRequestSuccessResult: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.details = try ManageCreatePollRequestSuccessResultDetails(xdrData: &xdrData)
+    self.ext = try ManageCreatePollRequestSuccessResultExt(xdrData: &xdrData)
   }
 
   public enum ManageCreatePollRequestSuccessResultDetails: XDRDiscriminatedUnion {
@@ -72,6 +77,19 @@ public struct ManageCreatePollRequestSuccessResult: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageCreatePollRequestAction.create.rawValue:
+        let data = try CreatePollRequestResponse(xdrData: &xdrData)
+        self = .create(data)
+      case ManageCreatePollRequestAction.cancel.rawValue: self = .cancel()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageCreatePollRequestSuccessResultExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -92,6 +110,16 @@ public struct ManageCreatePollRequestSuccessResult: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

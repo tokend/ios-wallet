@@ -26,7 +26,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct BalanceEntry: XDREncodable {
+public struct BalanceEntry: XDRCodable {
   public var balanceID: BalanceID
   public var sequentialID: Uint64
   public var asset: AssetCode
@@ -67,6 +67,16 @@ public struct BalanceEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.balanceID = try BalanceID(xdrData: &xdrData)
+    self.sequentialID = try Uint64(xdrData: &xdrData)
+    self.asset = try AssetCode(xdrData: &xdrData)
+    self.accountID = try AccountID(xdrData: &xdrData)
+    self.amount = try Uint64(xdrData: &xdrData)
+    self.locked = try Uint64(xdrData: &xdrData)
+    self.ext = try BalanceEntryExt(xdrData: &xdrData)
+  }
+
   public enum BalanceEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -86,6 +96,16 @@ public struct BalanceEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

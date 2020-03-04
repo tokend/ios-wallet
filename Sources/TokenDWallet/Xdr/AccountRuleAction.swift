@@ -26,7 +26,10 @@ import Foundation
 //      CLOSE = 16,
 //      REMOVE = 17,
 //      UPDATE_END_TIME = 18,
-//      CREATE_FOR_OTHER_WITH_TASKS = 19
+//      CREATE_FOR_OTHER_WITH_TASKS = 19,
+//      REMOVE_FOR_OTHER = 20,
+//      EXCHANGE = 21,
+//      RECEIVE_REDEMPTION = 22
 //  };
 
 //  ===========================================================================
@@ -50,4 +53,7 @@ public enum AccountRuleAction: Int32, XDREnum {
   case remove = 17
   case updateEndTime = 18
   case createForOtherWithTasks = 19
+  case removeForOther = 20
+  case exchange = 21
+  case receiveRedemption = 22
 }

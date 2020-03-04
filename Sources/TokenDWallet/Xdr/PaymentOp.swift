@@ -40,7 +40,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct PaymentOp: XDREncodable {
+public struct PaymentOp: XDRCodable {
   public var sourceBalanceID: BalanceID
   public var destination: PaymentOpDestination
   public var amount: Uint64
@@ -81,6 +81,16 @@ public struct PaymentOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.sourceBalanceID = try BalanceID(xdrData: &xdrData)
+    self.destination = try PaymentOpDestination(xdrData: &xdrData)
+    self.amount = try Uint64(xdrData: &xdrData)
+    self.feeData = try PaymentFeeData(xdrData: &xdrData)
+    self.subject = try Longstring(xdrData: &xdrData)
+    self.reference = try Longstring(xdrData: &xdrData)
+    self.ext = try PaymentOpExt(xdrData: &xdrData)
+  }
+
   public enum PaymentOpDestination: XDRDiscriminatedUnion {
     case account(AccountID)
     case balance(BalanceID)
@@ -105,6 +115,21 @@ public struct PaymentOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case PaymentDestinationType.account.rawValue:
+        let data = try AccountID(xdrData: &xdrData)
+        self = .account(data)
+      case PaymentDestinationType.balance.rawValue:
+        let data = try BalanceID(xdrData: &xdrData)
+        self = .balance(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum PaymentOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -125,6 +150,16 @@ public struct PaymentOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

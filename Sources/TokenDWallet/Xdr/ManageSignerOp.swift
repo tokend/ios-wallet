@@ -25,7 +25,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageSignerOp: XDREncodable {
+public struct ManageSignerOp: XDRCodable {
   public var data: ManageSignerOpData
   public var ext: EmptyExt
 
@@ -44,6 +44,11 @@ public struct ManageSignerOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.data = try ManageSignerOpData(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 
   public enum ManageSignerOpData: XDRDiscriminatedUnion {
@@ -71,6 +76,24 @@ public struct ManageSignerOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageSignerAction.create.rawValue:
+        let data = try UpdateSignerData(xdrData: &xdrData)
+        self = .create(data)
+      case ManageSignerAction.update.rawValue:
+        let data = try UpdateSignerData(xdrData: &xdrData)
+        self = .update(data)
+      case ManageSignerAction.remove.rawValue:
+        let data = try RemoveSignerData(xdrData: &xdrData)
+        self = .remove(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

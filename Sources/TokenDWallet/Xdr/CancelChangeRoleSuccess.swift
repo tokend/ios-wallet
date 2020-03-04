@@ -18,7 +18,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CancelChangeRoleSuccess: XDREncodable {
+public struct CancelChangeRoleSuccess: XDRCodable {
   public var ext: CancelChangeRoleSuccessExt
 
   public init(
@@ -33,6 +33,10 @@ public struct CancelChangeRoleSuccess: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ext = try CancelChangeRoleSuccessExt(xdrData: &xdrData)
   }
 
   public enum CancelChangeRoleSuccessExt: XDRDiscriminatedUnion {
@@ -54,6 +58,16 @@ public struct CancelChangeRoleSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

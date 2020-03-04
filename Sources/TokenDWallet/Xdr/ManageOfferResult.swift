@@ -65,7 +65,25 @@ public enum ManageOfferResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct ManageOfferResultPhysicalPriceRestriction: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageOfferResultCode.success.rawValue:
+      let data = try ManageOfferSuccessResult(xdrData: &xdrData)
+      self = .success(data)
+    case ManageOfferResultCode.physicalPriceRestriction.rawValue:
+      let data = try ManageOfferResultPhysicalPriceRestriction(xdrData: &xdrData)
+      self = .physicalPriceRestriction(data)
+    case ManageOfferResultCode.currentPriceRestriction.rawValue:
+      let data = try ManageOfferResultCurrentPriceRestriction(xdrData: &xdrData)
+      self = .currentPriceRestriction(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ManageOfferResultPhysicalPriceRestriction: XDRCodable {
     public var physicalPrice: Int64
     public var ext: ManageOfferResultPhysicalPriceRestrictionExt
 
@@ -84,6 +102,11 @@ public enum ManageOfferResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.physicalPrice = try Int64(xdrData: &xdrData)
+      self.ext = try ManageOfferResultPhysicalPriceRestrictionExt(xdrData: &xdrData)
     }
 
     public enum ManageOfferResultPhysicalPriceRestrictionExt: XDRDiscriminatedUnion {
@@ -107,9 +130,19 @@ public enum ManageOfferResult: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct ManageOfferResultCurrentPriceRestriction: XDREncodable {
+  public struct ManageOfferResultCurrentPriceRestriction: XDRCodable {
     public var currentPrice: Int64
     public var ext: ManageOfferResultCurrentPriceRestrictionExt
 
@@ -128,6 +161,11 @@ public enum ManageOfferResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.currentPrice = try Int64(xdrData: &xdrData)
+      self.ext = try ManageOfferResultCurrentPriceRestrictionExt(xdrData: &xdrData)
     }
 
     public enum ManageOfferResultCurrentPriceRestrictionExt: XDRDiscriminatedUnion {
@@ -149,6 +187,16 @@ public enum ManageOfferResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

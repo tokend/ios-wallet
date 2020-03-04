@@ -11,7 +11,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct Curve25519Secret: XDREncodable {
+public struct Curve25519Secret: XDRCodable {
   public var key: XDRDataFixed32
 
   public init(
@@ -26,5 +26,9 @@ public struct Curve25519Secret: XDREncodable {
     xdr.append(self.key.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.key = try XDRDataFixed32(xdrData: &xdrData)
   }
 }

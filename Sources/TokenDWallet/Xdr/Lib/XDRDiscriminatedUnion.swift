@@ -1,5 +1,5 @@
 import Foundation
 
-public protocol XDRDiscriminatedUnion: XDREncodable {
+public protocol XDRDiscriminatedUnion: XDRCodable {
     var discriminant: Int32 { get }
 }

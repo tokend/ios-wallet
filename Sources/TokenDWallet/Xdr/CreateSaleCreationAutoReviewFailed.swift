@@ -19,7 +19,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateSaleCreationAutoReviewFailed: XDREncodable {
+public struct CreateSaleCreationAutoReviewFailed: XDRCodable {
   public var reviewRequestRequest: ReviewRequestResult
   public var ext: CreateSaleCreationAutoReviewFailedExt
 
@@ -38,6 +38,11 @@ public struct CreateSaleCreationAutoReviewFailed: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.reviewRequestRequest = try ReviewRequestResult(xdrData: &xdrData)
+    self.ext = try CreateSaleCreationAutoReviewFailedExt(xdrData: &xdrData)
   }
 
   public enum CreateSaleCreationAutoReviewFailedExt: XDRDiscriminatedUnion {
@@ -59,6 +64,16 @@ public struct CreateSaleCreationAutoReviewFailed: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

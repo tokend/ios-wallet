@@ -18,7 +18,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageBalanceSuccess: XDREncodable {
+public struct ManageBalanceSuccess: XDRCodable {
   public var balanceID: BalanceID
   public var ext: ManageBalanceSuccessExt
 
@@ -37,6 +37,11 @@ public struct ManageBalanceSuccess: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.balanceID = try BalanceID(xdrData: &xdrData)
+    self.ext = try ManageBalanceSuccessExt(xdrData: &xdrData)
   }
 
   public enum ManageBalanceSuccessExt: XDRDiscriminatedUnion {
@@ -58,6 +63,16 @@ public struct ManageBalanceSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

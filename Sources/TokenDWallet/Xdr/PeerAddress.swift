@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct PeerAddress: XDREncodable {
+public struct PeerAddress: XDRCodable {
   public var ip: PeerAddressIp
   public var port: Uint32
   public var numFailures: Uint32
@@ -45,6 +45,12 @@ public struct PeerAddress: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.ip = try PeerAddressIp(xdrData: &xdrData)
+    self.port = try Uint32(xdrData: &xdrData)
+    self.numFailures = try Uint32(xdrData: &xdrData)
+  }
+
   public enum PeerAddressIp: XDRDiscriminatedUnion {
     case ipv4(XDRDataFixed4)
     case ipv6(XDRDataFixed16)
@@ -67,6 +73,21 @@ public struct PeerAddress: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case IPAddrType.ipv4.rawValue:
+        let data = try XDRDataFixed4(xdrData: &xdrData)
+        self = .ipv4(data)
+      case IPAddrType.ipv6.rawValue:
+        let data = try XDRDataFixed16(xdrData: &xdrData)
+        self = .ipv6(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

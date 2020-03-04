@@ -22,7 +22,7 @@ import Foundation
 //      };
 
 //  ===========================================================================
-public struct SetFeesOp: XDREncodable {
+public struct SetFeesOp: XDRCodable {
   public var fee: FeeEntry?
   public var isDelete: Bool
   public var ext: SetFeesOpExt
@@ -47,6 +47,16 @@ public struct SetFeesOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    if (try Bool(xdrData: &xdrData)) {
+      self.fee = try FeeEntry(xdrData: &xdrData)
+    } else {
+      self.fee = nil
+    }
+    self.isDelete = try Bool(xdrData: &xdrData)
+    self.ext = try SetFeesOpExt(xdrData: &xdrData)
+  }
+
   public enum SetFeesOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -66,6 +76,16 @@ public struct SetFeesOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

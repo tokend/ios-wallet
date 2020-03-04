@@ -50,7 +50,13 @@ import Foundation
 //      CANCEL_CHANGE_ROLE_REQUEST = 47,
 //      INITIATE_KYC_RECOVERY = 48,
 //      CREATE_KYC_RECOVERY_REQUEST = 49,
-//      REMOVE_ASSET_PAIR = 50
+//      REMOVE_ASSET_PAIR = 50,
+//      CREATE_MANAGE_OFFER_REQUEST = 51,
+//      CREATE_PAYMENT_REQUEST = 52,
+//      REMOVE_ASSET = 53,
+//      OPEN_SWAP = 54,
+//      CLOSE_SWAP = 55,
+//      CREATE_REDEMPTION_REQUEST = 56
 //  };
 
 //  ===========================================================================
@@ -99,4 +105,10 @@ public enum OperationType: Int32, XDREnum {
   case initiateKycRecovery = 48
   case createKycRecoveryRequest = 49
   case removeAssetPair = 50
+  case createManageOfferRequest = 51
+  case createPaymentRequest = 52
+  case removeAsset = 53
+  case openSwap = 54
+  case closeSwap = 55
+  case createRedemptionRequest = 56
 }

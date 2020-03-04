@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateContractRequest: XDREncodable {
+public struct CreateContractRequest: XDRCodable {
   public var contractRequest: ContractRequest
   public var allTasks: Uint32?
   public var ext: CreateContractRequestExt
@@ -45,6 +45,16 @@ public struct CreateContractRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.contractRequest = try ContractRequest(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.allTasks = try Uint32(xdrData: &xdrData)
+    } else {
+      self.allTasks = nil
+    }
+    self.ext = try CreateContractRequestExt(xdrData: &xdrData)
+  }
+
   public enum CreateContractRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -64,6 +74,16 @@ public struct CreateContractRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

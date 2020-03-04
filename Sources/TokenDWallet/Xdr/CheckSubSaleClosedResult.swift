@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CheckSubSaleClosedResult: XDREncodable {
+public struct CheckSubSaleClosedResult: XDRCodable {
   public var saleBaseBalance: BalanceID
   public var saleQuoteBalance: BalanceID
   public var saleDetails: ManageOfferSuccessResult
@@ -52,6 +52,13 @@ public struct CheckSubSaleClosedResult: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.saleBaseBalance = try BalanceID(xdrData: &xdrData)
+    self.saleQuoteBalance = try BalanceID(xdrData: &xdrData)
+    self.saleDetails = try ManageOfferSuccessResult(xdrData: &xdrData)
+    self.ext = try CheckSubSaleClosedResultExt(xdrData: &xdrData)
+  }
+
   public enum CheckSubSaleClosedResultExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -71,6 +78,16 @@ public struct CheckSubSaleClosedResult: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

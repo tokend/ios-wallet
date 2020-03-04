@@ -96,4 +96,54 @@ public enum StellarMessage: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case MessageType.errorMsg.rawValue:
+      let data = try Error(xdrData: &xdrData)
+      self = .errorMsg(data)
+    case MessageType.hello.rawValue:
+      let data = try Hello(xdrData: &xdrData)
+      self = .hello(data)
+    case MessageType.auth.rawValue:
+      let data = try Auth(xdrData: &xdrData)
+      self = .auth(data)
+    case MessageType.dontHave.rawValue:
+      let data = try DontHave(xdrData: &xdrData)
+      self = .dontHave(data)
+    case MessageType.getPeers.rawValue: self = .getPeers()
+    case MessageType.peers.rawValue:
+      let lengthpeers = try Int32(xdrData: &xdrData)
+      var data = [PeerAddress]()
+      for _ in 1...lengthpeers {
+        data.append(try PeerAddress(xdrData: &xdrData))
+      }
+      self = .peers(data)
+    case MessageType.getTxSet.rawValue:
+      let data = try Uint256(xdrData: &xdrData)
+      self = .getTxSet(data)
+    case MessageType.txSet.rawValue:
+      let data = try TransactionSet(xdrData: &xdrData)
+      self = .txSet(data)
+    case MessageType.transaction.rawValue:
+      let data = try TransactionEnvelope(xdrData: &xdrData)
+      self = .transaction(data)
+    case MessageType.getScpQuorumset.rawValue:
+      let data = try Uint256(xdrData: &xdrData)
+      self = .getScpQuorumset(data)
+    case MessageType.scpQuorumset.rawValue:
+      let data = try SCPQuorumSet(xdrData: &xdrData)
+      self = .scpQuorumset(data)
+    case MessageType.scpMessage.rawValue:
+      let data = try SCPEnvelope(xdrData: &xdrData)
+      self = .scpMessage(data)
+    case MessageType.getScpState.rawValue:
+      let data = try Uint32(xdrData: &xdrData)
+      self = .getScpState(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

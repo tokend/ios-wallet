@@ -40,7 +40,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AssetPairEntry: XDREncodable {
+public struct AssetPairEntry: XDRCodable {
   public var base: AssetCode
   public var quote: AssetCode
   public var currentPrice: Int64
@@ -85,6 +85,17 @@ public struct AssetPairEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.base = try AssetCode(xdrData: &xdrData)
+    self.quote = try AssetCode(xdrData: &xdrData)
+    self.currentPrice = try Int64(xdrData: &xdrData)
+    self.physicalPrice = try Int64(xdrData: &xdrData)
+    self.physicalPriceCorrection = try Int64(xdrData: &xdrData)
+    self.maxPriceStep = try Int64(xdrData: &xdrData)
+    self.policies = try Int32(xdrData: &xdrData)
+    self.ext = try AssetPairEntryExt(xdrData: &xdrData)
+  }
+
   public enum AssetPairEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -104,6 +115,16 @@ public struct AssetPairEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

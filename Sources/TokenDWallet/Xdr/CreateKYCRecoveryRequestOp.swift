@@ -31,7 +31,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateKYCRecoveryRequestOp: XDREncodable {
+public struct CreateKYCRecoveryRequestOp: XDRCodable {
   public var requestID: Uint64
   public var targetAccount: AccountID
   public var signersData: [UpdateSignerData]
@@ -68,6 +68,23 @@ public struct CreateKYCRecoveryRequestOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.targetAccount = try AccountID(xdrData: &xdrData)
+    let lengthsignersData = try Int32(xdrData: &xdrData)
+    self.signersData = [UpdateSignerData]()
+    for _ in 1...lengthsignersData {
+      self.signersData.append(try UpdateSignerData(xdrData: &xdrData))
+    }
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.allTasks = try Uint32(xdrData: &xdrData)
+    } else {
+      self.allTasks = nil
+    }
+    self.ext = try CreateKYCRecoveryRequestOpExt(xdrData: &xdrData)
+  }
+
   public enum CreateKYCRecoveryRequestOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -87,6 +104,16 @@ public struct CreateKYCRecoveryRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -31,7 +31,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AtomicSwapAskEntry: XDREncodable {
+public struct AtomicSwapAskEntry: XDRCodable {
   public var id: Uint64
   public var ownerID: AccountID
   public var baseAsset: AssetCode
@@ -88,6 +88,24 @@ public struct AtomicSwapAskEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.id = try Uint64(xdrData: &xdrData)
+    self.ownerID = try AccountID(xdrData: &xdrData)
+    self.baseAsset = try AssetCode(xdrData: &xdrData)
+    self.baseBalance = try BalanceID(xdrData: &xdrData)
+    self.amount = try Uint64(xdrData: &xdrData)
+    self.lockedAmount = try Uint64(xdrData: &xdrData)
+    self.createdAt = try Uint64(xdrData: &xdrData)
+    self.isCancelled = try Bool(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    let lengthquoteAssets = try Int32(xdrData: &xdrData)
+    self.quoteAssets = [AtomicSwapAskQuoteAsset]()
+    for _ in 1...lengthquoteAssets {
+      self.quoteAssets.append(try AtomicSwapAskQuoteAsset(xdrData: &xdrData))
+    }
+    self.ext = try AtomicSwapAskEntryExt(xdrData: &xdrData)
+  }
+
   public enum AtomicSwapAskEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -107,6 +125,16 @@ public struct AtomicSwapAskEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

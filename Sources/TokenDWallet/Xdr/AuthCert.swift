@@ -13,7 +13,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AuthCert: XDREncodable {
+public struct AuthCert: XDRCodable {
   public var pubkey: Curve25519Public
   public var expiration: Uint64
   public var sig: Signature
@@ -36,5 +36,11 @@ public struct AuthCert: XDREncodable {
     xdr.append(self.sig.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.pubkey = try Curve25519Public(xdrData: &xdrData)
+    self.expiration = try Uint64(xdrData: &xdrData)
+    self.sig = try Signature(xdrData: &xdrData)
   }
 }

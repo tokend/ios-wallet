@@ -25,7 +25,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateIssuanceRequestSuccess: XDREncodable {
+public struct CreateIssuanceRequestSuccess: XDRCodable {
   public var requestID: Uint64
   public var receiver: AccountID
   public var fulfilled: Bool
@@ -58,6 +58,14 @@ public struct CreateIssuanceRequestSuccess: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.receiver = try AccountID(xdrData: &xdrData)
+    self.fulfilled = try Bool(xdrData: &xdrData)
+    self.fee = try Fee(xdrData: &xdrData)
+    self.ext = try CreateIssuanceRequestSuccessExt(xdrData: &xdrData)
+  }
+
   public enum CreateIssuanceRequestSuccessExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -77,6 +85,16 @@ public struct CreateIssuanceRequestSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

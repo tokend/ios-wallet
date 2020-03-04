@@ -51,7 +51,19 @@ public enum ManageInvoiceRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct ManageInvoiceRequestResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageInvoiceRequestResultCode.success.rawValue:
+      let data = try ManageInvoiceRequestResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ManageInvoiceRequestResultSuccess: XDRCodable {
     public var fulfilled: Bool
     public var details: ManageInvoiceRequestResultSuccessDetails
     public var ext: ManageInvoiceRequestResultSuccessExt
@@ -74,6 +86,12 @@ public enum ManageInvoiceRequestResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.fulfilled = try Bool(xdrData: &xdrData)
+      self.details = try ManageInvoiceRequestResultSuccessDetails(xdrData: &xdrData)
+      self.ext = try ManageInvoiceRequestResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum ManageInvoiceRequestResultSuccessDetails: XDRDiscriminatedUnion {
@@ -100,6 +118,19 @@ public enum ManageInvoiceRequestResult: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case ManageInvoiceRequestAction.create.rawValue:
+          let data = try CreateInvoiceRequestResponse(xdrData: &xdrData)
+          self = .create(data)
+        case ManageInvoiceRequestAction.remove.rawValue: self = .remove()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
     public enum ManageInvoiceRequestResultSuccessExt: XDRDiscriminatedUnion {
       case emptyVersion()
@@ -120,6 +151,16 @@ public enum ManageInvoiceRequestResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

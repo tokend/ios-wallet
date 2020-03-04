@@ -9,14 +9,14 @@ import Foundation
 //  union CancelChangeRoleRequestResult switch (CancelChangeRoleRequestResultCode code)
 //  {
 //      case SUCCESS:
-//          CancelSaleCreationSuccess success;
+//          CancelChangeRoleSuccess success;
 //      default:
 //          void;
 //  };
 
 //  ===========================================================================
 public enum CancelChangeRoleRequestResult: XDRDiscriminatedUnion {
-  case success(CancelSaleCreationSuccess)
+  case success(CancelChangeRoleSuccess)
 
   public var discriminant: Int32 {
     switch self {
@@ -34,5 +34,17 @@ public enum CancelChangeRoleRequestResult: XDRDiscriminatedUnion {
     }
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CancelChangeRoleRequestResultCode.success.rawValue:
+      let data = try CancelChangeRoleSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
   }
 }

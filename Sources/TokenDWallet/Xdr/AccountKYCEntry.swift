@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AccountKYCEntry: XDREncodable {
+public struct AccountKYCEntry: XDRCodable {
   public var accountID: AccountID
   public var KYCData: Longstring
   public var ext: AccountKYCEntryExt
@@ -45,6 +45,12 @@ public struct AccountKYCEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.accountID = try AccountID(xdrData: &xdrData)
+    self.KYCData = try Longstring(xdrData: &xdrData)
+    self.ext = try AccountKYCEntryExt(xdrData: &xdrData)
+  }
+
   public enum AccountKYCEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -64,6 +70,16 @@ public struct AccountKYCEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

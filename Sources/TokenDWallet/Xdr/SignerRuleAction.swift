@@ -25,7 +25,9 @@ import Foundation
 //      CLOSE = 15,
 //      UPDATE_END_TIME = 16,
 //      CREATE_WITH_TASKS = 17,
-//      CREATE_FOR_OTHER_WITH_TASKS = 18
+//      CREATE_FOR_OTHER_WITH_TASKS = 18,
+//      REMOVE_FOR_OTHER = 19,
+//      EXCHANGE = 20
 //  };
 
 //  ===========================================================================
@@ -48,4 +50,6 @@ public enum SignerRuleAction: Int32, XDREnum {
   case updateEndTime = 16
   case createWithTasks = 17
   case createForOtherWithTasks = 18
+  case removeForOther = 19
+  case exchange = 20
 }

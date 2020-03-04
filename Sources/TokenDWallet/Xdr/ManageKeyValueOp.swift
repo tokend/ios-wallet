@@ -32,7 +32,7 @@ import Foundation
 //      };
 
 //  ===========================================================================
-public struct ManageKeyValueOp: XDREncodable {
+public struct ManageKeyValueOp: XDRCodable {
   public var key: Longstring
   public var action: ManageKeyValueOpAction
   public var ext: ManageKeyValueOpExt
@@ -55,6 +55,12 @@ public struct ManageKeyValueOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.key = try Longstring(xdrData: &xdrData)
+    self.action = try ManageKeyValueOpAction(xdrData: &xdrData)
+    self.ext = try ManageKeyValueOpExt(xdrData: &xdrData)
   }
 
   public enum ManageKeyValueOpAction: XDRDiscriminatedUnion {
@@ -81,6 +87,19 @@ public struct ManageKeyValueOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageKVAction.put.rawValue:
+        let data = try KeyValueEntryValue(xdrData: &xdrData)
+        self = .put(data)
+      case ManageKVAction.remove.rawValue: self = .remove()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageKeyValueOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -101,6 +120,16 @@ public struct ManageKeyValueOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

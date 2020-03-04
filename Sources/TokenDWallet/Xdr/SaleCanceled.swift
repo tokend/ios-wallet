@@ -17,7 +17,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SaleCanceled: XDREncodable {
+public struct SaleCanceled: XDRCodable {
   public var ext: SaleCanceledExt
 
   public init(
@@ -32,6 +32,10 @@ public struct SaleCanceled: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ext = try SaleCanceledExt(xdrData: &xdrData)
   }
 
   public enum SaleCanceledExt: XDRDiscriminatedUnion {
@@ -53,6 +57,16 @@ public struct SaleCanceled: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

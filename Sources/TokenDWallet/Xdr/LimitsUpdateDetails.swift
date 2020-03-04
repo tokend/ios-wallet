@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct LimitsUpdateDetails: XDREncodable {
+public struct LimitsUpdateDetails: XDRCodable {
   public var newLimitsV2: LimitsV2Entry
   public var ext: LimitsUpdateDetailsExt
 
@@ -39,6 +39,11 @@ public struct LimitsUpdateDetails: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.newLimitsV2 = try LimitsV2Entry(xdrData: &xdrData)
+    self.ext = try LimitsUpdateDetailsExt(xdrData: &xdrData)
   }
 
   public enum LimitsUpdateDetailsExt: XDRDiscriminatedUnion {
@@ -60,6 +65,16 @@ public struct LimitsUpdateDetails: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

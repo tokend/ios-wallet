@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct RemoveAssetPairOp: XDREncodable {
+public struct RemoveAssetPairOp: XDRCodable {
   public var base: AssetCode
   public var quote: AssetCode
   public var ext: RemoveAssetPairOpExt
@@ -48,6 +48,12 @@ public struct RemoveAssetPairOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.base = try AssetCode(xdrData: &xdrData)
+    self.quote = try AssetCode(xdrData: &xdrData)
+    self.ext = try RemoveAssetPairOpExt(xdrData: &xdrData)
+  }
+
   public enum RemoveAssetPairOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -67,6 +73,16 @@ public struct RemoveAssetPairOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

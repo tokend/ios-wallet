@@ -37,7 +37,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageOfferSuccessResult: XDREncodable {
+public struct ManageOfferSuccessResult: XDRCodable {
   public var offersClaimed: [ClaimOfferAtom]
   public var baseAsset: AssetCode
   public var quoteAsset: AssetCode
@@ -70,6 +70,18 @@ public struct ManageOfferSuccessResult: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    let lengthoffersClaimed = try Int32(xdrData: &xdrData)
+    self.offersClaimed = [ClaimOfferAtom]()
+    for _ in 1...lengthoffersClaimed {
+      self.offersClaimed.append(try ClaimOfferAtom(xdrData: &xdrData))
+    }
+    self.baseAsset = try AssetCode(xdrData: &xdrData)
+    self.quoteAsset = try AssetCode(xdrData: &xdrData)
+    self.offer = try ManageOfferSuccessResultOffer(xdrData: &xdrData)
+    self.ext = try ManageOfferSuccessResultExt(xdrData: &xdrData)
+  }
+
   public enum ManageOfferSuccessResultOffer: XDRDiscriminatedUnion {
     case created(OfferEntry)
     case updated(OfferEntry)
@@ -94,6 +106,21 @@ public struct ManageOfferSuccessResult: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageOfferEffect.created.rawValue:
+        let data = try OfferEntry(xdrData: &xdrData)
+        self = .created(data)
+      case ManageOfferEffect.updated.rawValue:
+        let data = try OfferEntry(xdrData: &xdrData)
+        self = .updated(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageOfferSuccessResultExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -114,6 +141,16 @@ public struct ManageOfferSuccessResult: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

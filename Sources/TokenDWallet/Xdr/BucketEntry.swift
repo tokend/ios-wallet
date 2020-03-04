@@ -38,4 +38,19 @@ public enum BucketEntry: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case BucketEntryType.liveentry.rawValue:
+      let data = try LedgerEntry(xdrData: &xdrData)
+      self = .liveentry(data)
+    case BucketEntryType.deadentry.rawValue:
+      let data = try LedgerKey(xdrData: &xdrData)
+      self = .deadentry(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

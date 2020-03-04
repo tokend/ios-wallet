@@ -25,7 +25,7 @@ import Foundation
 //      };
 
 //  ===========================================================================
-public struct KeyValueEntry: XDREncodable {
+public struct KeyValueEntry: XDRCodable {
   public var key: Longstring
   public var value: KeyValueEntryValue
   public var ext: KeyValueEntryExt
@@ -50,6 +50,12 @@ public struct KeyValueEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.key = try Longstring(xdrData: &xdrData)
+    self.value = try KeyValueEntryValue(xdrData: &xdrData)
+    self.ext = try KeyValueEntryExt(xdrData: &xdrData)
+  }
+
   public enum KeyValueEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -69,6 +75,16 @@ public struct KeyValueEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

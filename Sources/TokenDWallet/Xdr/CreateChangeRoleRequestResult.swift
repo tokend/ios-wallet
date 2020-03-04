@@ -48,7 +48,19 @@ public enum CreateChangeRoleRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct CreateChangeRoleRequestResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CreateChangeRoleRequestResultCode.success.rawValue:
+      let data = try CreateChangeRoleRequestResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct CreateChangeRoleRequestResultSuccess: XDRCodable {
     public var requestID: Uint64
     public var fulfilled: Bool
     public var ext: CreateChangeRoleRequestResultSuccessExt
@@ -73,6 +85,12 @@ public enum CreateChangeRoleRequestResult: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.requestID = try Uint64(xdrData: &xdrData)
+      self.fulfilled = try Bool(xdrData: &xdrData)
+      self.ext = try CreateChangeRoleRequestResultSuccessExt(xdrData: &xdrData)
+    }
+
     public enum CreateChangeRoleRequestResultSuccessExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -92,6 +110,16 @@ public enum CreateChangeRoleRequestResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

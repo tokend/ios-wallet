@@ -9,7 +9,7 @@ import Foundation
 //  enum ReviewRequestResultCode
 //  {
 //      //: Codes considered as "success" for an operation
-//      //: Operation is applied successfuly 
+//      //: Operation is applied successfully
 //      SUCCESS = 0,
 //  
 //      //: Codes considered as "failure" for an operation
@@ -127,8 +127,13 @@ import Foundation
 //  
 //      //KYC
 //      //:Signer data is invalid - either weight is wrong or details are invalid
-//      INVALID_SIGNER_DATA = -1600
+//      INVALID_SIGNER_DATA = -1600,
 //  
+//      // offer
+//      MANAGE_OFFER_FAILED = -1700,
+//      
+//      // payment
+//      PAYMENT_FAILED = -1800
 //  };
 
 //  ===========================================================================
@@ -194,4 +199,6 @@ public enum ReviewRequestResultCode: Int32, XDREnum {
   case quoteAssetCannotBeSwapped = -1501
   case atomicSwapBidOwnerFullLine = -1504
   case invalidSignerData = -1600
+  case manageOfferFailed = -1700
+  case paymentFailed = -1800
 }

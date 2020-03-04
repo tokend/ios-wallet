@@ -37,7 +37,19 @@ public enum AuthenticatedMessage: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct AuthenticatedMessageV0: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerVersion.emptyVersion.rawValue:
+      let data = try AuthenticatedMessageV0(xdrData: &xdrData)
+      self = .emptyVersion(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct AuthenticatedMessageV0: XDRCodable {
     public var sequence: Uint64
     public var message: StellarMessage
     public var mac: HmacSha256Mac
@@ -60,6 +72,12 @@ public enum AuthenticatedMessage: XDRDiscriminatedUnion {
       xdr.append(self.mac.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.sequence = try Uint64(xdrData: &xdrData)
+      self.message = try StellarMessage(xdrData: &xdrData)
+      self.mac = try HmacSha256Mac(xdrData: &xdrData)
     }
 
   }
