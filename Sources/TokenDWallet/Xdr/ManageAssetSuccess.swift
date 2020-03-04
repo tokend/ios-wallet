@@ -22,7 +22,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageAssetSuccess: XDREncodable {
+public struct ManageAssetSuccess: XDRCodable {
   public var requestID: Uint64
   public var fulfilled: Bool
   public var ext: ManageAssetSuccessExt
@@ -47,6 +47,12 @@ public struct ManageAssetSuccess: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.fulfilled = try Bool(xdrData: &xdrData)
+    self.ext = try ManageAssetSuccessExt(xdrData: &xdrData)
+  }
+
   public enum ManageAssetSuccessExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -66,6 +72,16 @@ public struct ManageAssetSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

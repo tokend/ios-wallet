@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageLimitsOp: XDREncodable {
+public struct ManageLimitsOp: XDRCodable {
   public var details: ManageLimitsOpDetails
   public var ext: ManageLimitsOpExt
 
@@ -46,6 +46,11 @@ public struct ManageLimitsOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.details = try ManageLimitsOpDetails(xdrData: &xdrData)
+    self.ext = try ManageLimitsOpExt(xdrData: &xdrData)
   }
 
   public enum ManageLimitsOpDetails: XDRDiscriminatedUnion {
@@ -72,6 +77,21 @@ public struct ManageLimitsOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageLimitsAction.create.rawValue:
+        let data = try LimitsCreateDetails(xdrData: &xdrData)
+        self = .create(data)
+      case ManageLimitsAction.remove.rawValue:
+        let data = try Uint64(xdrData: &xdrData)
+        self = .remove(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageLimitsOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -92,6 +112,16 @@ public struct ManageLimitsOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

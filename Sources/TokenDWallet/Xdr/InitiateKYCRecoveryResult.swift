@@ -43,7 +43,19 @@ public enum InitiateKYCRecoveryResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct InitiateKYCRecoveryResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case InitiateKYCRecoveryResultCode.success.rawValue:
+      let data = try InitiateKYCRecoveryResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct InitiateKYCRecoveryResultSuccess: XDRCodable {
     public var ext: InitiateKYCRecoveryResultSuccessExt
 
     public init(
@@ -58,6 +70,10 @@ public enum InitiateKYCRecoveryResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.ext = try InitiateKYCRecoveryResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum InitiateKYCRecoveryResultSuccessExt: XDRDiscriminatedUnion {
@@ -79,6 +95,16 @@ public enum InitiateKYCRecoveryResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

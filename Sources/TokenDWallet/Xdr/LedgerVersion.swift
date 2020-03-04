@@ -26,7 +26,15 @@ import Foundation
 //      ADD_ACC_SPECIFIC_RULE_RESOURCE = 16,
 //      FIX_SIGNER_CHANGES_REMOVE = 17,
 //      FIX_DEPOSIT_STATS = 18,
-//      FIX_CREATE_KYC_RECOVERY_PERMISSIONS = 19
+//      FIX_CREATE_KYC_RECOVERY_PERMISSIONS = 19,
+//      CLEAR_DATABASE_CACHE = 20,
+//      FIX_ISSUANCE_REVIEWER = 21,
+//      MARK_ASSET_AS_DELETED = 22,
+//      FIX_MAX_SUBJECT_SIZE = 23,
+//      FIX_MOVEMENT_REVIEW = 24,
+//      FIX_SIGNATURE_CHECK = 25,
+//      FIX_AUTOREVIEW = 26,
+//      MOVEMENT_REQUESTS_DETAILS = 27
 //  };
 
 //  ===========================================================================
@@ -51,4 +59,12 @@ public enum LedgerVersion: Int32, XDREnum {
   case fixSignerChangesRemove = 17
   case fixDepositStats = 18
   case fixCreateKycRecoveryPermissions = 19
+  case clearDatabaseCache = 20
+  case fixIssuanceReviewer = 21
+  case markAssetAsDeleted = 22
+  case fixMaxSubjectSize = 23
+  case fixMovementReview = 24
+  case fixSignatureCheck = 25
+  case fixAutoreview = 26
+  case movementRequestsDetails = 27
 }

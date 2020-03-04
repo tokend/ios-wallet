@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct RemoveAccountRuleData: XDREncodable {
+public struct RemoveAccountRuleData: XDRCodable {
   public var ruleID: Uint64
   public var ext: RemoveAccountRuleDataExt
 
@@ -39,6 +39,11 @@ public struct RemoveAccountRuleData: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ruleID = try Uint64(xdrData: &xdrData)
+    self.ext = try RemoveAccountRuleDataExt(xdrData: &xdrData)
   }
 
   public enum RemoveAccountRuleDataExt: XDRDiscriminatedUnion {
@@ -60,6 +65,16 @@ public struct RemoveAccountRuleData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

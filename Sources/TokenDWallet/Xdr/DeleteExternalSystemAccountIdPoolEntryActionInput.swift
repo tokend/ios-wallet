@@ -22,7 +22,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct DeleteExternalSystemAccountIdPoolEntryActionInput: XDREncodable {
+public struct DeleteExternalSystemAccountIdPoolEntryActionInput: XDRCodable {
   public var poolEntryID: Uint64
   public var ext: DeleteExternalSystemAccountIdPoolEntryActionInputExt
 
@@ -41,6 +41,11 @@ public struct DeleteExternalSystemAccountIdPoolEntryActionInput: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.poolEntryID = try Uint64(xdrData: &xdrData)
+    self.ext = try DeleteExternalSystemAccountIdPoolEntryActionInputExt(xdrData: &xdrData)
   }
 
   public enum DeleteExternalSystemAccountIdPoolEntryActionInputExt: XDRDiscriminatedUnion {
@@ -62,6 +67,16 @@ public struct DeleteExternalSystemAccountIdPoolEntryActionInput: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

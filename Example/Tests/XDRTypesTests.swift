@@ -27,6 +27,8 @@ class XDRTypesTests: XCTestCase {
         let op = Operation(sourceAccount: nil, body: Operation.OperationBody.manageBalance(manageBalanceOp))
         
         XCTAssertEqual(op.toXDR().base64, "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
+        // Decoding
+        XCTAssertEqual(try! Operation(xdrBase64: "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA").toXdrBase64String(), "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
     }
     
     func testDeleteBalanceOp() {
@@ -37,6 +39,8 @@ class XDRTypesTests: XCTestCase {
         let op = Operation(sourceAccount: nil, body: Operation.OperationBody.manageBalance(manageBalanceOp))
         
         XCTAssertEqual(op.toXDR().base64, "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
+        // Decoding
+        XCTAssertEqual(try! Operation(xdrBase64: "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA").toXdrBase64String(), "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
     }
 }
 

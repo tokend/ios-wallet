@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct OperationFee: XDREncodable {
+public struct OperationFee: XDRCodable {
   public var operationType: OperationType
   public var amount: Uint64
   public var ext: OperationFeeExt
@@ -45,6 +45,12 @@ public struct OperationFee: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.operationType = try OperationType(xdrData: &xdrData)
+    self.amount = try Uint64(xdrData: &xdrData)
+    self.ext = try OperationFeeExt(xdrData: &xdrData)
+  }
+
   public enum OperationFeeExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -64,6 +70,16 @@ public struct OperationFee: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

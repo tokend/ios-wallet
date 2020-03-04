@@ -21,7 +21,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct PendingStatisticsEntry: XDREncodable {
+public struct PendingStatisticsEntry: XDRCodable {
   public var statisticsID: Uint64
   public var requestID: Uint64
   public var amount: Uint64
@@ -50,6 +50,13 @@ public struct PendingStatisticsEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.statisticsID = try Uint64(xdrData: &xdrData)
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.amount = try Uint64(xdrData: &xdrData)
+    self.ext = try PendingStatisticsEntryExt(xdrData: &xdrData)
+  }
+
   public enum PendingStatisticsEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -69,6 +76,16 @@ public struct PendingStatisticsEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -18,7 +18,7 @@ import Foundation
 //      };
 
 //  ===========================================================================
-public struct ManageKeyValueSuccess: XDREncodable {
+public struct ManageKeyValueSuccess: XDRCodable {
   public var ext: ManageKeyValueSuccessExt
 
   public init(
@@ -33,6 +33,10 @@ public struct ManageKeyValueSuccess: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ext = try ManageKeyValueSuccessExt(xdrData: &xdrData)
   }
 
   public enum ManageKeyValueSuccessExt: XDRDiscriminatedUnion {
@@ -54,6 +58,16 @@ public struct ManageKeyValueSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

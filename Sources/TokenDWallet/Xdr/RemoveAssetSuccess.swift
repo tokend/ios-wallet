@@ -5,41 +5,41 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  struct CancelASwapBidOp
+//  //: Result of successful `RemoveAssetOp` application
+//  struct RemoveAssetSuccess
 //  {
-//      uint64 bidID;
-//  
-//      // reserved for future use
+//      //: Reserved for future use
 //      union switch (LedgerVersion v)
 //      {
 //      case EMPTY_VERSION:
 //          void;
-//      } ext;
+//      }
+//      ext;
 //  };
 
 //  ===========================================================================
-public struct CancelASwapBidOp: XDREncodable {
-  public var bidID: Uint64
-  public var ext: CancelASwapBidOpExt
+public struct RemoveAssetSuccess: XDRCodable {
+  public var ext: RemoveAssetSuccessExt
 
   public init(
-      bidID: Uint64,
-      ext: CancelASwapBidOpExt) {
+      ext: RemoveAssetSuccessExt) {
 
-    self.bidID = bidID
     self.ext = ext
   }
 
   public func toXDR() -> Data {
     var xdr = Data()
 
-    xdr.append(self.bidID.toXDR())
     xdr.append(self.ext.toXDR())
 
     return xdr
   }
 
-  public enum CancelASwapBidOpExt: XDRDiscriminatedUnion {
+  public init(xdrData: inout Data) throws {
+    self.ext = try RemoveAssetSuccessExt(xdrData: &xdrData)
+  }
+
+  public enum RemoveAssetSuccessExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
     public var discriminant: Int32 {
@@ -58,6 +58,16 @@ public struct CancelASwapBidOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

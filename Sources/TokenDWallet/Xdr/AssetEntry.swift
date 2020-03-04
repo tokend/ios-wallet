@@ -7,29 +7,35 @@ import Foundation
 
 //  struct AssetEntry
 //  {
+//      //: Code of the asset
 //      AssetCode code;
+//      //: Owner(creator) of the asset
 //  	AccountID owner;
-//  	AccountID preissuedAssetSigner; // signer of pre issuance tokens
+//  	//: Account responsible for preissuance of the asset
+//  	AccountID preissuedAssetSigner;
+//      //: Arbitrary stringified JSON object that can be used to attach data to asset
 //  	longstring details;
-//  	uint64 maxIssuanceAmount; // max number of tokens to be issued
-//  	uint64 availableForIssueance; // pre issued tokens available for issuance
-//  	uint64 issued; // number of issued tokens
-//  	uint64 pendingIssuance; // number of tokens locked for entries like token sale. lockedIssuance + issued can not be > maxIssuanceAmount
+//  	//: Maximal amount of tokens that can be issued
+//  	uint64 maxIssuanceAmount;
+//  	//: Amount of tokens available for issuance
+//  	uint64 availableForIssueance;
+//  	//: Amount of tokens issued already
+//  	uint64 issued;
+//  	//: Amount of tokens to be issued which is locked. `pendingIssuance+issued <= maxIssuanceAmount`
+//  	uint64 pendingIssuance;
+//  	//: Policies of the asset
 //      uint32 policies;
-//      uint64 type; // use instead policies that limit usage, use in account rules
+//      //: Used to restrict usage. Used in account rules
+//      uint64 type;
+//      //: Number of decimal places. Must be <= 6
 //      uint32 trailingDigitsCount;
 //  
-//      // reserved for future use
-//      union switch (LedgerVersion v)
-//      {
-//      case EMPTY_VERSION:
-//          void;
-//      }
-//      ext;
+//      //: Reserved for future use
+//      EmptyExt ext;
 //  };
 
 //  ===========================================================================
-public struct AssetEntry: XDREncodable {
+public struct AssetEntry: XDRCodable {
   public var code: AssetCode
   public var owner: AccountID
   public var preissuedAssetSigner: AccountID
@@ -41,7 +47,7 @@ public struct AssetEntry: XDREncodable {
   public var policies: Uint32
   public var type: Uint64
   public var trailingDigitsCount: Uint32
-  public var ext: AssetEntryExt
+  public var ext: EmptyExt
 
   public init(
       code: AssetCode,
@@ -55,7 +61,7 @@ public struct AssetEntry: XDREncodable {
       policies: Uint32,
       type: Uint64,
       trailingDigitsCount: Uint32,
-      ext: AssetEntryExt) {
+      ext: EmptyExt) {
 
     self.code = code
     self.owner = owner
@@ -90,26 +96,18 @@ public struct AssetEntry: XDREncodable {
     return xdr
   }
 
-  public enum AssetEntryExt: XDRDiscriminatedUnion {
-    case emptyVersion()
-
-    public var discriminant: Int32 {
-      switch self {
-      case .emptyVersion: return LedgerVersion.emptyVersion.rawValue
-      }
-    }
-
-    public func toXDR() -> Data {
-      var xdr = Data()
-
-      xdr.append(self.discriminant.toXDR())
-
-      switch self {
-      case .emptyVersion(): xdr.append(Data())
-      }
-
-      return xdr
-    }
-
+  public init(xdrData: inout Data) throws {
+    self.code = try AssetCode(xdrData: &xdrData)
+    self.owner = try AccountID(xdrData: &xdrData)
+    self.preissuedAssetSigner = try AccountID(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    self.maxIssuanceAmount = try Uint64(xdrData: &xdrData)
+    self.availableForIssueance = try Uint64(xdrData: &xdrData)
+    self.issued = try Uint64(xdrData: &xdrData)
+    self.pendingIssuance = try Uint64(xdrData: &xdrData)
+    self.policies = try Uint32(xdrData: &xdrData)
+    self.type = try Uint64(xdrData: &xdrData)
+    self.trailingDigitsCount = try Uint32(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 }

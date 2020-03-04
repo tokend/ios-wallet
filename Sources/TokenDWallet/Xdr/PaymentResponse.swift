@@ -34,7 +34,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct PaymentResponse: XDREncodable {
+public struct PaymentResponse: XDRCodable {
   public var destination: AccountID
   public var destinationBalanceID: BalanceID
   public var asset: AssetCode
@@ -79,6 +79,17 @@ public struct PaymentResponse: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.destination = try AccountID(xdrData: &xdrData)
+    self.destinationBalanceID = try BalanceID(xdrData: &xdrData)
+    self.asset = try AssetCode(xdrData: &xdrData)
+    self.sourceSentUniversal = try Uint64(xdrData: &xdrData)
+    self.paymentID = try Uint64(xdrData: &xdrData)
+    self.actualSourcePaymentFee = try Fee(xdrData: &xdrData)
+    self.actualDestinationPaymentFee = try Fee(xdrData: &xdrData)
+    self.ext = try PaymentResponseExt(xdrData: &xdrData)
+  }
+
   public enum PaymentResponseExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -98,6 +109,16 @@ public struct PaymentResponse: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -11,7 +11,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct IdGenerator: XDREncodable {
+public struct IdGenerator: XDRCodable {
   public var entryType: LedgerEntryType
   public var idPool: Uint64
 
@@ -30,5 +30,10 @@ public struct IdGenerator: XDREncodable {
     xdr.append(self.idPool.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.entryType = try LedgerEntryType(xdrData: &xdrData)
+    self.idPool = try Uint64(xdrData: &xdrData)
   }
 }

@@ -26,7 +26,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageContractResponse: XDREncodable {
+public struct ManageContractResponse: XDRCodable {
   public var data: ManageContractResponseData
   public var ext: ManageContractResponseExt
 
@@ -45,6 +45,11 @@ public struct ManageContractResponse: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.data = try ManageContractResponseData(xdrData: &xdrData)
+    self.ext = try ManageContractResponseExt(xdrData: &xdrData)
   }
 
   public enum ManageContractResponseData: XDRDiscriminatedUnion {
@@ -68,6 +73,18 @@ public struct ManageContractResponse: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageContractAction.confirmCompleted.rawValue:
+        let data = try Bool(xdrData: &xdrData)
+        self = .confirmCompleted(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageContractResponseExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -88,6 +105,16 @@ public struct ManageContractResponse: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

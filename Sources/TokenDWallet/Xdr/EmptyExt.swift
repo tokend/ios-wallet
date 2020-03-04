@@ -32,4 +32,14 @@ public enum EmptyExt: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

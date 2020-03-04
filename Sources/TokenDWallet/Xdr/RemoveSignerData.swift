@@ -16,7 +16,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct RemoveSignerData: XDREncodable {
+public struct RemoveSignerData: XDRCodable {
   public var publicKey: PublicKey
   public var ext: EmptyExt
 
@@ -35,5 +35,10 @@ public struct RemoveSignerData: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.publicKey = try PublicKey(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 }

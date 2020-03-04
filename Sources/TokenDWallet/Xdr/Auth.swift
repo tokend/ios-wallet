@@ -13,7 +13,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct Auth: XDREncodable {
+public struct Auth: XDRCodable {
   public var unused: Int32
 
   public init(
@@ -28,5 +28,9 @@ public struct Auth: XDREncodable {
     xdr.append(self.unused.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.unused = try Int32(xdrData: &xdrData)
   }
 }

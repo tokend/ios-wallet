@@ -21,7 +21,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ExternalSystemAccountID: XDREncodable {
+public struct ExternalSystemAccountID: XDRCodable {
   public var accountID: AccountID
   public var externalSystemType: Int32
   public var data: Longstring
@@ -50,6 +50,13 @@ public struct ExternalSystemAccountID: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.accountID = try AccountID(xdrData: &xdrData)
+    self.externalSystemType = try Int32(xdrData: &xdrData)
+    self.data = try Longstring(xdrData: &xdrData)
+    self.ext = try ExternalSystemAccountIDExt(xdrData: &xdrData)
+  }
+
   public enum ExternalSystemAccountIDExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -69,6 +76,16 @@ public struct ExternalSystemAccountID: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

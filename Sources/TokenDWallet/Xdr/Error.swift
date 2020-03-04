@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct Error: XDREncodable {
+public struct Error: XDRCodable {
   public var code: ErrorCode
   public var msg: String
 
@@ -31,5 +31,10 @@ public struct Error: XDREncodable {
     xdr.append(self.msg.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.code = try ErrorCode(xdrData: &xdrData)
+    self.msg = try String(xdrData: &xdrData)
   }
 }

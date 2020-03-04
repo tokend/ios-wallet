@@ -19,7 +19,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct UpdatePollEndTimeData: XDREncodable {
+public struct UpdatePollEndTimeData: XDRCodable {
   public var newEndTime: Uint64
   public var ext: UpdatePollEndTimeDataExt
 
@@ -38,6 +38,11 @@ public struct UpdatePollEndTimeData: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.newEndTime = try Uint64(xdrData: &xdrData)
+    self.ext = try UpdatePollEndTimeDataExt(xdrData: &xdrData)
   }
 
   public enum UpdatePollEndTimeDataExt: XDRDiscriminatedUnion {
@@ -59,6 +64,16 @@ public struct UpdatePollEndTimeData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

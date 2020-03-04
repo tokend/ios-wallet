@@ -19,7 +19,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct WithdrawalDetails: XDREncodable {
+public struct WithdrawalDetails: XDRCodable {
   public var externalDetails: String
   public var ext: WithdrawalDetailsExt
 
@@ -38,6 +38,11 @@ public struct WithdrawalDetails: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.externalDetails = try String(xdrData: &xdrData)
+    self.ext = try WithdrawalDetailsExt(xdrData: &xdrData)
   }
 
   public enum WithdrawalDetailsExt: XDRDiscriminatedUnion {
@@ -59,6 +64,16 @@ public struct WithdrawalDetails: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

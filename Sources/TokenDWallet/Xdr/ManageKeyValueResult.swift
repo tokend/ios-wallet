@@ -35,4 +35,16 @@ public enum ManageKeyValueResult: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageKeyValueResultCode.success.rawValue:
+      let data = try ManageKeyValueSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

@@ -43,4 +43,22 @@ public enum KeyValueEntryValue: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case KeyValueEntryType.uint32.rawValue:
+      let data = try Uint32(xdrData: &xdrData)
+      self = .uint32(data)
+    case KeyValueEntryType.string.rawValue:
+      let data = try String(xdrData: &xdrData)
+      self = .string(data)
+    case KeyValueEntryType.uint64.rawValue:
+      let data = try Uint64(xdrData: &xdrData)
+      self = .uint64(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

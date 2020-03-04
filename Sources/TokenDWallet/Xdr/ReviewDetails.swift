@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ReviewDetails: XDREncodable {
+public struct ReviewDetails: XDRCodable {
   public var tasksToAdd: Uint32
   public var tasksToRemove: Uint32
   public var externalDetails: String
@@ -52,6 +52,13 @@ public struct ReviewDetails: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.tasksToAdd = try Uint32(xdrData: &xdrData)
+    self.tasksToRemove = try Uint32(xdrData: &xdrData)
+    self.externalDetails = try String(xdrData: &xdrData)
+    self.ext = try ReviewDetailsExt(xdrData: &xdrData)
+  }
+
   public enum ReviewDetailsExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -71,6 +78,16 @@ public struct ReviewDetails: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

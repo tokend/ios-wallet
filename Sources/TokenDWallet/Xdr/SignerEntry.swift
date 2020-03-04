@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SignerEntry: XDREncodable {
+public struct SignerEntry: XDRCodable {
   public var pubKey: PublicKey
   public var accountID: AccountID
   public var weight: Uint32
@@ -68,6 +68,16 @@ public struct SignerEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.pubKey = try PublicKey(xdrData: &xdrData)
+    self.accountID = try AccountID(xdrData: &xdrData)
+    self.weight = try Uint32(xdrData: &xdrData)
+    self.identity = try Uint32(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    self.roleID = try Uint64(xdrData: &xdrData)
+    self.ext = try SignerEntryExt(xdrData: &xdrData)
+  }
+
   public enum SignerEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -87,6 +97,16 @@ public struct SignerEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

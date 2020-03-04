@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateVoteData: XDREncodable {
+public struct CreateVoteData: XDRCodable {
   public var pollID: Uint64
   public var data: VoteData
   public var ext: CreateVoteDataExt
@@ -48,6 +48,12 @@ public struct CreateVoteData: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.pollID = try Uint64(xdrData: &xdrData)
+    self.data = try VoteData(xdrData: &xdrData)
+    self.ext = try CreateVoteDataExt(xdrData: &xdrData)
+  }
+
   public enum CreateVoteDataExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -67,6 +73,16 @@ public struct CreateVoteData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

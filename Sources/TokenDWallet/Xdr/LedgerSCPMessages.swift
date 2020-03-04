@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct LedgerSCPMessages: XDREncodable {
+public struct LedgerSCPMessages: XDRCodable {
   public var ledgerSeq: Uint32
   public var messages: [SCPEnvelope]
 
@@ -31,5 +31,14 @@ public struct LedgerSCPMessages: XDREncodable {
     xdr.append(self.messages.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ledgerSeq = try Uint32(xdrData: &xdrData)
+    let lengthmessages = try Int32(xdrData: &xdrData)
+    self.messages = [SCPEnvelope]()
+    for _ in 1...lengthmessages {
+      self.messages.append(try SCPEnvelope(xdrData: &xdrData))
+    }
   }
 }

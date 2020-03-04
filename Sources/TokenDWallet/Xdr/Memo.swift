@@ -52,4 +52,26 @@ public enum Memo: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case MemoType.memoNone.rawValue: self = .memoNone()
+    case MemoType.memoText.rawValue:
+      let data = try String(xdrData: &xdrData)
+      self = .memoText(data)
+    case MemoType.memoId.rawValue:
+      let data = try Uint64(xdrData: &xdrData)
+      self = .memoId(data)
+    case MemoType.memoHash.rawValue:
+      let data = try Hash(xdrData: &xdrData)
+      self = .memoHash(data)
+    case MemoType.memoReturn.rawValue:
+      let data = try Hash(xdrData: &xdrData)
+      self = .memoReturn(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

@@ -28,7 +28,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct UpdateAccountRuleData: XDREncodable {
+public struct UpdateAccountRuleData: XDRCodable {
   public var ruleID: Uint64
   public var resource: AccountRuleResource
   public var action: AccountRuleAction
@@ -65,6 +65,15 @@ public struct UpdateAccountRuleData: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.ruleID = try Uint64(xdrData: &xdrData)
+    self.resource = try AccountRuleResource(xdrData: &xdrData)
+    self.action = try AccountRuleAction(xdrData: &xdrData)
+    self.forbids = try Bool(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    self.ext = try UpdateAccountRuleDataExt(xdrData: &xdrData)
+  }
+
   public enum UpdateAccountRuleDataExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -84,6 +93,16 @@ public struct UpdateAccountRuleData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

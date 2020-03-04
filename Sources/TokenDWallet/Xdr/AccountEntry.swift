@@ -28,7 +28,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AccountEntry: XDREncodable {
+public struct AccountEntry: XDRCodable {
   public var accountID: AccountID
   public var referrer: AccountID?
   public var sequentialID: Uint64
@@ -61,6 +61,18 @@ public struct AccountEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.accountID = try AccountID(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.referrer = try AccountID(xdrData: &xdrData)
+    } else {
+      self.referrer = nil
+    }
+    self.sequentialID = try Uint64(xdrData: &xdrData)
+    self.roleID = try Uint64(xdrData: &xdrData)
+    self.ext = try AccountEntryExt(xdrData: &xdrData)
+  }
+
   public enum AccountEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -80,6 +92,16 @@ public struct AccountEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

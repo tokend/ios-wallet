@@ -34,4 +34,16 @@ public enum PayoutResult: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case PayoutResultCode.success.rawValue:
+      let data = try PayoutSuccessResult(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

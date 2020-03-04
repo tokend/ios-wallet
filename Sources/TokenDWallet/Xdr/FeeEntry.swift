@@ -45,7 +45,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct FeeEntry: XDREncodable {
+public struct FeeEntry: XDRCodable {
   public var feeType: FeeType
   public var asset: AssetCode
   public var fixedFee: Int64
@@ -102,6 +102,28 @@ public struct FeeEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.feeType = try FeeType(xdrData: &xdrData)
+    self.asset = try AssetCode(xdrData: &xdrData)
+    self.fixedFee = try Int64(xdrData: &xdrData)
+    self.percentFee = try Int64(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.accountID = try AccountID(xdrData: &xdrData)
+    } else {
+      self.accountID = nil
+    }
+    if (try Bool(xdrData: &xdrData)) {
+      self.accountRole = try Uint64(xdrData: &xdrData)
+    } else {
+      self.accountRole = nil
+    }
+    self.subtype = try Int64(xdrData: &xdrData)
+    self.lowerBound = try Int64(xdrData: &xdrData)
+    self.upperBound = try Int64(xdrData: &xdrData)
+    self.hash = try Hash(xdrData: &xdrData)
+    self.ext = try FeeEntryExt(xdrData: &xdrData)
+  }
+
   public enum FeeEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -121,6 +143,16 @@ public struct FeeEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

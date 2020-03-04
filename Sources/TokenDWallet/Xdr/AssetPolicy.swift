@@ -7,13 +7,21 @@ import Foundation
 
 //  enum AssetPolicy
 //  {
+//      //: Defines whether or not asset can be transfered using payments
 //  	TRANSFERABLE = 1,
+//  	//: Defines whether or not asset is considered base
 //  	BASE_ASSET = 2,
+//  	//: [[Deprecated]]
 //  	STATS_QUOTE_ASSET = 4,
+//  	//: Defines whether or not asset can be withdrawed from the system
 //  	WITHDRAWABLE = 8,
+//  	//: Defines whether or not manual review for issuance of asset is required
 //  	ISSUANCE_MANUAL_REVIEW_REQUIRED = 16,
+//  	//: Defines whether or not asset can be base in atomic swap
 //  	CAN_BE_BASE_IN_ATOMIC_SWAP = 32,
-//  	CAN_BE_QUOTE_IN_ATOMIC_SWAP = 64
+//  	//: Defines whether or not asset can be quote in atomic swap
+//  	CAN_BE_QUOTE_IN_ATOMIC_SWAP = 64,
+//      SWAPPABLE = 128
 //  };
 
 //  ===========================================================================
@@ -25,4 +33,5 @@ public enum AssetPolicy: Int32, XDREnum {
   case issuanceManualReviewRequired = 16
   case canBeBaseInAtomicSwap = 32
   case canBeQuoteInAtomicSwap = 64
+  case swappable = 128
 }

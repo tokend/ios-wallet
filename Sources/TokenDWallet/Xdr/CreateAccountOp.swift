@@ -29,7 +29,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateAccountOp: XDREncodable {
+public struct CreateAccountOp: XDRCodable {
   public var destination: AccountID
   public var referrer: AccountID?
   public var roleID: Uint64
@@ -62,6 +62,22 @@ public struct CreateAccountOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.destination = try AccountID(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.referrer = try AccountID(xdrData: &xdrData)
+    } else {
+      self.referrer = nil
+    }
+    self.roleID = try Uint64(xdrData: &xdrData)
+    let lengthsignersData = try Int32(xdrData: &xdrData)
+    self.signersData = [UpdateSignerData]()
+    for _ in 1...lengthsignersData {
+      self.signersData.append(try UpdateSignerData(xdrData: &xdrData))
+    }
+    self.ext = try CreateAccountOpExt(xdrData: &xdrData)
+  }
+
   public enum CreateAccountOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -81,6 +97,16 @@ public struct CreateAccountOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

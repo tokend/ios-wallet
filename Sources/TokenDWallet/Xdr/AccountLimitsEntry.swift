@@ -19,7 +19,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AccountLimitsEntry: XDREncodable {
+public struct AccountLimitsEntry: XDRCodable {
   public var accountID: AccountID
   public var limits: Limits
   public var ext: AccountLimitsEntryExt
@@ -44,6 +44,12 @@ public struct AccountLimitsEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.accountID = try AccountID(xdrData: &xdrData)
+    self.limits = try Limits(xdrData: &xdrData)
+    self.ext = try AccountLimitsEntryExt(xdrData: &xdrData)
+  }
+
   public enum AccountLimitsEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -63,6 +69,16 @@ public struct AccountLimitsEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

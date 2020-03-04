@@ -53,7 +53,19 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct ManageLimitsResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageLimitsResultCode.success.rawValue:
+      let data = try ManageLimitsResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ManageLimitsResultSuccess: XDRCodable {
     public var details: ManageLimitsResultSuccessDetails
     public var ext: ManageLimitsResultSuccessExt
 
@@ -72,6 +84,11 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.details = try ManageLimitsResultSuccessDetails(xdrData: &xdrData)
+      self.ext = try ManageLimitsResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum ManageLimitsResultSuccessDetails: XDRDiscriminatedUnion {
@@ -98,6 +115,19 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case ManageLimitsAction.create.rawValue:
+          let data = try Uint64(xdrData: &xdrData)
+          self = .create(data)
+        case ManageLimitsAction.remove.rawValue: self = .remove()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
     public enum ManageLimitsResultSuccessExt: XDRDiscriminatedUnion {
       case emptyVersion()
@@ -118,6 +148,16 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

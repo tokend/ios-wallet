@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageSaleOp: XDREncodable {
+public struct ManageSaleOp: XDRCodable {
   public var saleID: Uint64
   public var data: ManageSaleOpData
   public var ext: ManageSaleOpExt
@@ -50,6 +50,12 @@ public struct ManageSaleOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.saleID = try Uint64(xdrData: &xdrData)
+    self.data = try ManageSaleOpData(xdrData: &xdrData)
+    self.ext = try ManageSaleOpExt(xdrData: &xdrData)
   }
 
   public enum ManageSaleOpData: XDRDiscriminatedUnion {
@@ -76,6 +82,19 @@ public struct ManageSaleOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageSaleAction.createUpdateDetailsRequest.rawValue:
+        let data = try UpdateSaleDetailsData(xdrData: &xdrData)
+        self = .createUpdateDetailsRequest(data)
+      case ManageSaleAction.cancel.rawValue: self = .cancel()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageSaleOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -96,6 +115,16 @@ public struct ManageSaleOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -40,7 +40,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct LedgerHeader: XDREncodable {
+public struct LedgerHeader: XDRCodable {
   public var ledgerVersion: Uint32
   public var previousLedgerHash: Hash
   public var scpValue: StellarValue
@@ -52,7 +52,7 @@ public struct LedgerHeader: XDREncodable {
   public var baseReserve: Uint32
   public var maxTxSetSize: Uint32
   public var txExpirationPeriod: Int64
-//  public var skipList: XDRArrayFixed<Hash>
+  public var skipList: XDRArrayFixed4<Hash>
   public var ext: LedgerHeaderExt
 
   public init(
@@ -67,7 +67,7 @@ public struct LedgerHeader: XDREncodable {
       baseReserve: Uint32,
       maxTxSetSize: Uint32,
       txExpirationPeriod: Int64,
-//      skipList: XDRArrayFixed<Hash>,
+      skipList: XDRArrayFixed4<Hash>,
       ext: LedgerHeaderExt) {
 
     self.ledgerVersion = ledgerVersion
@@ -81,7 +81,7 @@ public struct LedgerHeader: XDREncodable {
     self.baseReserve = baseReserve
     self.maxTxSetSize = maxTxSetSize
     self.txExpirationPeriod = txExpirationPeriod
-//    self.skipList = skipList
+    self.skipList = skipList
     self.ext = ext
   }
 
@@ -99,10 +99,30 @@ public struct LedgerHeader: XDREncodable {
     xdr.append(self.baseReserve.toXDR())
     xdr.append(self.maxTxSetSize.toXDR())
     xdr.append(self.txExpirationPeriod.toXDR())
-//    xdr.append(self.skipList.toXDR())
+    xdr.append(self.skipList.toXDR())
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ledgerVersion = try Uint32(xdrData: &xdrData)
+    self.previousLedgerHash = try Hash(xdrData: &xdrData)
+    self.scpValue = try StellarValue(xdrData: &xdrData)
+    self.txSetResultHash = try Hash(xdrData: &xdrData)
+    self.bucketListHash = try Hash(xdrData: &xdrData)
+    self.ledgerSeq = try Uint32(xdrData: &xdrData)
+    let lengthidGenerators = try Int32(xdrData: &xdrData)
+    self.idGenerators = [IdGenerator]()
+    for _ in 1...lengthidGenerators {
+      self.idGenerators.append(try IdGenerator(xdrData: &xdrData))
+    }
+    self.baseFee = try Uint32(xdrData: &xdrData)
+    self.baseReserve = try Uint32(xdrData: &xdrData)
+    self.maxTxSetSize = try Uint32(xdrData: &xdrData)
+    self.txExpirationPeriod = try Int64(xdrData: &xdrData)
+    self.skipList = try XDRArrayFixed4<Hash>(xdrData: &xdrData)
+    self.ext = try LedgerHeaderExt(xdrData: &xdrData)
   }
 
   public enum LedgerHeaderExt: XDRDiscriminatedUnion {
@@ -124,6 +144,16 @@ public struct LedgerHeader: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

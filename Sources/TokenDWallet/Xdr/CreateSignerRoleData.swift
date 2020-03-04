@@ -24,7 +24,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateSignerRoleData: XDREncodable {
+public struct CreateSignerRoleData: XDRCodable {
   public var ruleIDs: [Uint64]
   public var isReadOnly: Bool
   public var details: Longstring
@@ -53,6 +53,17 @@ public struct CreateSignerRoleData: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    let lengthruleIDs = try Int32(xdrData: &xdrData)
+    self.ruleIDs = [Uint64]()
+    for _ in 1...lengthruleIDs {
+      self.ruleIDs.append(try Uint64(xdrData: &xdrData))
+    }
+    self.isReadOnly = try Bool(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    self.ext = try CreateSignerRoleDataExt(xdrData: &xdrData)
+  }
+
   public enum CreateSignerRoleDataExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -72,6 +83,16 @@ public struct CreateSignerRoleData: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

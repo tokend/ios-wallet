@@ -17,7 +17,8 @@ import Foundation
 //      //: Provided due date is in the past.
 //      INVALID_DUE_DATE = -2,
 //      //: Not enough valid signatures to submit a license (at least one valid signature is required)
-//      INVALID_SIGNATURE = -3
+//      INVALID_SIGNATURE = -3,
+//      EXTRA_SIGNATURES = -4
 //  };
 
 //  ===========================================================================
@@ -26,4 +27,5 @@ public enum LicenseResultCode: Int32, XDREnum {
   case invalidStamp = -1
   case invalidDueDate = -2
   case invalidSignature = -3
+  case extraSignatures = -4
 }

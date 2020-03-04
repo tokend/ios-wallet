@@ -18,7 +18,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct StampOp: XDREncodable {
+public struct StampOp: XDRCodable {
   public var ext: StampOpExt
 
   public init(
@@ -33,6 +33,10 @@ public struct StampOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.ext = try StampOpExt(xdrData: &xdrData)
   }
 
   public enum StampOpExt: XDRDiscriminatedUnion {
@@ -54,6 +58,16 @@ public struct StampOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

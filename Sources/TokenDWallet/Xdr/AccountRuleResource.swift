@@ -125,6 +125,17 @@ import Foundation
 //              EmptyExt ext;
 //          } accountSpecificRule;
 //      } accountSpecificRuleExt;
+//  case SWAP:
+//      struct
+//      {
+//          //: code of the asset
+//          AssetCode assetCode;
+//          //: type of asset
+//          uint64 assetType;
+//  
+//          //: reserved for future extension
+//          EmptyExt ext;
+//      } swap;
 //  default:
 //      //: reserved for future extension
 //      EmptyExt ext;
@@ -143,6 +154,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
   case vote(AccountRuleResourceVote)
   case initiateKycRecovery(AccountRuleResourceInitiateKYCRecovery)
   case accountSpecificRule(AccountRuleResourceAccountSpecificRuleExt)
+  case swap(AccountRuleResourceSwap)
 
   public var discriminant: Int32 {
     switch self {
@@ -157,6 +169,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case .vote: return LedgerEntryType.vote.rawValue
     case .initiateKycRecovery: return LedgerEntryType.initiateKycRecovery.rawValue
     case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
+    case .swap: return LedgerEntryType.swap.rawValue
     }
   }
 
@@ -177,11 +190,55 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case .vote(let data): xdr.append(data.toXDR())
     case .initiateKycRecovery(let data): xdr.append(data.toXDR())
     case .accountSpecificRule(let data): xdr.append(data.toXDR())
+    case .swap(let data): xdr.append(data.toXDR())
     }
 
     return xdr
   }
-  public struct AccountRuleResourceAsset: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerEntryType.asset.rawValue:
+      let data = try AccountRuleResourceAsset(xdrData: &xdrData)
+      self = .asset(data)
+    case LedgerEntryType.reviewableRequest.rawValue:
+      let data = try AccountRuleResourceReviewableRequest(xdrData: &xdrData)
+      self = .reviewableRequest(data)
+    case LedgerEntryType.any.rawValue: self = .any()
+    case LedgerEntryType.offerEntry.rawValue:
+      let data = try AccountRuleResourceOffer(xdrData: &xdrData)
+      self = .offerEntry(data)
+    case LedgerEntryType.sale.rawValue:
+      let data = try AccountRuleResourceSale(xdrData: &xdrData)
+      self = .sale(data)
+    case LedgerEntryType.atomicSwapAsk.rawValue:
+      let data = try AccountRuleResourceAtomicSwapAsk(xdrData: &xdrData)
+      self = .atomicSwapAsk(data)
+    case LedgerEntryType.keyValue.rawValue:
+      let data = try AccountRuleResourceKeyValue(xdrData: &xdrData)
+      self = .keyValue(data)
+    case LedgerEntryType.poll.rawValue:
+      let data = try AccountRuleResourcePoll(xdrData: &xdrData)
+      self = .poll(data)
+    case LedgerEntryType.vote.rawValue:
+      let data = try AccountRuleResourceVote(xdrData: &xdrData)
+      self = .vote(data)
+    case LedgerEntryType.initiateKycRecovery.rawValue:
+      let data = try AccountRuleResourceInitiateKYCRecovery(xdrData: &xdrData)
+      self = .initiateKycRecovery(data)
+    case LedgerEntryType.accountSpecificRule.rawValue:
+      let data = try AccountRuleResourceAccountSpecificRuleExt(xdrData: &xdrData)
+      self = .accountSpecificRule(data)
+    case LedgerEntryType.swap.rawValue:
+      let data = try AccountRuleResourceSwap(xdrData: &xdrData)
+      self = .swap(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct AccountRuleResourceAsset: XDRCodable {
     public var assetCode: AssetCode
     public var assetType: Uint64
     public var ext: EmptyExt
@@ -206,8 +263,14 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourceReviewableRequest: XDREncodable {
+  public struct AccountRuleResourceReviewableRequest: XDRCodable {
     public var details: ReviewableRequestResource
     public var ext: EmptyExt
 
@@ -228,8 +291,13 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.details = try ReviewableRequestResource(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourceOffer: XDREncodable {
+  public struct AccountRuleResourceOffer: XDRCodable {
     public var baseAssetType: Uint64
     public var quoteAssetType: Uint64
     public var baseAssetCode: AssetCode
@@ -266,8 +334,17 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.baseAssetType = try Uint64(xdrData: &xdrData)
+      self.quoteAssetType = try Uint64(xdrData: &xdrData)
+      self.baseAssetCode = try AssetCode(xdrData: &xdrData)
+      self.quoteAssetCode = try AssetCode(xdrData: &xdrData)
+      self.isBuy = try Bool(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourceSale: XDREncodable {
+  public struct AccountRuleResourceSale: XDRCodable {
     public var saleID: Uint64
     public var saleType: Uint64
     public var ext: EmptyExt
@@ -292,8 +369,14 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.saleID = try Uint64(xdrData: &xdrData)
+      self.saleType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourceAtomicSwapAsk: XDREncodable {
+  public struct AccountRuleResourceAtomicSwapAsk: XDRCodable {
     public var assetType: Uint64
     public var assetCode: AssetCode
     public var ext: EmptyExt
@@ -318,8 +401,14 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourceKeyValue: XDREncodable {
+  public struct AccountRuleResourceKeyValue: XDRCodable {
     public var keyPrefix: Longstring
     public var ext: EmptyExt
 
@@ -340,8 +429,13 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.keyPrefix = try Longstring(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourcePoll: XDREncodable {
+  public struct AccountRuleResourcePoll: XDRCodable {
     public var pollID: Uint64
     public var permissionType: Uint32
     public var ext: EmptyExt
@@ -366,8 +460,14 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.pollID = try Uint64(xdrData: &xdrData)
+      self.permissionType = try Uint32(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourceVote: XDREncodable {
+  public struct AccountRuleResourceVote: XDRCodable {
     public var pollID: Uint64
     public var permissionType: Uint32
     public var ext: EmptyExt
@@ -392,8 +492,14 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.pollID = try Uint64(xdrData: &xdrData)
+      self.permissionType = try Uint32(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct AccountRuleResourceInitiateKYCRecovery: XDREncodable {
+  public struct AccountRuleResourceInitiateKYCRecovery: XDRCodable {
     public var roleID: Uint64
     public var ext: EmptyExt
 
@@ -412,6 +518,11 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.roleID = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
     }
 
   }
@@ -439,7 +550,20 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       return xdr
     }
 
-    public struct AccountRuleResourceAccountSpecificRuleExtAccountSpecificRule: XDREncodable {
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.addAccSpecificRuleResource.rawValue:
+        let data = try AccountRuleResourceAccountSpecificRuleExtAccountSpecificRule(xdrData: &xdrData)
+        self = .addAccSpecificRuleResource(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
+    public struct AccountRuleResourceAccountSpecificRuleExtAccountSpecificRule: XDRCodable {
       public var ledgerKey: LedgerKey
       public var ext: EmptyExt
 
@@ -460,6 +584,43 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        self.ledgerKey = try LedgerKey(xdrData: &xdrData)
+        self.ext = try EmptyExt(xdrData: &xdrData)
+      }
+
     }
+  }
+  public struct AccountRuleResourceSwap: XDRCodable {
+    public var assetCode: AssetCode
+    public var assetType: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        assetCode: AssetCode,
+        assetType: Uint64,
+        ext: EmptyExt) {
+
+      self.assetCode = assetCode
+      self.assetType = assetType
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.assetCode.toXDR())
+      xdr.append(self.assetType.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.assetCode = try AssetCode(xdrData: &xdrData)
+      self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
 }

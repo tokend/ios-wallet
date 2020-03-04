@@ -22,7 +22,9 @@ import Foundation
 //      //: Limits cannot be created for account ID and account role simultaneously
 //      CANNOT_CREATE_FOR_ACC_ID_AND_ACC_TYPE = -4, // FIXME ACC_ROLE ?
 //      //: Limits entry is invalid (e.g. weeklyOut is less than dailyOut)
-//      INVALID_LIMITS = -5
+//      INVALID_LIMITS = -5,
+//      //: Asset with provided asset code does not exist
+//      ASSET_NOT_FOUND = -6
 //  };
 
 //  ===========================================================================
@@ -33,4 +35,5 @@ public enum ManageLimitsResultCode: Int32, XDREnum {
   case roleNotFound = -3
   case cannotCreateForAccIdAndAccType = -4
   case invalidLimits = -5
+  case assetNotFound = -6
 }

@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SaleExtended: XDREncodable {
+public struct SaleExtended: XDRCodable {
   public var saleID: Uint64
   public var ext: SaleExtendedExt
 
@@ -39,6 +39,11 @@ public struct SaleExtended: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.saleID = try Uint64(xdrData: &xdrData)
+    self.ext = try SaleExtendedExt(xdrData: &xdrData)
   }
 
   public enum SaleExtendedExt: XDRDiscriminatedUnion {
@@ -60,6 +65,16 @@ public struct SaleExtended: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

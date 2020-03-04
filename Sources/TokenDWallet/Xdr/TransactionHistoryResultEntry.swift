@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct TransactionHistoryResultEntry: XDREncodable {
+public struct TransactionHistoryResultEntry: XDRCodable {
   public var ledgerSeq: Uint32
   public var txResultSet: TransactionResultSet
   public var ext: TransactionHistoryResultEntryExt
@@ -45,6 +45,12 @@ public struct TransactionHistoryResultEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.ledgerSeq = try Uint32(xdrData: &xdrData)
+    self.txResultSet = try TransactionResultSet(xdrData: &xdrData)
+    self.ext = try TransactionHistoryResultEntryExt(xdrData: &xdrData)
+  }
+
   public enum TransactionHistoryResultEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -64,6 +70,16 @@ public struct TransactionHistoryResultEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

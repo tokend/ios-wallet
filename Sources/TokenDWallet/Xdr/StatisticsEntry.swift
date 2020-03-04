@@ -26,7 +26,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct StatisticsEntry: XDREncodable {
+public struct StatisticsEntry: XDRCodable {
   public var accountID: AccountID
   public var dailyOutcome: Uint64
   public var weeklyOutcome: Uint64
@@ -67,6 +67,16 @@ public struct StatisticsEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.accountID = try AccountID(xdrData: &xdrData)
+    self.dailyOutcome = try Uint64(xdrData: &xdrData)
+    self.weeklyOutcome = try Uint64(xdrData: &xdrData)
+    self.monthlyOutcome = try Uint64(xdrData: &xdrData)
+    self.annualOutcome = try Uint64(xdrData: &xdrData)
+    self.updatedAt = try Int64(xdrData: &xdrData)
+    self.ext = try StatisticsEntryExt(xdrData: &xdrData)
+  }
+
   public enum StatisticsEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -86,6 +96,16 @@ public struct StatisticsEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

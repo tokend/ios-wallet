@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageAccountSpecificRuleOp: XDREncodable {
+public struct ManageAccountSpecificRuleOp: XDRCodable {
   public var data: ManageAccountSpecificRuleOpData
   public var ext: ManageAccountSpecificRuleOpExt
 
@@ -46,6 +46,11 @@ public struct ManageAccountSpecificRuleOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.data = try ManageAccountSpecificRuleOpData(xdrData: &xdrData)
+    self.ext = try ManageAccountSpecificRuleOpExt(xdrData: &xdrData)
   }
 
   public enum ManageAccountSpecificRuleOpData: XDRDiscriminatedUnion {
@@ -72,6 +77,21 @@ public struct ManageAccountSpecificRuleOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageAccountSpecificRuleAction.create.rawValue:
+        let data = try CreateAccountSpecificRuleData(xdrData: &xdrData)
+        self = .create(data)
+      case ManageAccountSpecificRuleAction.remove.rawValue:
+        let data = try RemoveAccountSpecificRuleData(xdrData: &xdrData)
+        self = .remove(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageAccountSpecificRuleOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -92,6 +112,16 @@ public struct ManageAccountSpecificRuleOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

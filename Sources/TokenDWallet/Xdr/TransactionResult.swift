@@ -31,7 +31,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct TransactionResult: XDREncodable {
+public struct TransactionResult: XDRCodable {
   public var feeCharged: Int64
   public var result: TransactionResultResult
   public var ext: TransactionResultExt
@@ -54,6 +54,12 @@ public struct TransactionResult: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.feeCharged = try Int64(xdrData: &xdrData)
+    self.result = try TransactionResultResult(xdrData: &xdrData)
+    self.ext = try TransactionResultExt(xdrData: &xdrData)
   }
 
   public enum TransactionResultResult: XDRDiscriminatedUnion {
@@ -83,6 +89,32 @@ public struct TransactionResult: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case TransactionResultCode.txsuccess.rawValue:
+        let lengthresults = try Int32(xdrData: &xdrData)
+        var data = [OperationResult]()
+        for _ in 1...lengthresults {
+          data.append(try OperationResult(xdrData: &xdrData))
+        }
+        self = .txsuccess(data)
+      case TransactionResultCode.txfailed.rawValue:
+        let lengthresults = try Int32(xdrData: &xdrData)
+        var data = [OperationResult]()
+        for _ in 1...lengthresults {
+          data.append(try OperationResult(xdrData: &xdrData))
+        }
+        self = .txfailed(data)
+      case TransactionResultCode.txnoRolePermission.rawValue:
+        let data = try AccountRuleRequirement(xdrData: &xdrData)
+        self = .txnoRolePermission(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum TransactionResultExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -103,6 +135,16 @@ public struct TransactionResult: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

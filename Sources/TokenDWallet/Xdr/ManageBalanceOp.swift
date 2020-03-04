@@ -24,7 +24,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageBalanceOp: XDREncodable {
+public struct ManageBalanceOp: XDRCodable {
   public var action: ManageBalanceAction
   public var destination: AccountID
   public var asset: AssetCode
@@ -53,6 +53,13 @@ public struct ManageBalanceOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.action = try ManageBalanceAction(xdrData: &xdrData)
+    self.destination = try AccountID(xdrData: &xdrData)
+    self.asset = try AssetCode(xdrData: &xdrData)
+    self.ext = try ManageBalanceOpExt(xdrData: &xdrData)
+  }
+
   public enum ManageBalanceOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -72,6 +79,16 @@ public struct ManageBalanceOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

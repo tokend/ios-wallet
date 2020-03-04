@@ -103,12 +103,24 @@ import Foundation
 //          InitiateKYCRecoveryOp initiateKYCRecoveryOp;
 //      case CREATE_KYC_RECOVERY_REQUEST:
 //          CreateKYCRecoveryRequestOp createKYCRecoveryRequestOp;
+//      case CREATE_MANAGE_OFFER_REQUEST:
+//          CreateManageOfferRequestOp createManageOfferRequestOp;
+//      case CREATE_PAYMENT_REQUEST:
+//          CreatePaymentRequestOp createPaymentRequestOp;
+//      case REMOVE_ASSET:
+//          RemoveAssetOp removeAssetOp;
+//      case OPEN_SWAP:
+//          OpenSwapOp openSwapOp;
+//      case CLOSE_SWAP:
+//          CloseSwapOp closeSwapOp;
+//      case CREATE_REDEMPTION_REQUEST:
+//          CreateRedemptionRequestOp createRedemptionRequestOp;
 //      }
 //      body;
 //  };
 
 //  ===========================================================================
-public struct Operation: XDREncodable {
+public struct Operation: XDRCodable {
   public var sourceAccount: AccountID?
   public var body: OperationBody
 
@@ -127,6 +139,15 @@ public struct Operation: XDREncodable {
     xdr.append(self.body.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    if (try Bool(xdrData: &xdrData)) {
+      self.sourceAccount = try AccountID(xdrData: &xdrData)
+    } else {
+      self.sourceAccount = nil
+    }
+    self.body = try OperationBody(xdrData: &xdrData)
   }
 
   public enum OperationBody: XDRDiscriminatedUnion {
@@ -174,6 +195,12 @@ public struct Operation: XDREncodable {
     case removeAssetPair(RemoveAssetPairOp)
     case initiateKycRecovery(InitiateKYCRecoveryOp)
     case createKycRecoveryRequest(CreateKYCRecoveryRequestOp)
+    case createManageOfferRequest(CreateManageOfferRequestOp)
+    case createPaymentRequest(CreatePaymentRequestOp)
+    case removeAsset(RemoveAssetOp)
+    case openSwap(OpenSwapOp)
+    case closeSwap(CloseSwapOp)
+    case createRedemptionRequest(CreateRedemptionRequestOp)
 
     public var discriminant: Int32 {
       switch self {
@@ -221,6 +248,12 @@ public struct Operation: XDREncodable {
       case .removeAssetPair: return OperationType.removeAssetPair.rawValue
       case .initiateKycRecovery: return OperationType.initiateKycRecovery.rawValue
       case .createKycRecoveryRequest: return OperationType.createKycRecoveryRequest.rawValue
+      case .createManageOfferRequest: return OperationType.createManageOfferRequest.rawValue
+      case .createPaymentRequest: return OperationType.createPaymentRequest.rawValue
+      case .removeAsset: return OperationType.removeAsset.rawValue
+      case .openSwap: return OperationType.openSwap.rawValue
+      case .closeSwap: return OperationType.closeSwap.rawValue
+      case .createRedemptionRequest: return OperationType.createRedemptionRequest.rawValue
       }
     }
 
@@ -274,9 +307,174 @@ public struct Operation: XDREncodable {
       case .removeAssetPair(let data): xdr.append(data.toXDR())
       case .initiateKycRecovery(let data): xdr.append(data.toXDR())
       case .createKycRecoveryRequest(let data): xdr.append(data.toXDR())
+      case .createManageOfferRequest(let data): xdr.append(data.toXDR())
+      case .createPaymentRequest(let data): xdr.append(data.toXDR())
+      case .removeAsset(let data): xdr.append(data.toXDR())
+      case .openSwap(let data): xdr.append(data.toXDR())
+      case .closeSwap(let data): xdr.append(data.toXDR())
+      case .createRedemptionRequest(let data): xdr.append(data.toXDR())
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case OperationType.createAccount.rawValue:
+        let data = try CreateAccountOp(xdrData: &xdrData)
+        self = .createAccount(data)
+      case OperationType.createIssuanceRequest.rawValue:
+        let data = try CreateIssuanceRequestOp(xdrData: &xdrData)
+        self = .createIssuanceRequest(data)
+      case OperationType.setFees.rawValue:
+        let data = try SetFeesOp(xdrData: &xdrData)
+        self = .setFees(data)
+      case OperationType.createWithdrawalRequest.rawValue:
+        let data = try CreateWithdrawalRequestOp(xdrData: &xdrData)
+        self = .createWithdrawalRequest(data)
+      case OperationType.manageBalance.rawValue:
+        let data = try ManageBalanceOp(xdrData: &xdrData)
+        self = .manageBalance(data)
+      case OperationType.manageAsset.rawValue:
+        let data = try ManageAssetOp(xdrData: &xdrData)
+        self = .manageAsset(data)
+      case OperationType.createPreissuanceRequest.rawValue:
+        let data = try CreatePreIssuanceRequestOp(xdrData: &xdrData)
+        self = .createPreissuanceRequest(data)
+      case OperationType.manageLimits.rawValue:
+        let data = try ManageLimitsOp(xdrData: &xdrData)
+        self = .manageLimits(data)
+      case OperationType.manageAssetPair.rawValue:
+        let data = try ManageAssetPairOp(xdrData: &xdrData)
+        self = .manageAssetPair(data)
+      case OperationType.manageOffer.rawValue:
+        let data = try ManageOfferOp(xdrData: &xdrData)
+        self = .manageOffer(data)
+      case OperationType.manageInvoiceRequest.rawValue:
+        let data = try ManageInvoiceRequestOp(xdrData: &xdrData)
+        self = .manageInvoiceRequest(data)
+      case OperationType.reviewRequest.rawValue:
+        let data = try ReviewRequestOp(xdrData: &xdrData)
+        self = .reviewRequest(data)
+      case OperationType.createSaleRequest.rawValue:
+        let data = try CreateSaleCreationRequestOp(xdrData: &xdrData)
+        self = .createSaleRequest(data)
+      case OperationType.checkSaleState.rawValue:
+        let data = try CheckSaleStateOp(xdrData: &xdrData)
+        self = .checkSaleState(data)
+      case OperationType.payout.rawValue:
+        let data = try PayoutOp(xdrData: &xdrData)
+        self = .payout(data)
+      case OperationType.createAmlAlert.rawValue:
+        let data = try CreateAMLAlertRequestOp(xdrData: &xdrData)
+        self = .createAmlAlert(data)
+      case OperationType.manageKeyValue.rawValue:
+        let data = try ManageKeyValueOp(xdrData: &xdrData)
+        self = .manageKeyValue(data)
+      case OperationType.createChangeRoleRequest.rawValue:
+        let data = try CreateChangeRoleRequestOp(xdrData: &xdrData)
+        self = .createChangeRoleRequest(data)
+      case OperationType.manageExternalSystemAccountIdPoolEntry.rawValue:
+        let data = try ManageExternalSystemAccountIdPoolEntryOp(xdrData: &xdrData)
+        self = .manageExternalSystemAccountIdPoolEntry(data)
+      case OperationType.bindExternalSystemAccountId.rawValue:
+        let data = try BindExternalSystemAccountIdOp(xdrData: &xdrData)
+        self = .bindExternalSystemAccountId(data)
+      case OperationType.payment.rawValue:
+        let data = try PaymentOp(xdrData: &xdrData)
+        self = .payment(data)
+      case OperationType.manageSale.rawValue:
+        let data = try ManageSaleOp(xdrData: &xdrData)
+        self = .manageSale(data)
+      case OperationType.createManageLimitsRequest.rawValue:
+        let data = try CreateManageLimitsRequestOp(xdrData: &xdrData)
+        self = .createManageLimitsRequest(data)
+      case OperationType.manageContractRequest.rawValue:
+        let data = try ManageContractRequestOp(xdrData: &xdrData)
+        self = .manageContractRequest(data)
+      case OperationType.manageContract.rawValue:
+        let data = try ManageContractOp(xdrData: &xdrData)
+        self = .manageContract(data)
+      case OperationType.cancelSaleRequest.rawValue:
+        let data = try CancelSaleCreationRequestOp(xdrData: &xdrData)
+        self = .cancelSaleRequest(data)
+      case OperationType.createAtomicSwapAskRequest.rawValue:
+        let data = try CreateAtomicSwapAskRequestOp(xdrData: &xdrData)
+        self = .createAtomicSwapAskRequest(data)
+      case OperationType.cancelAtomicSwapAsk.rawValue:
+        let data = try CancelAtomicSwapAskOp(xdrData: &xdrData)
+        self = .cancelAtomicSwapAsk(data)
+      case OperationType.createAtomicSwapBidRequest.rawValue:
+        let data = try CreateAtomicSwapBidRequestOp(xdrData: &xdrData)
+        self = .createAtomicSwapBidRequest(data)
+      case OperationType.manageAccountRole.rawValue:
+        let data = try ManageAccountRoleOp(xdrData: &xdrData)
+        self = .manageAccountRole(data)
+      case OperationType.manageAccountRule.rawValue:
+        let data = try ManageAccountRuleOp(xdrData: &xdrData)
+        self = .manageAccountRule(data)
+      case OperationType.manageSigner.rawValue:
+        let data = try ManageSignerOp(xdrData: &xdrData)
+        self = .manageSigner(data)
+      case OperationType.manageSignerRole.rawValue:
+        let data = try ManageSignerRoleOp(xdrData: &xdrData)
+        self = .manageSignerRole(data)
+      case OperationType.manageSignerRule.rawValue:
+        let data = try ManageSignerRuleOp(xdrData: &xdrData)
+        self = .manageSignerRule(data)
+      case OperationType.stamp.rawValue:
+        let data = try StampOp(xdrData: &xdrData)
+        self = .stamp(data)
+      case OperationType.license.rawValue:
+        let data = try LicenseOp(xdrData: &xdrData)
+        self = .license(data)
+      case OperationType.manageCreatePollRequest.rawValue:
+        let data = try ManageCreatePollRequestOp(xdrData: &xdrData)
+        self = .manageCreatePollRequest(data)
+      case OperationType.managePoll.rawValue:
+        let data = try ManagePollOp(xdrData: &xdrData)
+        self = .managePoll(data)
+      case OperationType.manageVote.rawValue:
+        let data = try ManageVoteOp(xdrData: &xdrData)
+        self = .manageVote(data)
+      case OperationType.manageAccountSpecificRule.rawValue:
+        let data = try ManageAccountSpecificRuleOp(xdrData: &xdrData)
+        self = .manageAccountSpecificRule(data)
+      case OperationType.cancelChangeRoleRequest.rawValue:
+        let data = try CancelChangeRoleRequestOp(xdrData: &xdrData)
+        self = .cancelChangeRoleRequest(data)
+      case OperationType.removeAssetPair.rawValue:
+        let data = try RemoveAssetPairOp(xdrData: &xdrData)
+        self = .removeAssetPair(data)
+      case OperationType.initiateKycRecovery.rawValue:
+        let data = try InitiateKYCRecoveryOp(xdrData: &xdrData)
+        self = .initiateKycRecovery(data)
+      case OperationType.createKycRecoveryRequest.rawValue:
+        let data = try CreateKYCRecoveryRequestOp(xdrData: &xdrData)
+        self = .createKycRecoveryRequest(data)
+      case OperationType.createManageOfferRequest.rawValue:
+        let data = try CreateManageOfferRequestOp(xdrData: &xdrData)
+        self = .createManageOfferRequest(data)
+      case OperationType.createPaymentRequest.rawValue:
+        let data = try CreatePaymentRequestOp(xdrData: &xdrData)
+        self = .createPaymentRequest(data)
+      case OperationType.removeAsset.rawValue:
+        let data = try RemoveAssetOp(xdrData: &xdrData)
+        self = .removeAsset(data)
+      case OperationType.openSwap.rawValue:
+        let data = try OpenSwapOp(xdrData: &xdrData)
+        self = .openSwap(data)
+      case OperationType.closeSwap.rawValue:
+        let data = try CloseSwapOp(xdrData: &xdrData)
+        self = .closeSwap(data)
+      case OperationType.createRedemptionRequest.rawValue:
+        let data = try CreateRedemptionRequestOp(xdrData: &xdrData)
+        self = .createRedemptionRequest(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

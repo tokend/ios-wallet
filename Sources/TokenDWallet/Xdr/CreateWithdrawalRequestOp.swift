@@ -25,7 +25,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateWithdrawalRequestOp: XDREncodable {
+public struct CreateWithdrawalRequestOp: XDRCodable {
   public var request: WithdrawalRequest
   public var allTasks: Uint32?
   public var ext: CreateWithdrawalRequestOpExt
@@ -50,6 +50,16 @@ public struct CreateWithdrawalRequestOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.request = try WithdrawalRequest(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.allTasks = try Uint32(xdrData: &xdrData)
+    } else {
+      self.allTasks = nil
+    }
+    self.ext = try CreateWithdrawalRequestOpExt(xdrData: &xdrData)
+  }
+
   public enum CreateWithdrawalRequestOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -69,6 +79,16 @@ public struct CreateWithdrawalRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

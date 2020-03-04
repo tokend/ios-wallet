@@ -303,6 +303,13 @@ import Foundation
 //  
 //          EmptyExt ext;
 //      } accountSpecificRule;
+//  case SWAP:
+//      struct
+//      {
+//          uint64 id;
+//  
+//          EmptyExt ext;
+//      } swap;
 //  };
 
 //  ===========================================================================
@@ -337,6 +344,7 @@ public enum LedgerKey: XDRDiscriminatedUnion {
   case poll(LedgerKeyPoll)
   case vote(LedgerKeyVote)
   case accountSpecificRule(LedgerKeyAccountSpecificRule)
+  case swap(LedgerKeySwap)
 
   public var discriminant: Int32 {
     switch self {
@@ -370,6 +378,7 @@ public enum LedgerKey: XDRDiscriminatedUnion {
     case .poll: return LedgerEntryType.poll.rawValue
     case .vote: return LedgerEntryType.vote.rawValue
     case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
+    case .swap: return LedgerEntryType.swap.rawValue
     }
   }
 
@@ -409,11 +418,114 @@ public enum LedgerKey: XDRDiscriminatedUnion {
     case .poll(let data): xdr.append(data.toXDR())
     case .vote(let data): xdr.append(data.toXDR())
     case .accountSpecificRule(let data): xdr.append(data.toXDR())
+    case .swap(let data): xdr.append(data.toXDR())
     }
 
     return xdr
   }
-  public struct LedgerKeyAccount: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerEntryType.account.rawValue:
+      let data = try LedgerKeyAccount(xdrData: &xdrData)
+      self = .account(data)
+    case LedgerEntryType.signer.rawValue:
+      let data = try LedgerKeySigner(xdrData: &xdrData)
+      self = .signer(data)
+    case LedgerEntryType.fee.rawValue:
+      let data = try LedgerKeyFeeState(xdrData: &xdrData)
+      self = .fee(data)
+    case LedgerEntryType.balance.rawValue:
+      let data = try LedgerKeyBalance(xdrData: &xdrData)
+      self = .balance(data)
+    case LedgerEntryType.asset.rawValue:
+      let data = try LedgerKeyAsset(xdrData: &xdrData)
+      self = .asset(data)
+    case LedgerEntryType.referenceEntry.rawValue:
+      let data = try LedgerKeyReference(xdrData: &xdrData)
+      self = .referenceEntry(data)
+    case LedgerEntryType.statistics.rawValue:
+      let data = try LedgerKeyStats(xdrData: &xdrData)
+      self = .statistics(data)
+    case LedgerEntryType.accountLimits.rawValue:
+      let data = try LedgerKeyAccountLimits(xdrData: &xdrData)
+      self = .accountLimits(data)
+    case LedgerEntryType.assetPair.rawValue:
+      let data = try LedgerKeyAssetPair(xdrData: &xdrData)
+      self = .assetPair(data)
+    case LedgerEntryType.offerEntry.rawValue:
+      let data = try LedgerKeyOffer(xdrData: &xdrData)
+      self = .offerEntry(data)
+    case LedgerEntryType.reviewableRequest.rawValue:
+      let data = try LedgerKeyReviewableRequest(xdrData: &xdrData)
+      self = .reviewableRequest(data)
+    case LedgerEntryType.externalSystemAccountId.rawValue:
+      let data = try LedgerKeyExternalSystemAccountID(xdrData: &xdrData)
+      self = .externalSystemAccountId(data)
+    case LedgerEntryType.sale.rawValue:
+      let data = try LedgerKeySale(xdrData: &xdrData)
+      self = .sale(data)
+    case LedgerEntryType.keyValue.rawValue:
+      let data = try LedgerKeyKeyValue(xdrData: &xdrData)
+      self = .keyValue(data)
+    case LedgerEntryType.accountKyc.rawValue:
+      let data = try LedgerKeyAccountKYC(xdrData: &xdrData)
+      self = .accountKyc(data)
+    case LedgerEntryType.externalSystemAccountIdPoolEntry.rawValue:
+      let data = try LedgerKeyExternalSystemAccountIDPoolEntry(xdrData: &xdrData)
+      self = .externalSystemAccountIdPoolEntry(data)
+    case LedgerEntryType.limitsV2.rawValue:
+      let data = try LedgerKeyLimitsV2(xdrData: &xdrData)
+      self = .limitsV2(data)
+    case LedgerEntryType.statisticsV2.rawValue:
+      let data = try LedgerKeyStatisticsV2(xdrData: &xdrData)
+      self = .statisticsV2(data)
+    case LedgerEntryType.pendingStatistics.rawValue:
+      let data = try LedgerKeyPendingStatistics(xdrData: &xdrData)
+      self = .pendingStatistics(data)
+    case LedgerEntryType.contract.rawValue:
+      let data = try LedgerKeyContract(xdrData: &xdrData)
+      self = .contract(data)
+    case LedgerEntryType.atomicSwapAsk.rawValue:
+      let data = try LedgerKeyAtomicSwapAsk(xdrData: &xdrData)
+      self = .atomicSwapAsk(data)
+    case LedgerEntryType.accountRole.rawValue:
+      let data = try LedgerKeyAccountRole(xdrData: &xdrData)
+      self = .accountRole(data)
+    case LedgerEntryType.accountRule.rawValue:
+      let data = try LedgerKeyAccountRule(xdrData: &xdrData)
+      self = .accountRule(data)
+    case LedgerEntryType.signerRole.rawValue:
+      let data = try LedgerKeySignerRole(xdrData: &xdrData)
+      self = .signerRole(data)
+    case LedgerEntryType.signerRule.rawValue:
+      let data = try LedgerKeySignerRule(xdrData: &xdrData)
+      self = .signerRule(data)
+    case LedgerEntryType.stamp.rawValue:
+      let data = try LedgerKeyStamp(xdrData: &xdrData)
+      self = .stamp(data)
+    case LedgerEntryType.license.rawValue:
+      let data = try LedgerKeyLicense(xdrData: &xdrData)
+      self = .license(data)
+    case LedgerEntryType.poll.rawValue:
+      let data = try LedgerKeyPoll(xdrData: &xdrData)
+      self = .poll(data)
+    case LedgerEntryType.vote.rawValue:
+      let data = try LedgerKeyVote(xdrData: &xdrData)
+      self = .vote(data)
+    case LedgerEntryType.accountSpecificRule.rawValue:
+      let data = try LedgerKeyAccountSpecificRule(xdrData: &xdrData)
+      self = .accountSpecificRule(data)
+    case LedgerEntryType.swap.rawValue:
+      let data = try LedgerKeySwap(xdrData: &xdrData)
+      self = .swap(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct LedgerKeyAccount: XDRCodable {
     public var accountID: AccountID
     public var ext: LedgerKeyAccountExt
 
@@ -432,6 +544,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.accountID = try AccountID(xdrData: &xdrData)
+      self.ext = try LedgerKeyAccountExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyAccountExt: XDRDiscriminatedUnion {
@@ -455,9 +572,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeySigner: XDREncodable {
+  public struct LedgerKeySigner: XDRCodable {
     public var pubKey: PublicKey
     public var accountID: AccountID
     public var ext: LedgerKeySignerExt
@@ -482,6 +609,12 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.pubKey = try PublicKey(xdrData: &xdrData)
+      self.accountID = try AccountID(xdrData: &xdrData)
+      self.ext = try LedgerKeySignerExt(xdrData: &xdrData)
+    }
+
     public enum LedgerKeySignerExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -503,9 +636,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyFeeState: XDREncodable {
+  public struct LedgerKeyFeeState: XDRCodable {
     public var hash: Hash
     public var lowerBound: Int64
     public var upperBound: Int64
@@ -534,6 +677,13 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.hash = try Hash(xdrData: &xdrData)
+      self.lowerBound = try Int64(xdrData: &xdrData)
+      self.upperBound = try Int64(xdrData: &xdrData)
+      self.ext = try LedgerKeyFeeStateExt(xdrData: &xdrData)
+    }
+
     public enum LedgerKeyFeeStateExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -555,9 +705,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyBalance: XDREncodable {
+  public struct LedgerKeyBalance: XDRCodable {
     public var balanceID: BalanceID
     public var ext: LedgerKeyBalanceExt
 
@@ -576,6 +736,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.balanceID = try BalanceID(xdrData: &xdrData)
+      self.ext = try LedgerKeyBalanceExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyBalanceExt: XDRDiscriminatedUnion {
@@ -599,9 +764,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyAsset: XDREncodable {
+  public struct LedgerKeyAsset: XDRCodable {
     public var code: AssetCode
     public var ext: LedgerKeyAssetExt
 
@@ -620,6 +795,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.code = try AssetCode(xdrData: &xdrData)
+      self.ext = try LedgerKeyAssetExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyAssetExt: XDRDiscriminatedUnion {
@@ -643,9 +823,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyReference: XDREncodable {
+  public struct LedgerKeyReference: XDRCodable {
     public var sender: AccountID
     public var reference: String64
     public var ext: LedgerKeyReferenceExt
@@ -670,6 +860,12 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.sender = try AccountID(xdrData: &xdrData)
+      self.reference = try String64(xdrData: &xdrData)
+      self.ext = try LedgerKeyReferenceExt(xdrData: &xdrData)
+    }
+
     public enum LedgerKeyReferenceExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -691,9 +887,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyStats: XDREncodable {
+  public struct LedgerKeyStats: XDRCodable {
     public var accountID: AccountID
     public var ext: LedgerKeyStatsExt
 
@@ -712,6 +918,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.accountID = try AccountID(xdrData: &xdrData)
+      self.ext = try LedgerKeyStatsExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyStatsExt: XDRDiscriminatedUnion {
@@ -735,9 +946,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyAccountLimits: XDREncodable {
+  public struct LedgerKeyAccountLimits: XDRCodable {
     public var accountID: AccountID
     public var ext: LedgerKeyAccountLimitsExt
 
@@ -756,6 +977,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.accountID = try AccountID(xdrData: &xdrData)
+      self.ext = try LedgerKeyAccountLimitsExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyAccountLimitsExt: XDRDiscriminatedUnion {
@@ -779,9 +1005,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyAssetPair: XDREncodable {
+  public struct LedgerKeyAssetPair: XDRCodable {
     public var base: AssetCode
     public var quote: AssetCode
     public var ext: LedgerKeyAssetPairExt
@@ -806,6 +1042,12 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.base = try AssetCode(xdrData: &xdrData)
+      self.quote = try AssetCode(xdrData: &xdrData)
+      self.ext = try LedgerKeyAssetPairExt(xdrData: &xdrData)
+    }
+
     public enum LedgerKeyAssetPairExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -827,9 +1069,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyOffer: XDREncodable {
+  public struct LedgerKeyOffer: XDRCodable {
     public var offerID: Uint64
     public var ownerID: AccountID
 
@@ -850,8 +1102,13 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.offerID = try Uint64(xdrData: &xdrData)
+      self.ownerID = try AccountID(xdrData: &xdrData)
+    }
+
   }
-  public struct LedgerKeyReviewableRequest: XDREncodable {
+  public struct LedgerKeyReviewableRequest: XDRCodable {
     public var requestID: Uint64
     public var ext: LedgerKeyReviewableRequestExt
 
@@ -870,6 +1127,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.requestID = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyReviewableRequestExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyReviewableRequestExt: XDRDiscriminatedUnion {
@@ -893,9 +1155,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyExternalSystemAccountID: XDREncodable {
+  public struct LedgerKeyExternalSystemAccountID: XDRCodable {
     public var accountID: AccountID
     public var externalSystemType: Int32
     public var ext: LedgerKeyExternalSystemAccountIDExt
@@ -920,6 +1192,12 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.accountID = try AccountID(xdrData: &xdrData)
+      self.externalSystemType = try Int32(xdrData: &xdrData)
+      self.ext = try LedgerKeyExternalSystemAccountIDExt(xdrData: &xdrData)
+    }
+
     public enum LedgerKeyExternalSystemAccountIDExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -941,9 +1219,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeySale: XDREncodable {
+  public struct LedgerKeySale: XDRCodable {
     public var saleID: Uint64
     public var ext: LedgerKeySaleExt
 
@@ -962,6 +1250,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.saleID = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeySaleExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeySaleExt: XDRDiscriminatedUnion {
@@ -985,9 +1278,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyKeyValue: XDREncodable {
+  public struct LedgerKeyKeyValue: XDRCodable {
     public var key: Longstring
     public var ext: LedgerKeyKeyValueExt
 
@@ -1006,6 +1309,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.key = try Longstring(xdrData: &xdrData)
+      self.ext = try LedgerKeyKeyValueExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyKeyValueExt: XDRDiscriminatedUnion {
@@ -1029,9 +1337,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyAccountKYC: XDREncodable {
+  public struct LedgerKeyAccountKYC: XDRCodable {
     public var accountID: AccountID
     public var ext: LedgerKeyAccountKYCExt
 
@@ -1050,6 +1368,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.accountID = try AccountID(xdrData: &xdrData)
+      self.ext = try LedgerKeyAccountKYCExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyAccountKYCExt: XDRDiscriminatedUnion {
@@ -1073,9 +1396,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyExternalSystemAccountIDPoolEntry: XDREncodable {
+  public struct LedgerKeyExternalSystemAccountIDPoolEntry: XDRCodable {
     public var poolEntryID: Uint64
     public var ext: LedgerKeyExternalSystemAccountIDPoolEntryExt
 
@@ -1094,6 +1427,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.poolEntryID = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyExternalSystemAccountIDPoolEntryExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyExternalSystemAccountIDPoolEntryExt: XDRDiscriminatedUnion {
@@ -1117,9 +1455,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyLimitsV2: XDREncodable {
+  public struct LedgerKeyLimitsV2: XDRCodable {
     public var id: Uint64
     public var ext: LedgerKeyLimitsV2Ext
 
@@ -1138,6 +1486,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyLimitsV2Ext(xdrData: &xdrData)
     }
 
     public enum LedgerKeyLimitsV2Ext: XDRDiscriminatedUnion {
@@ -1161,9 +1514,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyStatisticsV2: XDREncodable {
+  public struct LedgerKeyStatisticsV2: XDRCodable {
     public var id: Uint64
     public var ext: LedgerKeyStatisticsV2Ext
 
@@ -1182,6 +1545,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyStatisticsV2Ext(xdrData: &xdrData)
     }
 
     public enum LedgerKeyStatisticsV2Ext: XDRDiscriminatedUnion {
@@ -1205,9 +1573,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyPendingStatistics: XDREncodable {
+  public struct LedgerKeyPendingStatistics: XDRCodable {
     public var statisticsID: Uint64
     public var requestID: Uint64
     public var ext: LedgerKeyPendingStatisticsExt
@@ -1232,6 +1610,12 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.statisticsID = try Uint64(xdrData: &xdrData)
+      self.requestID = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyPendingStatisticsExt(xdrData: &xdrData)
+    }
+
     public enum LedgerKeyPendingStatisticsExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -1253,9 +1637,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyContract: XDREncodable {
+  public struct LedgerKeyContract: XDRCodable {
     public var contractID: Uint64
     public var ext: LedgerKeyContractExt
 
@@ -1274,6 +1668,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.contractID = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyContractExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyContractExt: XDRDiscriminatedUnion {
@@ -1297,9 +1696,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyAtomicSwapAsk: XDREncodable {
+  public struct LedgerKeyAtomicSwapAsk: XDRCodable {
     public var id: Uint64
     public var ext: LedgerKeyAtomicSwapAskExt
 
@@ -1318,6 +1727,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyAtomicSwapAskExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyAtomicSwapAskExt: XDRDiscriminatedUnion {
@@ -1341,9 +1755,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyAccountRole: XDREncodable {
+  public struct LedgerKeyAccountRole: XDRCodable {
     public var id: Uint64
     public var ext: LedgerKeyAccountRoleExt
 
@@ -1362,6 +1786,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyAccountRoleExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyAccountRoleExt: XDRDiscriminatedUnion {
@@ -1385,9 +1814,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyAccountRule: XDREncodable {
+  public struct LedgerKeyAccountRule: XDRCodable {
     public var id: Uint64
     public var ext: LedgerKeyAccountRuleExt
 
@@ -1406,6 +1845,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeyAccountRuleExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyAccountRuleExt: XDRDiscriminatedUnion {
@@ -1429,9 +1873,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeySignerRole: XDREncodable {
+  public struct LedgerKeySignerRole: XDRCodable {
     public var id: Uint64
     public var ext: LedgerKeySignerRoleExt
 
@@ -1450,6 +1904,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeySignerRoleExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeySignerRoleExt: XDRDiscriminatedUnion {
@@ -1473,9 +1932,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeySignerRule: XDREncodable {
+  public struct LedgerKeySignerRule: XDRCodable {
     public var id: Uint64
     public var ext: LedgerKeySignerRuleExt
 
@@ -1494,6 +1963,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try LedgerKeySignerRuleExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeySignerRuleExt: XDRDiscriminatedUnion {
@@ -1517,9 +1991,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyStamp: XDREncodable {
+  public struct LedgerKeyStamp: XDRCodable {
     public var ledgerHash: Hash
     public var licenseHash: Hash
     public var ext: LedgerKeyStampExt
@@ -1544,6 +2028,12 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.ledgerHash = try Hash(xdrData: &xdrData)
+      self.licenseHash = try Hash(xdrData: &xdrData)
+      self.ext = try LedgerKeyStampExt(xdrData: &xdrData)
+    }
+
     public enum LedgerKeyStampExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -1565,9 +2055,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyLicense: XDREncodable {
+  public struct LedgerKeyLicense: XDRCodable {
     public var licenseHash: Hash
     public var ext: LedgerKeyLicenseExt
 
@@ -1586,6 +2086,11 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.licenseHash = try Hash(xdrData: &xdrData)
+      self.ext = try LedgerKeyLicenseExt(xdrData: &xdrData)
     }
 
     public enum LedgerKeyLicenseExt: XDRDiscriminatedUnion {
@@ -1609,9 +2114,19 @@ public enum LedgerKey: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
   }
-  public struct LedgerKeyPoll: XDREncodable {
+  public struct LedgerKeyPoll: XDRCodable {
     public var id: Uint64
     public var ext: EmptyExt
 
@@ -1632,8 +2147,13 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct LedgerKeyVote: XDREncodable {
+  public struct LedgerKeyVote: XDRCodable {
     public var pollID: Uint64
     public var voterID: AccountID
     public var ext: EmptyExt
@@ -1658,8 +2178,14 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.pollID = try Uint64(xdrData: &xdrData)
+      self.voterID = try AccountID(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
   }
-  public struct LedgerKeyAccountSpecificRule: XDREncodable {
+  public struct LedgerKeyAccountSpecificRule: XDRCodable {
     public var id: Uint64
     public var ext: EmptyExt
 
@@ -1678,6 +2204,38 @@ public enum LedgerKey: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct LedgerKeySwap: XDRCodable {
+    public var id: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        id: Uint64,
+        ext: EmptyExt) {
+
+      self.id = id
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.id.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
     }
 
   }

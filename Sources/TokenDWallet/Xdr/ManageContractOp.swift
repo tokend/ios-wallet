@@ -32,7 +32,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageContractOp: XDREncodable {
+public struct ManageContractOp: XDRCodable {
   public var contractID: Uint64
   public var data: ManageContractOpData
   public var ext: ManageContractOpExt
@@ -55,6 +55,12 @@ public struct ManageContractOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.contractID = try Uint64(xdrData: &xdrData)
+    self.data = try ManageContractOpData(xdrData: &xdrData)
+    self.ext = try ManageContractOpExt(xdrData: &xdrData)
   }
 
   public enum ManageContractOpData: XDRDiscriminatedUnion {
@@ -87,6 +93,25 @@ public struct ManageContractOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageContractAction.addDetails.rawValue:
+        let data = try Longstring(xdrData: &xdrData)
+        self = .addDetails(data)
+      case ManageContractAction.confirmCompleted.rawValue: self = .confirmCompleted()
+      case ManageContractAction.startDispute.rawValue:
+        let data = try Longstring(xdrData: &xdrData)
+        self = .startDispute(data)
+      case ManageContractAction.resolveDispute.rawValue:
+        let data = try Bool(xdrData: &xdrData)
+        self = .resolveDispute(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageContractOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -107,6 +132,16 @@ public struct ManageContractOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

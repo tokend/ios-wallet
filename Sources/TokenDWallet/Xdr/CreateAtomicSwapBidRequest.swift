@@ -26,7 +26,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateAtomicSwapBidRequest: XDREncodable {
+public struct CreateAtomicSwapBidRequest: XDRCodable {
   public var askID: Uint64
   public var baseAmount: Uint64
   public var quoteAsset: AssetCode
@@ -59,6 +59,14 @@ public struct CreateAtomicSwapBidRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.askID = try Uint64(xdrData: &xdrData)
+    self.baseAmount = try Uint64(xdrData: &xdrData)
+    self.quoteAsset = try AssetCode(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    self.ext = try CreateAtomicSwapBidRequestExt(xdrData: &xdrData)
+  }
+
   public enum CreateAtomicSwapBidRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -78,6 +86,16 @@ public struct CreateAtomicSwapBidRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

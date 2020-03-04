@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct StampSuccess: XDREncodable {
+public struct StampSuccess: XDRCodable {
   public var ledgerHash: Hash
   public var licenseHash: Hash
   public var ext: StampSuccessExt
@@ -48,6 +48,12 @@ public struct StampSuccess: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.ledgerHash = try Hash(xdrData: &xdrData)
+    self.licenseHash = try Hash(xdrData: &xdrData)
+    self.ext = try StampSuccessExt(xdrData: &xdrData)
+  }
+
   public enum StampSuccessExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -67,6 +73,16 @@ public struct StampSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

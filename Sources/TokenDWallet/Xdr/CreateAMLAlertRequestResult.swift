@@ -35,4 +35,16 @@ public enum CreateAMLAlertRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CreateAMLAlertRequestResultCode.success.rawValue:
+      let data = try CreateAMLAlertRequestSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

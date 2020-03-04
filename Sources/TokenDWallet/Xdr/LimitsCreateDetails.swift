@@ -42,7 +42,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct LimitsCreateDetails: XDREncodable {
+public struct LimitsCreateDetails: XDRCodable {
   public var accountRole: Uint64?
   public var accountID: AccountID?
   public var statsOpType: StatsOpType
@@ -95,6 +95,27 @@ public struct LimitsCreateDetails: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    if (try Bool(xdrData: &xdrData)) {
+      self.accountRole = try Uint64(xdrData: &xdrData)
+    } else {
+      self.accountRole = nil
+    }
+    if (try Bool(xdrData: &xdrData)) {
+      self.accountID = try AccountID(xdrData: &xdrData)
+    } else {
+      self.accountID = nil
+    }
+    self.statsOpType = try StatsOpType(xdrData: &xdrData)
+    self.assetCode = try AssetCode(xdrData: &xdrData)
+    self.isConvertNeeded = try Bool(xdrData: &xdrData)
+    self.dailyOut = try Uint64(xdrData: &xdrData)
+    self.weeklyOut = try Uint64(xdrData: &xdrData)
+    self.monthlyOut = try Uint64(xdrData: &xdrData)
+    self.annualOut = try Uint64(xdrData: &xdrData)
+    self.ext = try LimitsCreateDetailsExt(xdrData: &xdrData)
+  }
+
   public enum LimitsCreateDetailsExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -114,6 +135,16 @@ public struct LimitsCreateDetails: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

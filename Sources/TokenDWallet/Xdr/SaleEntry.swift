@@ -35,7 +35,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SaleEntry: XDREncodable {
+public struct SaleEntry: XDRCodable {
   public var saleID: Uint64
   public var saleType: Uint64
   public var ownerID: AccountID
@@ -112,6 +112,29 @@ public struct SaleEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.saleID = try Uint64(xdrData: &xdrData)
+    self.saleType = try Uint64(xdrData: &xdrData)
+    self.ownerID = try AccountID(xdrData: &xdrData)
+    self.baseAsset = try AssetCode(xdrData: &xdrData)
+    self.startTime = try Uint64(xdrData: &xdrData)
+    self.endTime = try Uint64(xdrData: &xdrData)
+    self.defaultQuoteAsset = try AssetCode(xdrData: &xdrData)
+    self.softCap = try Uint64(xdrData: &xdrData)
+    self.hardCap = try Uint64(xdrData: &xdrData)
+    self.currentCapInBase = try Uint64(xdrData: &xdrData)
+    self.maxAmountToBeSold = try Uint64(xdrData: &xdrData)
+    self.details = try Longstring(xdrData: &xdrData)
+    let lengthquoteAssets = try Int32(xdrData: &xdrData)
+    self.quoteAssets = [SaleQuoteAsset]()
+    for _ in 1...lengthquoteAssets {
+      self.quoteAssets.append(try SaleQuoteAsset(xdrData: &xdrData))
+    }
+    self.baseBalance = try BalanceID(xdrData: &xdrData)
+    self.saleTypeExt = try SaleTypeExt(xdrData: &xdrData)
+    self.ext = try SaleEntryExt(xdrData: &xdrData)
+  }
+
   public enum SaleEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
     case addSaleWhitelists()
@@ -134,6 +157,17 @@ public struct SaleEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.addSaleWhitelists.rawValue: self = .addSaleWhitelists()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

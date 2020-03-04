@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AccountRoleEntry: XDREncodable {
+public struct AccountRoleEntry: XDRCodable {
   public var id: Uint64
   public var ruleIDs: [Uint64]
   public var details: Longstring
@@ -52,6 +52,17 @@ public struct AccountRoleEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.id = try Uint64(xdrData: &xdrData)
+    let lengthruleIDs = try Int32(xdrData: &xdrData)
+    self.ruleIDs = [Uint64]()
+    for _ in 1...lengthruleIDs {
+      self.ruleIDs.append(try Uint64(xdrData: &xdrData))
+    }
+    self.details = try Longstring(xdrData: &xdrData)
+    self.ext = try AccountRoleEntryExt(xdrData: &xdrData)
+  }
+
   public enum AccountRoleEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -71,6 +82,16 @@ public struct AccountRoleEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

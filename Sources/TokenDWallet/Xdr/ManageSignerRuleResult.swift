@@ -52,7 +52,26 @@ public enum ManageSignerRuleResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct ManageSignerRuleResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageSignerRuleResultCode.success.rawValue:
+      let data = try ManageSignerRuleResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    case ManageSignerRuleResultCode.ruleIsUsed.rawValue:
+      let lengthroleIDs = try Int32(xdrData: &xdrData)
+      var data = [Uint64]()
+      for _ in 1...lengthroleIDs {
+        data.append(try Uint64(xdrData: &xdrData))
+      }
+      self = .ruleIsUsed(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ManageSignerRuleResultSuccess: XDRCodable {
     public var ruleID: Uint64
     public var ext: ManageSignerRuleResultSuccessExt
 
@@ -71,6 +90,11 @@ public enum ManageSignerRuleResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.ruleID = try Uint64(xdrData: &xdrData)
+      self.ext = try ManageSignerRuleResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum ManageSignerRuleResultSuccessExt: XDRDiscriminatedUnion {
@@ -92,6 +116,16 @@ public enum ManageSignerRuleResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

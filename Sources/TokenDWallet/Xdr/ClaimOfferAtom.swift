@@ -37,7 +37,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ClaimOfferAtom: XDREncodable {
+public struct ClaimOfferAtom: XDRCodable {
   public var bAccountID: AccountID
   public var offerID: Uint64
   public var baseAmount: Int64
@@ -90,6 +90,19 @@ public struct ClaimOfferAtom: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.bAccountID = try AccountID(xdrData: &xdrData)
+    self.offerID = try Uint64(xdrData: &xdrData)
+    self.baseAmount = try Int64(xdrData: &xdrData)
+    self.quoteAmount = try Int64(xdrData: &xdrData)
+    self.bFeePaid = try Int64(xdrData: &xdrData)
+    self.aFeePaid = try Int64(xdrData: &xdrData)
+    self.baseBalance = try BalanceID(xdrData: &xdrData)
+    self.quoteBalance = try BalanceID(xdrData: &xdrData)
+    self.currentPrice = try Int64(xdrData: &xdrData)
+    self.ext = try ClaimOfferAtomExt(xdrData: &xdrData)
+  }
+
   public enum ClaimOfferAtomExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -109,6 +122,16 @@ public struct ClaimOfferAtom: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

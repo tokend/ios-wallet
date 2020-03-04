@@ -13,6 +13,8 @@ import Foundation
 //  		CrowdFundingSale crowdFundingSale;
 //  	case FIXED_PRICE:
 //  		FixedPriceSale fixedPriceSale;
+//      case IMMEDIATE:
+//          ImmediateSale immediateSale;
 //  };
 
 //  ===========================================================================
@@ -20,12 +22,14 @@ public enum SaleTypeExt: XDRDiscriminatedUnion {
   case basicSale(BasicSale)
   case crowdFunding(CrowdFundingSale)
   case fixedPrice(FixedPriceSale)
+  case immediate(ImmediateSale)
 
   public var discriminant: Int32 {
     switch self {
     case .basicSale: return SaleType.basicSale.rawValue
     case .crowdFunding: return SaleType.crowdFunding.rawValue
     case .fixedPrice: return SaleType.fixedPrice.rawValue
+    case .immediate: return SaleType.immediate.rawValue
     }
   }
 
@@ -38,8 +42,30 @@ public enum SaleTypeExt: XDRDiscriminatedUnion {
     case .basicSale(let data): xdr.append(data.toXDR())
     case .crowdFunding(let data): xdr.append(data.toXDR())
     case .fixedPrice(let data): xdr.append(data.toXDR())
+    case .immediate(let data): xdr.append(data.toXDR())
     }
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case SaleType.basicSale.rawValue:
+      let data = try BasicSale(xdrData: &xdrData)
+      self = .basicSale(data)
+    case SaleType.crowdFunding.rawValue:
+      let data = try CrowdFundingSale(xdrData: &xdrData)
+      self = .crowdFunding(data)
+    case SaleType.fixedPrice.rawValue:
+      let data = try FixedPriceSale(xdrData: &xdrData)
+      self = .fixedPrice(data)
+    case SaleType.immediate.rawValue:
+      let data = try ImmediateSale(xdrData: &xdrData)
+      self = .immediate(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
   }
 }

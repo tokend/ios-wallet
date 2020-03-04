@@ -44,7 +44,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ReviewRequestOp: XDREncodable {
+public struct ReviewRequestOp: XDRCodable {
   public var requestID: Uint64
   public var requestHash: Hash
   public var requestDetails: ReviewRequestOpRequestDetails
@@ -85,6 +85,16 @@ public struct ReviewRequestOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.requestHash = try Hash(xdrData: &xdrData)
+    self.requestDetails = try ReviewRequestOpRequestDetails(xdrData: &xdrData)
+    self.action = try ReviewRequestOpAction(xdrData: &xdrData)
+    self.reason = try Longstring(xdrData: &xdrData)
+    self.reviewDetails = try ReviewDetails(xdrData: &xdrData)
+    self.ext = try ReviewRequestOpExt(xdrData: &xdrData)
+  }
+
   public enum ReviewRequestOpRequestDetails: XDRDiscriminatedUnion {
     case createWithdraw(WithdrawalDetails)
     case updateLimits(LimitsUpdateDetails)
@@ -118,6 +128,30 @@ public struct ReviewRequestOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ReviewableRequestType.createWithdraw.rawValue:
+        let data = try WithdrawalDetails(xdrData: &xdrData)
+        self = .createWithdraw(data)
+      case ReviewableRequestType.updateLimits.rawValue:
+        let data = try LimitsUpdateDetails(xdrData: &xdrData)
+        self = .updateLimits(data)
+      case ReviewableRequestType.createAmlAlert.rawValue:
+        let data = try AMLAlertDetails(xdrData: &xdrData)
+        self = .createAmlAlert(data)
+      case ReviewableRequestType.createInvoice.rawValue:
+        let data = try BillPayDetails(xdrData: &xdrData)
+        self = .createInvoice(data)
+      case ReviewableRequestType.manageContract.rawValue:
+        let data = try ContractDetails(xdrData: &xdrData)
+        self = .manageContract(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ReviewRequestOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -138,6 +172,16 @@ public struct ReviewRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

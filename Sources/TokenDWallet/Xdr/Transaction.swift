@@ -36,7 +36,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct Transaction: XDREncodable {
+public struct Transaction: XDRCodable {
   public var sourceAccount: AccountID
   public var salt: Salt
   public var timeBounds: TimeBounds
@@ -73,6 +73,19 @@ public struct Transaction: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.sourceAccount = try AccountID(xdrData: &xdrData)
+    self.salt = try Salt(xdrData: &xdrData)
+    self.timeBounds = try TimeBounds(xdrData: &xdrData)
+    self.memo = try Memo(xdrData: &xdrData)
+    let lengthoperations = try Int32(xdrData: &xdrData)
+    self.operations = [Operation]()
+    for _ in 1...lengthoperations {
+      self.operations.append(try Operation(xdrData: &xdrData))
+    }
+    self.ext = try TransactionExt(xdrData: &xdrData)
+  }
+
   public enum TransactionExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -92,6 +105,16 @@ public struct Transaction: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

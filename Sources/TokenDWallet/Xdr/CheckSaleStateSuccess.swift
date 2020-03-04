@@ -31,7 +31,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CheckSaleStateSuccess: XDREncodable {
+public struct CheckSaleStateSuccess: XDRCodable {
   public var saleID: Uint64
   public var effect: CheckSaleStateSuccessEffect
   public var ext: CheckSaleStateSuccessExt
@@ -54,6 +54,12 @@ public struct CheckSaleStateSuccess: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.saleID = try Uint64(xdrData: &xdrData)
+    self.effect = try CheckSaleStateSuccessEffect(xdrData: &xdrData)
+    self.ext = try CheckSaleStateSuccessExt(xdrData: &xdrData)
   }
 
   public enum CheckSaleStateSuccessEffect: XDRDiscriminatedUnion {
@@ -83,6 +89,24 @@ public struct CheckSaleStateSuccess: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case CheckSaleStateEffect.canceled.rawValue:
+        let data = try SaleCanceled(xdrData: &xdrData)
+        self = .canceled(data)
+      case CheckSaleStateEffect.closed.rawValue:
+        let data = try CheckSaleClosedResult(xdrData: &xdrData)
+        self = .closed(data)
+      case CheckSaleStateEffect.updated.rawValue:
+        let data = try SaleUpdated(xdrData: &xdrData)
+        self = .updated(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum CheckSaleStateSuccessExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -103,6 +127,16 @@ public struct CheckSaleStateSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

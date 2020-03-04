@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct UpdateMaxIssuance: XDREncodable {
+public struct UpdateMaxIssuance: XDRCodable {
   public var assetCode: AssetCode
   public var maxIssuanceAmount: Uint64
   public var ext: UpdateMaxIssuanceExt
@@ -48,6 +48,12 @@ public struct UpdateMaxIssuance: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.assetCode = try AssetCode(xdrData: &xdrData)
+    self.maxIssuanceAmount = try Uint64(xdrData: &xdrData)
+    self.ext = try UpdateMaxIssuanceExt(xdrData: &xdrData)
+  }
+
   public enum UpdateMaxIssuanceExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -67,6 +73,16 @@ public struct UpdateMaxIssuance: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

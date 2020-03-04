@@ -27,7 +27,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageVoteOp: XDREncodable {
+public struct ManageVoteOp: XDRCodable {
   public var data: ManageVoteOpData
   public var ext: ManageVoteOpExt
 
@@ -46,6 +46,11 @@ public struct ManageVoteOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.data = try ManageVoteOpData(xdrData: &xdrData)
+    self.ext = try ManageVoteOpExt(xdrData: &xdrData)
   }
 
   public enum ManageVoteOpData: XDRDiscriminatedUnion {
@@ -72,6 +77,21 @@ public struct ManageVoteOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageVoteAction.create.rawValue:
+        let data = try CreateVoteData(xdrData: &xdrData)
+        self = .create(data)
+      case ManageVoteAction.remove.rawValue:
+        let data = try RemoveVoteData(xdrData: &xdrData)
+        self = .remove(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageVoteOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -92,6 +112,16 @@ public struct ManageVoteOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

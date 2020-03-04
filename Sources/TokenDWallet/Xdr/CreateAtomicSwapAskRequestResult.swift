@@ -36,4 +36,16 @@ public enum CreateAtomicSwapAskRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CreateAtomicSwapAskRequestResultCode.success.rawValue:
+      let data = try CreateAtomicSwapAskRequestSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

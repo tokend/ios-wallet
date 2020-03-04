@@ -29,7 +29,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct PreIssuanceRequest: XDREncodable {
+public struct PreIssuanceRequest: XDRCodable {
   public var asset: AssetCode
   public var amount: Uint64
   public var signature: DecoratedSignature
@@ -66,6 +66,15 @@ public struct PreIssuanceRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.asset = try AssetCode(xdrData: &xdrData)
+    self.amount = try Uint64(xdrData: &xdrData)
+    self.signature = try DecoratedSignature(xdrData: &xdrData)
+    self.reference = try String64(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    self.ext = try PreIssuanceRequestExt(xdrData: &xdrData)
+  }
+
   public enum PreIssuanceRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -85,6 +94,16 @@ public struct PreIssuanceRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

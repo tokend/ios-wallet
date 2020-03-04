@@ -26,7 +26,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AssetUpdateRequest: XDREncodable {
+public struct AssetUpdateRequest: XDRCodable {
   public var code: AssetCode
   public var creatorDetails: Longstring
   public var policies: Uint32
@@ -59,6 +59,14 @@ public struct AssetUpdateRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.code = try AssetCode(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    self.policies = try Uint32(xdrData: &xdrData)
+    self.sequenceNumber = try Uint32(xdrData: &xdrData)
+    self.ext = try AssetUpdateRequestExt(xdrData: &xdrData)
+  }
+
   public enum AssetUpdateRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -78,6 +86,16 @@ public struct AssetUpdateRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

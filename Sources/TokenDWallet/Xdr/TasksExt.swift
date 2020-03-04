@@ -23,7 +23,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct TasksExt: XDREncodable {
+public struct TasksExt: XDRCodable {
   public var allTasks: Uint32
   public var pendingTasks: Uint32
   public var externalDetails: [Longstring]
@@ -52,6 +52,17 @@ public struct TasksExt: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.allTasks = try Uint32(xdrData: &xdrData)
+    self.pendingTasks = try Uint32(xdrData: &xdrData)
+    let lengthexternalDetails = try Int32(xdrData: &xdrData)
+    self.externalDetails = [Longstring]()
+    for _ in 1...lengthexternalDetails {
+      self.externalDetails.append(try Longstring(xdrData: &xdrData))
+    }
+    self.ext = try TasksExtExt(xdrData: &xdrData)
+  }
+
   public enum TasksExtExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -71,6 +82,16 @@ public struct TasksExt: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -11,7 +11,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct OperationMeta: XDREncodable {
+public struct OperationMeta: XDRCodable {
   public var changes: LedgerEntryChanges
 
   public init(
@@ -26,5 +26,13 @@ public struct OperationMeta: XDREncodable {
     xdr.append(self.changes.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    let length = try Int32(xdrData: &xdrData)
+    self.changes = LedgerEntryChanges()
+    for _ in 1...length {
+        self.changes.append(try LedgerEntryChange(xdrData: &xdrData))
+    }
   }
 }

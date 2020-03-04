@@ -30,7 +30,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ContractEntry: XDREncodable {
+public struct ContractEntry: XDRCodable {
   public var contractID: Uint64
   public var contractor: AccountID
   public var customer: AccountID
@@ -87,6 +87,24 @@ public struct ContractEntry: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.contractID = try Uint64(xdrData: &xdrData)
+    self.contractor = try AccountID(xdrData: &xdrData)
+    self.customer = try AccountID(xdrData: &xdrData)
+    self.escrow = try AccountID(xdrData: &xdrData)
+    self.startTime = try Uint64(xdrData: &xdrData)
+    self.endTime = try Uint64(xdrData: &xdrData)
+    let lengthinvoiceRequestsIDs = try Int32(xdrData: &xdrData)
+    self.invoiceRequestsIDs = [Uint64]()
+    for _ in 1...lengthinvoiceRequestsIDs {
+      self.invoiceRequestsIDs.append(try Uint64(xdrData: &xdrData))
+    }
+    self.initialDetails = try Longstring(xdrData: &xdrData)
+    self.state = try Uint32(xdrData: &xdrData)
+    self.customerDetails = try Longstring(xdrData: &xdrData)
+    self.ext = try ContractEntryExt(xdrData: &xdrData)
+  }
+
   public enum ContractEntryExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -106,6 +124,16 @@ public struct ContractEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

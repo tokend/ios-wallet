@@ -24,7 +24,10 @@ import Foundation
 //  	CREATE_POLL = 14,
 //  	CREATE_ATOMIC_SWAP_ASK = 16,
 //  	CREATE_ATOMIC_SWAP_BID = 17,
-//  	KYC_RECOVERY = 18
+//  	KYC_RECOVERY = 18,
+//  	MANAGE_OFFER = 19,
+//  	CREATE_PAYMENT = 20,
+//  	PERFORM_REDEMPTION = 21
 //  };
 
 //  ===========================================================================
@@ -47,4 +50,7 @@ public enum ReviewableRequestType: Int32, XDREnum {
   case createAtomicSwapAsk = 16
   case createAtomicSwapBid = 17
   case kycRecovery = 18
+  case manageOffer = 19
+  case createPayment = 20
+  case performRedemption = 21
 }

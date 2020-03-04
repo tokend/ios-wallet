@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct TransactionSet: XDREncodable {
+public struct TransactionSet: XDRCodable {
   public var previousLedgerHash: Hash
   public var txs: [TransactionEnvelope]
 
@@ -31,5 +31,14 @@ public struct TransactionSet: XDREncodable {
     xdr.append(self.txs.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.previousLedgerHash = try Hash(xdrData: &xdrData)
+    let lengthtxs = try Int32(xdrData: &xdrData)
+    self.txs = [TransactionEnvelope]()
+    for _ in 1...lengthtxs {
+      self.txs.append(try TransactionEnvelope(xdrData: &xdrData))
+    }
   }
 }

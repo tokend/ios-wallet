@@ -7,11 +7,8 @@ import Foundation
 
 //  //: SaleCreationRequest is used to create a sale with provided parameters
 //  struct SaleCreationRequest
-//  {   
-//      //: Type of sale
-//      //: 1: basic sale
-//      //: 2: crowdfunding sale
-//      //: 3: fixed price sale
+//  {
+//      //: Some custom sale type that can be used while setting account rules 
 //      uint64 saleType;
 //      //: Asset code of an asset to sell on sale
 //      AssetCode baseAsset; // asset for which sale will be performed
@@ -29,7 +26,7 @@ import Foundation
 //      longstring creatorDetails; // details set by requester
 //      //: Parameters specific to a particular sale type
 //      SaleTypeExt saleTypeExt;
-//      //: 
+//      //:
 //      uint64 requiredBaseAssetForHardCap;
 //      //: Used to keep track of rejected requests updates. `SequenceNumber` increases after each rejected SaleCreationRequest update.
 //      uint32 sequenceNumber;
@@ -42,14 +39,14 @@ import Foundation
 //      case EMPTY_VERSION:
 //          void;
 //      case ADD_SALE_WHITELISTS:
-//          //: array of rules that define participation rules. One global rule must be specified. 
+//          //: array of rules that define participation rules. One global rule must be specified.
 //          CreateAccountSaleRuleData saleRules<>;
 //      }
 //      ext;
 //  };
 
 //  ===========================================================================
-public struct SaleCreationRequest: XDREncodable {
+public struct SaleCreationRequest: XDRCodable {
   public var saleType: Uint64
   public var baseAsset: AssetCode
   public var defaultQuoteAsset: AssetCode
@@ -114,6 +111,26 @@ public struct SaleCreationRequest: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.saleType = try Uint64(xdrData: &xdrData)
+    self.baseAsset = try AssetCode(xdrData: &xdrData)
+    self.defaultQuoteAsset = try AssetCode(xdrData: &xdrData)
+    self.startTime = try Uint64(xdrData: &xdrData)
+    self.endTime = try Uint64(xdrData: &xdrData)
+    self.softCap = try Uint64(xdrData: &xdrData)
+    self.hardCap = try Uint64(xdrData: &xdrData)
+    self.creatorDetails = try Longstring(xdrData: &xdrData)
+    self.saleTypeExt = try SaleTypeExt(xdrData: &xdrData)
+    self.requiredBaseAssetForHardCap = try Uint64(xdrData: &xdrData)
+    self.sequenceNumber = try Uint32(xdrData: &xdrData)
+    let lengthquoteAssets = try Int32(xdrData: &xdrData)
+    self.quoteAssets = [SaleCreationRequestQuoteAsset]()
+    for _ in 1...lengthquoteAssets {
+      self.quoteAssets.append(try SaleCreationRequestQuoteAsset(xdrData: &xdrData))
+    }
+    self.ext = try SaleCreationRequestExt(xdrData: &xdrData)
+  }
+
   public enum SaleCreationRequestExt: XDRDiscriminatedUnion {
     case emptyVersion()
     case addSaleWhitelists([CreateAccountSaleRuleData])
@@ -136,6 +153,23 @@ public struct SaleCreationRequest: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.addSaleWhitelists.rawValue:
+        let lengthsaleRules = try Int32(xdrData: &xdrData)
+        var data = [CreateAccountSaleRuleData]()
+        for _ in 1...lengthsaleRules {
+          data.append(try CreateAccountSaleRuleData(xdrData: &xdrData))
+        }
+        self = .addSaleWhitelists(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

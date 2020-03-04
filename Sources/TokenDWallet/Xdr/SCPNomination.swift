@@ -13,7 +13,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SCPNomination: XDREncodable {
+public struct SCPNomination: XDRCodable {
   public var quorumSetHash: Hash
   public var votes: [Value]
   public var accepted: [Value]
@@ -36,5 +36,19 @@ public struct SCPNomination: XDREncodable {
     xdr.append(self.accepted.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.quorumSetHash = try Hash(xdrData: &xdrData)
+    let lengthvotes = try Int32(xdrData: &xdrData)
+    self.votes = [Value]()
+    for _ in 1...lengthvotes {
+      self.votes.append(try Value(xdrData: &xdrData))
+    }
+    let lengthaccepted = try Int32(xdrData: &xdrData)
+    self.accepted = [Value]()
+    for _ in 1...lengthaccepted {
+      self.accepted.append(try Value(xdrData: &xdrData))
+    }
   }
 }

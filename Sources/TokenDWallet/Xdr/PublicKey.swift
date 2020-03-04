@@ -32,4 +32,16 @@ public enum PublicKey: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CryptoKeyType.keyTypeEd25519.rawValue:
+      let data = try Uint256(xdrData: &xdrData)
+      self = .keyTypeEd25519(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

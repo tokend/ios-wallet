@@ -77,7 +77,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageAssetOp: XDREncodable {
+public struct ManageAssetOp: XDRCodable {
   public var requestID: Uint64
   public var request: ManageAssetOpRequest
   public var ext: ManageAssetOpExt
@@ -100,6 +100,12 @@ public struct ManageAssetOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.requestID = try Uint64(xdrData: &xdrData)
+    self.request = try ManageAssetOpRequest(xdrData: &xdrData)
+    self.ext = try ManageAssetOpExt(xdrData: &xdrData)
   }
 
   public enum ManageAssetOpRequest: XDRDiscriminatedUnion {
@@ -135,7 +141,31 @@ public struct ManageAssetOp: XDREncodable {
       return xdr
     }
 
-    public struct ManageAssetOpCreateAssetCreationRequest: XDREncodable {
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageAssetAction.createAssetCreationRequest.rawValue:
+        let data = try ManageAssetOpCreateAssetCreationRequest(xdrData: &xdrData)
+        self = .createAssetCreationRequest(data)
+      case ManageAssetAction.createAssetUpdateRequest.rawValue:
+        let data = try ManageAssetOpCreateAssetUpdateRequest(xdrData: &xdrData)
+        self = .createAssetUpdateRequest(data)
+      case ManageAssetAction.cancelAssetRequest.rawValue:
+        let data = try CancelAssetRequest(xdrData: &xdrData)
+        self = .cancelAssetRequest(data)
+      case ManageAssetAction.changePreissuedAssetSigner.rawValue:
+        let data = try AssetChangePreissuedSigner(xdrData: &xdrData)
+        self = .changePreissuedAssetSigner(data)
+      case ManageAssetAction.updateMaxIssuance.rawValue:
+        let data = try UpdateMaxIssuance(xdrData: &xdrData)
+        self = .updateMaxIssuance(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
+    public struct ManageAssetOpCreateAssetCreationRequest: XDRCodable {
       public var createAsset: AssetCreationRequest
       public var allTasks: Uint32?
       public var ext: ManageAssetOpCreateAssetCreationRequestExt
@@ -160,6 +190,16 @@ public struct ManageAssetOp: XDREncodable {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        self.createAsset = try AssetCreationRequest(xdrData: &xdrData)
+        if (try Bool(xdrData: &xdrData)) {
+          self.allTasks = try Uint32(xdrData: &xdrData)
+        } else {
+          self.allTasks = nil
+        }
+        self.ext = try ManageAssetOpCreateAssetCreationRequestExt(xdrData: &xdrData)
+      }
+
       public enum ManageAssetOpCreateAssetCreationRequestExt: XDRDiscriminatedUnion {
         case emptyVersion()
 
@@ -181,9 +221,19 @@ public struct ManageAssetOp: XDREncodable {
           return xdr
         }
 
+        public init(xdrData: inout Data) throws {
+          let discriminant = try Int32(xdrData: &xdrData)
+
+          switch discriminant {
+          case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+          default:
+            throw XDRErrors.unknownEnumCase
+          }
+        }
+
       }
     }
-    public struct ManageAssetOpCreateAssetUpdateRequest: XDREncodable {
+    public struct ManageAssetOpCreateAssetUpdateRequest: XDRCodable {
       public var updateAsset: AssetUpdateRequest
       public var allTasks: Uint32?
       public var ext: ManageAssetOpCreateAssetUpdateRequestExt
@@ -208,6 +258,16 @@ public struct ManageAssetOp: XDREncodable {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        self.updateAsset = try AssetUpdateRequest(xdrData: &xdrData)
+        if (try Bool(xdrData: &xdrData)) {
+          self.allTasks = try Uint32(xdrData: &xdrData)
+        } else {
+          self.allTasks = nil
+        }
+        self.ext = try ManageAssetOpCreateAssetUpdateRequestExt(xdrData: &xdrData)
+      }
+
       public enum ManageAssetOpCreateAssetUpdateRequestExt: XDRDiscriminatedUnion {
         case emptyVersion()
 
@@ -227,6 +287,16 @@ public struct ManageAssetOp: XDREncodable {
           }
 
           return xdr
+        }
+
+        public init(xdrData: inout Data) throws {
+          let discriminant = try Int32(xdrData: &xdrData)
+
+          switch discriminant {
+          case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+          default:
+            throw XDRErrors.unknownEnumCase
+          }
         }
 
       }
@@ -251,6 +321,16 @@ public struct ManageAssetOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -47,7 +47,19 @@ public enum CreateManageLimitsRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct CreateManageLimitsRequestResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CreateManageLimitsRequestResultCode.success.rawValue:
+      let data = try CreateManageLimitsRequestResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct CreateManageLimitsRequestResultSuccess: XDRCodable {
     public var manageLimitsRequestID: Uint64
     public var fulfilled: Bool
     public var ext: CreateManageLimitsRequestResultSuccessExt
@@ -72,6 +84,12 @@ public enum CreateManageLimitsRequestResult: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.manageLimitsRequestID = try Uint64(xdrData: &xdrData)
+      self.fulfilled = try Bool(xdrData: &xdrData)
+      self.ext = try CreateManageLimitsRequestResultSuccessExt(xdrData: &xdrData)
+    }
+
     public enum CreateManageLimitsRequestResultSuccessExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -91,6 +109,16 @@ public enum CreateManageLimitsRequestResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

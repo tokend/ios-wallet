@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct SCPHistoryEntryV0: XDREncodable {
+public struct SCPHistoryEntryV0: XDRCodable {
   public var quorumSets: [SCPQuorumSet]
   public var ledgerMessages: LedgerSCPMessages
 
@@ -31,5 +31,14 @@ public struct SCPHistoryEntryV0: XDREncodable {
     xdr.append(self.ledgerMessages.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    let lengthquorumSets = try Int32(xdrData: &xdrData)
+    self.quorumSets = [SCPQuorumSet]()
+    for _ in 1...lengthquorumSets {
+      self.quorumSets.append(try SCPQuorumSet(xdrData: &xdrData))
+    }
+    self.ledgerMessages = try LedgerSCPMessages(xdrData: &xdrData)
   }
 }

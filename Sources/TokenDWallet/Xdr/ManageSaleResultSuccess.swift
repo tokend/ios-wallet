@@ -29,7 +29,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageSaleResultSuccess: XDREncodable {
+public struct ManageSaleResultSuccess: XDRCodable {
   public var fulfilled: Bool
   public var response: ManageSaleResultSuccessResponse
   public var ext: ManageSaleResultSuccessExt
@@ -52,6 +52,12 @@ public struct ManageSaleResultSuccess: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.fulfilled = try Bool(xdrData: &xdrData)
+    self.response = try ManageSaleResultSuccessResponse(xdrData: &xdrData)
+    self.ext = try ManageSaleResultSuccessExt(xdrData: &xdrData)
   }
 
   public enum ManageSaleResultSuccessResponse: XDRDiscriminatedUnion {
@@ -78,6 +84,19 @@ public struct ManageSaleResultSuccess: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageSaleAction.createUpdateDetailsRequest.rawValue:
+        let data = try Uint64(xdrData: &xdrData)
+        self = .createUpdateDetailsRequest(data)
+      case ManageSaleAction.cancel.rawValue: self = .cancel()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageSaleResultSuccessExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -98,6 +117,16 @@ public struct ManageSaleResultSuccess: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

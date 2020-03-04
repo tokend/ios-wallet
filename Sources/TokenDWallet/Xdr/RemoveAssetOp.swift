@@ -5,10 +5,12 @@ import Foundation
 
 // === xdr source ============================================================
 
-//  struct CreateASwapBidCreationRequestOp
+//  //: `RemoveAssetOp` changes the state of specified asset to removed 
+//  struct RemoveAssetOp
 //  {
-//      ASwapBidCreationRequest request;
-//  
+//      //: Defines an asset
+//      AssetCode code;
+//      //: reserved for future use
 //      union switch (LedgerVersion v)
 //      {
 //      case EMPTY_VERSION:
@@ -18,28 +20,33 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateASwapBidCreationRequestOp: XDREncodable {
-  public var request: ASwapBidCreationRequest
-  public var ext: CreateASwapBidCreationRequestOpExt
+public struct RemoveAssetOp: XDRCodable {
+  public var code: AssetCode
+  public var ext: RemoveAssetOpExt
 
   public init(
-      request: ASwapBidCreationRequest,
-      ext: CreateASwapBidCreationRequestOpExt) {
+      code: AssetCode,
+      ext: RemoveAssetOpExt) {
 
-    self.request = request
+    self.code = code
     self.ext = ext
   }
 
   public func toXDR() -> Data {
     var xdr = Data()
 
-    xdr.append(self.request.toXDR())
+    xdr.append(self.code.toXDR())
     xdr.append(self.ext.toXDR())
 
     return xdr
   }
 
-  public enum CreateASwapBidCreationRequestOpExt: XDRDiscriminatedUnion {
+  public init(xdrData: inout Data) throws {
+    self.code = try AssetCode(xdrData: &xdrData)
+    self.ext = try RemoveAssetOpExt(xdrData: &xdrData)
+  }
+
+  public enum RemoveAssetOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
     public var discriminant: Int32 {
@@ -58,6 +65,16 @@ public struct CreateASwapBidCreationRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -49,7 +49,19 @@ public enum CreatePreIssuanceRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct CreatePreIssuanceRequestResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case CreatePreIssuanceRequestResultCode.success.rawValue:
+      let data = try CreatePreIssuanceRequestResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct CreatePreIssuanceRequestResultSuccess: XDRCodable {
     public var requestID: Uint64
     public var fulfilled: Bool
     public var ext: CreatePreIssuanceRequestResultSuccessExt
@@ -74,6 +86,12 @@ public enum CreatePreIssuanceRequestResult: XDRDiscriminatedUnion {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      self.requestID = try Uint64(xdrData: &xdrData)
+      self.fulfilled = try Bool(xdrData: &xdrData)
+      self.ext = try CreatePreIssuanceRequestResultSuccessExt(xdrData: &xdrData)
+    }
+
     public enum CreatePreIssuanceRequestResultSuccessExt: XDRDiscriminatedUnion {
       case emptyVersion()
 
@@ -93,6 +111,16 @@ public enum CreatePreIssuanceRequestResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

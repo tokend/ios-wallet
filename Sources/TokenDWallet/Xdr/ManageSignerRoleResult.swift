@@ -67,7 +67,31 @@ public enum ManageSignerRoleResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct ManageSignerRoleResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageSignerRoleResultCode.success.rawValue:
+      let data = try ManageSignerRoleResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    case ManageSignerRoleResultCode.ruleIdDuplication.rawValue:
+      let data = try Uint64(xdrData: &xdrData)
+      self = .ruleIdDuplication(data)
+    case ManageSignerRoleResultCode.defaultRuleIdDuplication.rawValue:
+      let data = try Uint64(xdrData: &xdrData)
+      self = .defaultRuleIdDuplication(data)
+    case ManageSignerRoleResultCode.noSuchRule.rawValue:
+      let data = try Uint64(xdrData: &xdrData)
+      self = .noSuchRule(data)
+    case ManageSignerRoleResultCode.tooManyRuleIds.rawValue:
+      let data = try Uint64(xdrData: &xdrData)
+      self = .tooManyRuleIds(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ManageSignerRoleResultSuccess: XDRCodable {
     public var roleID: Uint64
     public var ext: ManageSignerRoleResultSuccessExt
 
@@ -86,6 +110,11 @@ public enum ManageSignerRoleResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.roleID = try Uint64(xdrData: &xdrData)
+      self.ext = try ManageSignerRoleResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum ManageSignerRoleResultSuccessExt: XDRDiscriminatedUnion {
@@ -107,6 +136,16 @@ public enum ManageSignerRoleResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

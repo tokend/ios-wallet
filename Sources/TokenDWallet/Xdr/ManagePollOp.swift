@@ -33,7 +33,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManagePollOp: XDREncodable {
+public struct ManagePollOp: XDRCodable {
   public var pollID: Uint64
   public var data: ManagePollOpData
   public var ext: ManagePollOpExt
@@ -56,6 +56,12 @@ public struct ManagePollOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.pollID = try Uint64(xdrData: &xdrData)
+    self.data = try ManagePollOpData(xdrData: &xdrData)
+    self.ext = try ManagePollOpExt(xdrData: &xdrData)
   }
 
   public enum ManagePollOpData: XDRDiscriminatedUnion {
@@ -85,6 +91,24 @@ public struct ManagePollOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManagePollAction.close.rawValue:
+        let data = try ClosePollData(xdrData: &xdrData)
+        self = .close(data)
+      case ManagePollAction.updateEndTime.rawValue:
+        let data = try UpdatePollEndTimeData(xdrData: &xdrData)
+        self = .updateEndTime(data)
+      case ManagePollAction.cancel.rawValue:
+        let data = try EmptyExt(xdrData: &xdrData)
+        self = .cancel(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManagePollOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -105,6 +129,16 @@ public struct ManagePollOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

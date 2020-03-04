@@ -104,6 +104,23 @@ class XDREncodingTests: XCTestCase {
                 
                 return xdr
             }
+            
+            init(xdrData: inout Data) throws {
+                let discriminant = try Int32(xdrData: &xdrData)
+                
+                switch discriminant {
+                case 0:
+                    let data = try Int64(xdrData: &xdrData)
+                    self = .a(data)
+                case 1:
+                    let data = try Int32(xdrData: &xdrData)
+                    self = .b(data)
+                case 2:
+                    self = .c
+                default:
+                    throw XDRErrors.unknownEnumCase
+                }
+            }
         }
         
         XCTAssertEqual(TestDescriminatedUnion.a(1).toXDR().base64, "AAAAAAAAAAAAAAAB")

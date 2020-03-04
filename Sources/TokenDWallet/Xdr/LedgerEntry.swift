@@ -71,6 +71,8 @@ import Foundation
 //          VoteEntry vote;
 //      case ACCOUNT_SPECIFIC_RULE:
 //          AccountSpecificRuleEntry accountSpecificRule;
+//      case SWAP:
+//          SwapEntry swap;
 //      }
 //      data;
 //  
@@ -84,7 +86,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct LedgerEntry: XDREncodable {
+public struct LedgerEntry: XDRCodable {
   public var lastModifiedLedgerSeq: Uint32
   public var data: LedgerEntryData
   public var ext: LedgerEntryExt
@@ -107,6 +109,12 @@ public struct LedgerEntry: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.lastModifiedLedgerSeq = try Uint32(xdrData: &xdrData)
+    self.data = try LedgerEntryData(xdrData: &xdrData)
+    self.ext = try LedgerEntryExt(xdrData: &xdrData)
   }
 
   public enum LedgerEntryData: XDRDiscriminatedUnion {
@@ -140,6 +148,7 @@ public struct LedgerEntry: XDREncodable {
     case poll(PollEntry)
     case vote(VoteEntry)
     case accountSpecificRule(AccountSpecificRuleEntry)
+    case swap(SwapEntry)
 
     public var discriminant: Int32 {
       switch self {
@@ -173,6 +182,7 @@ public struct LedgerEntry: XDREncodable {
       case .poll: return LedgerEntryType.poll.rawValue
       case .vote: return LedgerEntryType.vote.rawValue
       case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
+      case .swap: return LedgerEntryType.swap.rawValue
       }
     }
 
@@ -212,9 +222,112 @@ public struct LedgerEntry: XDREncodable {
       case .poll(let data): xdr.append(data.toXDR())
       case .vote(let data): xdr.append(data.toXDR())
       case .accountSpecificRule(let data): xdr.append(data.toXDR())
+      case .swap(let data): xdr.append(data.toXDR())
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerEntryType.account.rawValue:
+        let data = try AccountEntry(xdrData: &xdrData)
+        self = .account(data)
+      case LedgerEntryType.signer.rawValue:
+        let data = try SignerEntry(xdrData: &xdrData)
+        self = .signer(data)
+      case LedgerEntryType.fee.rawValue:
+        let data = try FeeEntry(xdrData: &xdrData)
+        self = .fee(data)
+      case LedgerEntryType.balance.rawValue:
+        let data = try BalanceEntry(xdrData: &xdrData)
+        self = .balance(data)
+      case LedgerEntryType.asset.rawValue:
+        let data = try AssetEntry(xdrData: &xdrData)
+        self = .asset(data)
+      case LedgerEntryType.referenceEntry.rawValue:
+        let data = try ReferenceEntry(xdrData: &xdrData)
+        self = .referenceEntry(data)
+      case LedgerEntryType.statistics.rawValue:
+        let data = try StatisticsEntry(xdrData: &xdrData)
+        self = .statistics(data)
+      case LedgerEntryType.accountLimits.rawValue:
+        let data = try AccountLimitsEntry(xdrData: &xdrData)
+        self = .accountLimits(data)
+      case LedgerEntryType.assetPair.rawValue:
+        let data = try AssetPairEntry(xdrData: &xdrData)
+        self = .assetPair(data)
+      case LedgerEntryType.offerEntry.rawValue:
+        let data = try OfferEntry(xdrData: &xdrData)
+        self = .offerEntry(data)
+      case LedgerEntryType.reviewableRequest.rawValue:
+        let data = try ReviewableRequestEntry(xdrData: &xdrData)
+        self = .reviewableRequest(data)
+      case LedgerEntryType.externalSystemAccountId.rawValue:
+        let data = try ExternalSystemAccountID(xdrData: &xdrData)
+        self = .externalSystemAccountId(data)
+      case LedgerEntryType.sale.rawValue:
+        let data = try SaleEntry(xdrData: &xdrData)
+        self = .sale(data)
+      case LedgerEntryType.keyValue.rawValue:
+        let data = try KeyValueEntry(xdrData: &xdrData)
+        self = .keyValue(data)
+      case LedgerEntryType.accountKyc.rawValue:
+        let data = try AccountKYCEntry(xdrData: &xdrData)
+        self = .accountKyc(data)
+      case LedgerEntryType.externalSystemAccountIdPoolEntry.rawValue:
+        let data = try ExternalSystemAccountIDPoolEntry(xdrData: &xdrData)
+        self = .externalSystemAccountIdPoolEntry(data)
+      case LedgerEntryType.limitsV2.rawValue:
+        let data = try LimitsV2Entry(xdrData: &xdrData)
+        self = .limitsV2(data)
+      case LedgerEntryType.statisticsV2.rawValue:
+        let data = try StatisticsV2Entry(xdrData: &xdrData)
+        self = .statisticsV2(data)
+      case LedgerEntryType.pendingStatistics.rawValue:
+        let data = try PendingStatisticsEntry(xdrData: &xdrData)
+        self = .pendingStatistics(data)
+      case LedgerEntryType.contract.rawValue:
+        let data = try ContractEntry(xdrData: &xdrData)
+        self = .contract(data)
+      case LedgerEntryType.atomicSwapAsk.rawValue:
+        let data = try AtomicSwapAskEntry(xdrData: &xdrData)
+        self = .atomicSwapAsk(data)
+      case LedgerEntryType.accountRole.rawValue:
+        let data = try AccountRoleEntry(xdrData: &xdrData)
+        self = .accountRole(data)
+      case LedgerEntryType.accountRule.rawValue:
+        let data = try AccountRuleEntry(xdrData: &xdrData)
+        self = .accountRule(data)
+      case LedgerEntryType.signerRule.rawValue:
+        let data = try SignerRuleEntry(xdrData: &xdrData)
+        self = .signerRule(data)
+      case LedgerEntryType.signerRole.rawValue:
+        let data = try SignerRoleEntry(xdrData: &xdrData)
+        self = .signerRole(data)
+      case LedgerEntryType.license.rawValue:
+        let data = try LicenseEntry(xdrData: &xdrData)
+        self = .license(data)
+      case LedgerEntryType.stamp.rawValue:
+        let data = try StampEntry(xdrData: &xdrData)
+        self = .stamp(data)
+      case LedgerEntryType.poll.rawValue:
+        let data = try PollEntry(xdrData: &xdrData)
+        self = .poll(data)
+      case LedgerEntryType.vote.rawValue:
+        let data = try VoteEntry(xdrData: &xdrData)
+        self = .vote(data)
+      case LedgerEntryType.accountSpecificRule.rawValue:
+        let data = try AccountSpecificRuleEntry(xdrData: &xdrData)
+        self = .accountSpecificRule(data)
+      case LedgerEntryType.swap.rawValue:
+        let data = try SwapEntry(xdrData: &xdrData)
+        self = .swap(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }
@@ -237,6 +350,16 @@ public struct LedgerEntry: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -21,7 +21,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CheckSaleClosedResult: XDREncodable {
+public struct CheckSaleClosedResult: XDRCodable {
   public var saleOwner: AccountID
   public var results: [CheckSubSaleClosedResult]
   public var ext: CheckSaleClosedResultExt
@@ -46,6 +46,16 @@ public struct CheckSaleClosedResult: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.saleOwner = try AccountID(xdrData: &xdrData)
+    let lengthresults = try Int32(xdrData: &xdrData)
+    self.results = [CheckSubSaleClosedResult]()
+    for _ in 1...lengthresults {
+      self.results.append(try CheckSubSaleClosedResult(xdrData: &xdrData))
+    }
+    self.ext = try CheckSaleClosedResultExt(xdrData: &xdrData)
+  }
+
   public enum CheckSaleClosedResultExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -65,6 +75,16 @@ public struct CheckSaleClosedResult: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

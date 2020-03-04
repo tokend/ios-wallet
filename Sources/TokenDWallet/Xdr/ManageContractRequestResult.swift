@@ -50,7 +50,19 @@ public enum ManageContractRequestResult: XDRDiscriminatedUnion {
 
     return xdr
   }
-  public struct ManageContractRequestResultSuccess: XDREncodable {
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case ManageContractRequestResultCode.success.rawValue:
+      let data = try ManageContractRequestResultSuccess(xdrData: &xdrData)
+      self = .success(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
+  public struct ManageContractRequestResultSuccess: XDRCodable {
     public var details: ManageContractRequestResultSuccessDetails
     public var ext: ManageContractRequestResultSuccessExt
 
@@ -69,6 +81,11 @@ public enum ManageContractRequestResult: XDRDiscriminatedUnion {
       xdr.append(self.ext.toXDR())
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.details = try ManageContractRequestResultSuccessDetails(xdrData: &xdrData)
+      self.ext = try ManageContractRequestResultSuccessExt(xdrData: &xdrData)
     }
 
     public enum ManageContractRequestResultSuccessDetails: XDRDiscriminatedUnion {
@@ -95,6 +112,19 @@ public enum ManageContractRequestResult: XDRDiscriminatedUnion {
         return xdr
       }
 
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case ManageContractRequestAction.create.rawValue:
+          let data = try CreateContractRequestResponse(xdrData: &xdrData)
+          self = .create(data)
+        case ManageContractRequestAction.remove.rawValue: self = .remove()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
+      }
+
     }
     public enum ManageContractRequestResultSuccessExt: XDRDiscriminatedUnion {
       case emptyVersion()
@@ -115,6 +145,16 @@ public enum ManageContractRequestResult: XDRDiscriminatedUnion {
         }
 
         return xdr
+      }
+
+      public init(xdrData: inout Data) throws {
+        let discriminant = try Int32(xdrData: &xdrData)
+
+        switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        default:
+          throw XDRErrors.unknownEnumCase
+        }
       }
 
     }

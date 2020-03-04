@@ -12,7 +12,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct DontHave: XDREncodable {
+public struct DontHave: XDRCodable {
   public var type: MessageType
   public var reqHash: Uint256
 
@@ -31,5 +31,10 @@ public struct DontHave: XDREncodable {
     xdr.append(self.reqHash.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.type = try MessageType(xdrData: &xdrData)
+    self.reqHash = try Uint256(xdrData: &xdrData)
   }
 }

@@ -32,4 +32,16 @@ public enum SCPHistoryEntry: XDRDiscriminatedUnion {
 
     return xdr
   }
+
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+
+    switch discriminant {
+    case LedgerVersion.emptyVersion.rawValue:
+      let data = try SCPHistoryEntryV0(xdrData: &xdrData)
+      self = .emptyVersion(data)
+    default:
+      throw XDRErrors.unknownEnumCase
+    }
+  }
 }

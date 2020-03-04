@@ -20,7 +20,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct AccountRuleRequirement: XDREncodable {
+public struct AccountRuleRequirement: XDRCodable {
   public var resource: AccountRuleResource
   public var action: AccountRuleAction
   public var account: AccountID
@@ -47,5 +47,12 @@ public struct AccountRuleRequirement: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.resource = try AccountRuleResource(xdrData: &xdrData)
+    self.action = try AccountRuleAction(xdrData: &xdrData)
+    self.account = try AccountID(xdrData: &xdrData)
+    self.ext = try EmptyExt(xdrData: &xdrData)
   }
 }

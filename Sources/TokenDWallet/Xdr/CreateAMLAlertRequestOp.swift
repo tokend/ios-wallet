@@ -28,7 +28,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CreateAMLAlertRequestOp: XDREncodable {
+public struct CreateAMLAlertRequestOp: XDRCodable {
   public var reference: String64
   public var amlAlertRequest: AMLAlertRequest
   public var allTasks: Uint32?
@@ -57,6 +57,17 @@ public struct CreateAMLAlertRequestOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.reference = try String64(xdrData: &xdrData)
+    self.amlAlertRequest = try AMLAlertRequest(xdrData: &xdrData)
+    if (try Bool(xdrData: &xdrData)) {
+      self.allTasks = try Uint32(xdrData: &xdrData)
+    } else {
+      self.allTasks = nil
+    }
+    self.ext = try CreateAMLAlertRequestOpExt(xdrData: &xdrData)
+  }
+
   public enum CreateAMLAlertRequestOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
 
@@ -76,6 +87,16 @@ public struct CreateAMLAlertRequestOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }

@@ -11,7 +11,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct HmacSha256Key: XDREncodable {
+public struct HmacSha256Key: XDRCodable {
   public var key: XDRDataFixed32
 
   public init(
@@ -26,5 +26,9 @@ public struct HmacSha256Key: XDREncodable {
     xdr.append(self.key.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.key = try XDRDataFixed32(xdrData: &xdrData)
   }
 }

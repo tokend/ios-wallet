@@ -29,7 +29,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct ManageSignerRoleOp: XDREncodable {
+public struct ManageSignerRoleOp: XDRCodable {
   public var data: ManageSignerRoleOpData
   public var ext: ManageSignerRoleOpExt
 
@@ -48,6 +48,11 @@ public struct ManageSignerRoleOp: XDREncodable {
     xdr.append(self.ext.toXDR())
 
     return xdr
+  }
+
+  public init(xdrData: inout Data) throws {
+    self.data = try ManageSignerRoleOpData(xdrData: &xdrData)
+    self.ext = try ManageSignerRoleOpExt(xdrData: &xdrData)
   }
 
   public enum ManageSignerRoleOpData: XDRDiscriminatedUnion {
@@ -77,6 +82,24 @@ public struct ManageSignerRoleOp: XDREncodable {
       return xdr
     }
 
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case ManageSignerRoleAction.create.rawValue:
+        let data = try CreateSignerRoleData(xdrData: &xdrData)
+        self = .create(data)
+      case ManageSignerRoleAction.update.rawValue:
+        let data = try UpdateSignerRoleData(xdrData: &xdrData)
+        self = .update(data)
+      case ManageSignerRoleAction.remove.rawValue:
+        let data = try RemoveSignerRoleData(xdrData: &xdrData)
+        self = .remove(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
+    }
+
   }
   public enum ManageSignerRoleOpExt: XDRDiscriminatedUnion {
     case emptyVersion()
@@ -97,6 +120,16 @@ public struct ManageSignerRoleOp: XDREncodable {
       }
 
       return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+
+      switch discriminant {
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      default:
+        throw XDRErrors.unknownEnumCase
+      }
     }
 
   }
