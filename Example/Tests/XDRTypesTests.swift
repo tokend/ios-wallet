@@ -23,24 +23,24 @@ class XDRTypesTests: XCTestCase {
         let manageBalanceOp = ManageBalanceOp(action: ManageBalanceAction.create,
                                               destination: pubKey,
                                               asset: assetCode,
-                                              ext: .emptyVersion())
+                                              ext: .emptyVersion)
         let op = Operation(sourceAccount: nil, body: Operation.OperationBody.manageBalance(manageBalanceOp))
         
         XCTAssertEqual(op.toXDR().base64, "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
         // Decoding
-        XCTAssertEqual(try! Operation(xdrBase64: "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA").toXdrBase64String(), "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
+        XCTAssertEqual(try Operation(xdrBase64: "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA").toXdrBase64String(), "AAAAAAAAAAkAAAAAAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
     }
     
     func testDeleteBalanceOp() {
         let manageBalanceOp = ManageBalanceOp(action: ManageBalanceAction.deleteBalance,
                                               destination: pubKey,
                                               asset: assetCode,
-                                              ext: .emptyVersion())
+                                              ext: .emptyVersion)
         let op = Operation(sourceAccount: nil, body: Operation.OperationBody.manageBalance(manageBalanceOp))
         
         XCTAssertEqual(op.toXDR().base64, "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
         // Decoding
-        XCTAssertEqual(try! Operation(xdrBase64: "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA").toXdrBase64String(), "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
+        XCTAssertEqual(try Operation(xdrBase64: "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA").toXdrBase64String(), "AAAAAAAAAAkAAAABAAAAAHteR0/xHy/UY52BNKpS2XhbRQ9sVCsVfrSwiwW7X7B9AAAAA09MRwAAAAAA")
     }
 }
 

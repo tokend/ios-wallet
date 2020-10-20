@@ -27,7 +27,9 @@ import Foundation
 //      CREATE_WITH_TASKS = 17,
 //      CREATE_FOR_OTHER_WITH_TASKS = 18,
 //      REMOVE_FOR_OTHER = 19,
-//      EXCHANGE = 20
+//      EXCHANGE = 20,
+//      UPDATE_FOR_OTHER = 21,
+//      CUSTOM = 22
 //  };
 
 //  ===========================================================================
@@ -52,4 +54,6 @@ public enum SignerRuleAction: Int32, XDREnum {
   case createForOtherWithTasks = 18
   case removeForOther = 19
   case exchange = 20
+  case updateForOther = 21
+  case custom = 22
 }

@@ -13,7 +13,7 @@ import Foundation
 //      SUCCESS = 0,
 //  
 //      //: Codes considered as "failure" for an operation
-//      //: Reject reason must be empty on approve and not empty on reject/permanent 
+//      //: Reject reason must be empty on approve and not empty on reject/permanent
 //      INVALID_REASON = -1,
 //      //: Unknown action to perform on ReviewableRequest
 //      INVALID_ACTION = -2,
@@ -66,7 +66,7 @@ import Foundation
 //      //: Trying to create a sale with one of the quote assets that doesn't exist
 //      QUOTE_ASSET_NOT_FOUND = -550,
 //  
-//      //: Change role 
+//      //: Change role
 //      //: Trying to remove zero tasks
 //      NON_ZERO_TASKS_TO_REMOVE_NOT_ALLOWED = -600,
 //      //: There is no account role with provided id
@@ -131,9 +131,12 @@ import Foundation
 //  
 //      // offer
 //      MANAGE_OFFER_FAILED = -1700,
-//      
+//  
 //      // payment
-//      PAYMENT_FAILED = -1800
+//      PAYMENT_FAILED = -1800,
+//  
+//      // Update Data
+//      DATA_NOT_FOUND = -1900
 //  };
 
 //  ===========================================================================
@@ -201,4 +204,5 @@ public enum ReviewRequestResultCode: Int32, XDREnum {
   case invalidSignerData = -1600
   case manageOfferFailed = -1700
   case paymentFailed = -1800
+  case dataNotFound = -1900
 }

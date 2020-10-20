@@ -62,7 +62,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
 
   public enum ManageSaleResultSuccessResponse: XDRDiscriminatedUnion {
     case createUpdateDetailsRequest(Uint64)
-    case cancel()
+    case cancel
 
     public var discriminant: Int32 {
       switch self {
@@ -78,7 +78,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
 
       switch self {
       case .createUpdateDetailsRequest(let data): xdr.append(data.toXDR())
-      case .cancel(): xdr.append(Data())
+      case .cancel: xdr.append(Data())
       }
 
       return xdr
@@ -91,7 +91,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
       case ManageSaleAction.createUpdateDetailsRequest.rawValue:
         let data = try Uint64(xdrData: &xdrData)
         self = .createUpdateDetailsRequest(data)
-      case ManageSaleAction.cancel.rawValue: self = .cancel()
+      case ManageSaleAction.cancel.rawValue: self = .cancel
       default:
         throw XDRErrors.unknownEnumCase
       }
@@ -99,7 +99,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
 
   }
   public enum ManageSaleResultSuccessExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -113,7 +113,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -123,7 +123,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

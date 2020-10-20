@@ -21,7 +21,7 @@ import Foundation
 
 //  ===========================================================================
 public enum Memo: XDRDiscriminatedUnion {
-  case memoNone()
+  case memoNone
   case memoText(String)
   case memoId(Uint64)
   case memoHash(Hash)
@@ -43,7 +43,7 @@ public enum Memo: XDRDiscriminatedUnion {
     xdr.append(self.discriminant.toXDR())
 
     switch self {
-    case .memoNone(): xdr.append(Data())
+    case .memoNone: xdr.append(Data())
     case .memoText(let data): xdr.append(data.toXDR())
     case .memoId(let data): xdr.append(data.toXDR())
     case .memoHash(let data): xdr.append(data.toXDR())
@@ -57,7 +57,7 @@ public enum Memo: XDRDiscriminatedUnion {
     let discriminant = try Int32(xdrData: &xdrData)
 
     switch discriminant {
-    case MemoType.memoNone.rawValue: self = .memoNone()
+    case MemoType.memoNone.rawValue: self = .memoNone
     case MemoType.memoText.rawValue:
       let data = try String(xdrData: &xdrData)
       self = .memoText(data)

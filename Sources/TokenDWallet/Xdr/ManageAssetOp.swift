@@ -201,7 +201,7 @@ public struct ManageAssetOp: XDRCodable {
       }
 
       public enum ManageAssetOpCreateAssetCreationRequestExt: XDRDiscriminatedUnion {
-        case emptyVersion()
+        case emptyVersion
 
         public var discriminant: Int32 {
           switch self {
@@ -215,7 +215,7 @@ public struct ManageAssetOp: XDRCodable {
           xdr.append(self.discriminant.toXDR())
 
           switch self {
-          case .emptyVersion(): xdr.append(Data())
+          case .emptyVersion: xdr.append(Data())
           }
 
           return xdr
@@ -225,7 +225,7 @@ public struct ManageAssetOp: XDRCodable {
           let discriminant = try Int32(xdrData: &xdrData)
 
           switch discriminant {
-          case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+          case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
           default:
             throw XDRErrors.unknownEnumCase
           }
@@ -269,7 +269,7 @@ public struct ManageAssetOp: XDRCodable {
       }
 
       public enum ManageAssetOpCreateAssetUpdateRequestExt: XDRDiscriminatedUnion {
-        case emptyVersion()
+        case emptyVersion
 
         public var discriminant: Int32 {
           switch self {
@@ -283,7 +283,7 @@ public struct ManageAssetOp: XDRCodable {
           xdr.append(self.discriminant.toXDR())
 
           switch self {
-          case .emptyVersion(): xdr.append(Data())
+          case .emptyVersion: xdr.append(Data())
           }
 
           return xdr
@@ -293,7 +293,7 @@ public struct ManageAssetOp: XDRCodable {
           let discriminant = try Int32(xdrData: &xdrData)
 
           switch discriminant {
-          case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+          case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
           default:
             throw XDRErrors.unknownEnumCase
           }
@@ -303,7 +303,7 @@ public struct ManageAssetOp: XDRCodable {
     }
   }
   public enum ManageAssetOpExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -317,7 +317,7 @@ public struct ManageAssetOp: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -327,7 +327,7 @@ public struct ManageAssetOp: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

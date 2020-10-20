@@ -29,7 +29,10 @@ import Foundation
 //      CREATE_FOR_OTHER_WITH_TASKS = 19,
 //      REMOVE_FOR_OTHER = 20,
 //      EXCHANGE = 21,
-//      RECEIVE_REDEMPTION = 22
+//      RECEIVE_REDEMPTION = 22,
+//      UPDATE = 23,
+//      UPDATE_FOR_OTHER = 24,
+//      CUSTOM = 25
 //  };
 
 //  ===========================================================================
@@ -56,4 +59,7 @@ public enum AccountRuleAction: Int32, XDREnum {
   case removeForOther = 20
   case exchange = 21
   case receiveRedemption = 22
+  case update = 23
+  case updateForOther = 24
+  case custom = 25
 }

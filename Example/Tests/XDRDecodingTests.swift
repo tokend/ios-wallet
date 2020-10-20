@@ -7,15 +7,15 @@ class XDRDecodingTests: XCTestCase {
     
     func testBasicTypes() {
         // Int
-        XCTAssertEqual(try! Int32(xdrBase64: "AAAABQ=="), Int32(5))
-        XCTAssertEqual(try! UInt32(xdrBase64: "AAAABQ=="), UInt32(5))
-        XCTAssertEqual(try! UInt64(xdrBase64: "AAAAAAAAAAU="), UInt64(5))
-        XCTAssertEqual(try! Int64(xdrBase64: "AAAAAAAAAAU="), Int64(5))
+        XCTAssertEqual(try Int32(xdrBase64: "AAAABQ=="), Int32(5))
+        XCTAssertEqual(try UInt32(xdrBase64: "AAAABQ=="), UInt32(5))
+        XCTAssertEqual(try UInt64(xdrBase64: "AAAAAAAAAAU="), UInt64(5))
+        XCTAssertEqual(try Int64(xdrBase64: "AAAAAAAAAAU="), Int64(5))
 
         // Float, Double and Quadruple is unsupported
 
         // Bool
-        XCTAssertEqual(try! Bool(xdrBase64: "AAAAAQ=="), true)
+        XCTAssertEqual(try Bool(xdrBase64: "AAAAAQ=="), true)
     }
     
     func testEnum() {
@@ -25,9 +25,9 @@ class XDRDecodingTests: XCTestCase {
             case c = -1
         }
 
-        XCTAssertEqual(try! TestEnum(xdrBase64: "AAAAAA=="), TestEnum.a)
-        XCTAssertEqual(try! TestEnum(xdrBase64: "AAAAAQ=="), TestEnum.b)
-        XCTAssertEqual(try! TestEnum(xdrBase64: "/////w=="), TestEnum.c)
+        XCTAssertEqual(try TestEnum(xdrBase64: "AAAAAA=="), TestEnum.a)
+        XCTAssertEqual(try TestEnum(xdrBase64: "AAAAAQ=="), TestEnum.b)
+        XCTAssertEqual(try TestEnum(xdrBase64: "/////w=="), TestEnum.c)
     }
 
     func testOptional() {
@@ -39,21 +39,21 @@ class XDRDecodingTests: XCTestCase {
     
     private func decodeOptionalInt32(xdrBase64: String) -> Int32? {
         var data = Data(base64Encoded: xdrBase64)!
-        if (try! Bool(xdrData: &data)) {
-            return try! Int32(xdrData: &data)
+        if (try? Bool(xdrData: &data)) == true {
+            return try? Int32(xdrData: &data)
         } else {
             return nil
         }
     }
 
     func testString() {
-        XCTAssertEqual(try! String(xdrBase64: "AAAABHRlc3Q="), "test")
+        XCTAssertEqual(try String(xdrBase64: "AAAABHRlc3Q="), "test")
     }
 
     func testOpaque() {
         // Dinamic size
         let data = Data(bytes: [1])
-        XCTAssertEqual(try! Data(xdrBase64: "AAAAAQE="), data)
+        XCTAssertEqual(try Data(xdrBase64: "AAAAAQE="), data)
         // Fixed size
         struct XDRDataFixed1: XDRDataFixed {
             static var length: Int { return 1 }
@@ -64,13 +64,13 @@ class XDRDecodingTests: XCTestCase {
                 self.wrapped = Data()
             }
         }
-        XCTAssertEqual(try! XDRDataFixed1(xdrBase64: "AQ=="), try! XDRDataFixed1(data))
+        XCTAssertEqual(try XDRDataFixed1(xdrBase64: "AQ=="), try XDRDataFixed1(data))
     }
 
     func testArray() {
         // Dinamic size
         let data = [Int64(1)]
-        XCTAssertEqual(try! decodeArrayInt64(xdrBase64: "AAAAAQAAAAAAAAAB"), data)
+        XCTAssertEqual(try decodeArrayInt64(xdrBase64: "AAAAAQAAAAAAAAAB"), data)
         struct XDRArrayFixed1<WrappedElement: XDRCodable>: XDRArrayFixed {
             typealias Element = WrappedElement
             
@@ -83,7 +83,7 @@ class XDRDecodingTests: XCTestCase {
             }
         }
         // Fixed size
-        XCTAssertEqual(try! XDRArrayFixed1<Int64>(xdrBase64: "AAAAAAAAAAE=").wrapped, try! XDRArrayFixed1(data).wrapped)
+        XCTAssertEqual(try XDRArrayFixed1<Int64>(xdrBase64: "AAAAAAAAAAE=").wrapped, try XDRArrayFixed1(data).wrapped)
     }
     
     private func decodeArrayInt64(xdrBase64: String) throws -> [Int64] {
@@ -143,9 +143,18 @@ class XDRDecodingTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(try! TestDescriminatedUnion(xdrBase64: "AAAAAAAAAAAAAAAB").toXdrBase64String(), TestDescriminatedUnion.a(1).toXdrBase64String())
-        XCTAssertEqual(try! TestDescriminatedUnion(xdrBase64: "AAAAAQAAAAE=").toXdrBase64String(), TestDescriminatedUnion.b(1).toXdrBase64String())
-        XCTAssertEqual(try! TestDescriminatedUnion(xdrBase64: "AAAAAg==").toXdrBase64String(), TestDescriminatedUnion.c.toXdrBase64String())
+        XCTAssertEqual(
+            try TestDescriminatedUnion(xdrBase64: "AAAAAAAAAAAAAAAB").toXdrBase64String(),
+            TestDescriminatedUnion.a(1).toXdrBase64String()
+        )
+        XCTAssertEqual(
+            try TestDescriminatedUnion(xdrBase64: "AAAAAQAAAAE=").toXdrBase64String(),
+            TestDescriminatedUnion.b(1).toXdrBase64String()
+        )
+        XCTAssertEqual(
+            try TestDescriminatedUnion(xdrBase64: "AAAAAg==").toXdrBase64String(),
+            TestDescriminatedUnion.c.toXdrBase64String()
+        )
     }
 
     func testStruct() {
@@ -180,7 +189,7 @@ class XDRDecodingTests: XCTestCase {
             
             init(xdrData: inout Data) throws {
                 self.a = try Int32(xdrData: &xdrData)
-                if (try Bool(xdrData: &xdrData)) {
+                if try Bool(xdrData: &xdrData) {
                     self.b = try Int32(xdrData: &xdrData)
                 } else {
                     self.b = nil
@@ -192,7 +201,7 @@ class XDRDecodingTests: XCTestCase {
 
         let test = Test(a: 1, b: nil, c: true, d: TestEnum.a)
 
-        XCTAssertEqual(try! Test(xdrBase64: "AAAAAQAAAAAAAAABAAAAAA==").toXdrBase64String(), test.toXdrBase64String())
+        XCTAssertEqual(try Test(xdrBase64: "AAAAAQAAAAAAAAABAAAAAA==").toXdrBase64String(), test.toXdrBase64String())
     }
 }
 

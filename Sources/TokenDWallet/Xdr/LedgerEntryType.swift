@@ -42,7 +42,9 @@ import Foundation
 //      VOTE = 35,
 //      ACCOUNT_SPECIFIC_RULE = 36,
 //      INITIATE_KYC_RECOVERY = 37,
-//      SWAP = 38
+//      SWAP = 38,
+//      DATA = 39,
+//      CUSTOM = 40
 //  };
 
 //  ===========================================================================
@@ -83,4 +85,6 @@ public enum LedgerEntryType: Int32, XDREnum {
   case accountSpecificRule = 36
   case initiateKycRecovery = 37
   case swap = 38
+  case data = 39
+  case custom = 40
 }

@@ -55,7 +55,7 @@ public struct ManageCreatePollRequestSuccessResult: XDRCodable {
 
   public enum ManageCreatePollRequestSuccessResultDetails: XDRDiscriminatedUnion {
     case create(CreatePollRequestResponse)
-    case cancel()
+    case cancel
 
     public var discriminant: Int32 {
       switch self {
@@ -71,7 +71,7 @@ public struct ManageCreatePollRequestSuccessResult: XDRCodable {
 
       switch self {
       case .create(let data): xdr.append(data.toXDR())
-      case .cancel(): xdr.append(Data())
+      case .cancel: xdr.append(Data())
       }
 
       return xdr
@@ -84,7 +84,7 @@ public struct ManageCreatePollRequestSuccessResult: XDRCodable {
       case ManageCreatePollRequestAction.create.rawValue:
         let data = try CreatePollRequestResponse(xdrData: &xdrData)
         self = .create(data)
-      case ManageCreatePollRequestAction.cancel.rawValue: self = .cancel()
+      case ManageCreatePollRequestAction.cancel.rawValue: self = .cancel
       default:
         throw XDRErrors.unknownEnumCase
       }
@@ -92,7 +92,7 @@ public struct ManageCreatePollRequestSuccessResult: XDRCodable {
 
   }
   public enum ManageCreatePollRequestSuccessResultExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -106,7 +106,7 @@ public struct ManageCreatePollRequestSuccessResult: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -116,7 +116,7 @@ public struct ManageCreatePollRequestSuccessResult: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

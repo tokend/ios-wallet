@@ -27,6 +27,8 @@ import Foundation
 //          PaymentResult paymentResult;
 //      case PERFORM_REDEMPTION:
 //          CreateRedemptionRequestResult createRedemptionResult;
+//      case DATA_CREATION:
+//          DataCreationExtended dataCreationExtended;
 //      } typeExt;
 //  
 //      //: Reserved for future use
@@ -72,13 +74,14 @@ public struct ExtendedResult: XDRCodable {
 
   public enum ExtendedResultTypeExt: XDRDiscriminatedUnion {
     case createSale(SaleExtended)
-    case none()
+    case none
     case createAtomicSwapBid(AtomicSwapBidExtended)
     case createAtomicSwapAsk(AtomicSwapAskExtended)
     case createPoll(CreatePollExtended)
     case manageOffer(ManageOfferResult)
     case createPayment(PaymentResult)
     case performRedemption(CreateRedemptionRequestResult)
+    case dataCreation(DataCreationExtended)
 
     public var discriminant: Int32 {
       switch self {
@@ -90,6 +93,7 @@ public struct ExtendedResult: XDRCodable {
       case .manageOffer: return ReviewableRequestType.manageOffer.rawValue
       case .createPayment: return ReviewableRequestType.createPayment.rawValue
       case .performRedemption: return ReviewableRequestType.performRedemption.rawValue
+      case .dataCreation: return ReviewableRequestType.dataCreation.rawValue
       }
     }
 
@@ -100,13 +104,14 @@ public struct ExtendedResult: XDRCodable {
 
       switch self {
       case .createSale(let data): xdr.append(data.toXDR())
-      case .none(): xdr.append(Data())
+      case .none: xdr.append(Data())
       case .createAtomicSwapBid(let data): xdr.append(data.toXDR())
       case .createAtomicSwapAsk(let data): xdr.append(data.toXDR())
       case .createPoll(let data): xdr.append(data.toXDR())
       case .manageOffer(let data): xdr.append(data.toXDR())
       case .createPayment(let data): xdr.append(data.toXDR())
       case .performRedemption(let data): xdr.append(data.toXDR())
+      case .dataCreation(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -119,7 +124,7 @@ public struct ExtendedResult: XDRCodable {
       case ReviewableRequestType.createSale.rawValue:
         let data = try SaleExtended(xdrData: &xdrData)
         self = .createSale(data)
-      case ReviewableRequestType.none.rawValue: self = .none()
+      case ReviewableRequestType.none.rawValue: self = .none
       case ReviewableRequestType.createAtomicSwapBid.rawValue:
         let data = try AtomicSwapBidExtended(xdrData: &xdrData)
         self = .createAtomicSwapBid(data)
@@ -138,6 +143,9 @@ public struct ExtendedResult: XDRCodable {
       case ReviewableRequestType.performRedemption.rawValue:
         let data = try CreateRedemptionRequestResult(xdrData: &xdrData)
         self = .performRedemption(data)
+      case ReviewableRequestType.dataCreation.rawValue:
+        let data = try DataCreationExtended(xdrData: &xdrData)
+        self = .dataCreation(data)
       default:
         throw XDRErrors.unknownEnumCase
       }
@@ -145,7 +153,7 @@ public struct ExtendedResult: XDRCodable {
 
   }
   public enum ExtendedResultExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -159,7 +167,7 @@ public struct ExtendedResult: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -169,7 +177,7 @@ public struct ExtendedResult: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

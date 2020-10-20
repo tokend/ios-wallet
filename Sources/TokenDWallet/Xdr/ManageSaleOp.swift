@@ -60,7 +60,7 @@ public struct ManageSaleOp: XDRCodable {
 
   public enum ManageSaleOpData: XDRDiscriminatedUnion {
     case createUpdateDetailsRequest(UpdateSaleDetailsData)
-    case cancel()
+    case cancel
 
     public var discriminant: Int32 {
       switch self {
@@ -76,7 +76,7 @@ public struct ManageSaleOp: XDRCodable {
 
       switch self {
       case .createUpdateDetailsRequest(let data): xdr.append(data.toXDR())
-      case .cancel(): xdr.append(Data())
+      case .cancel: xdr.append(Data())
       }
 
       return xdr
@@ -89,7 +89,7 @@ public struct ManageSaleOp: XDRCodable {
       case ManageSaleAction.createUpdateDetailsRequest.rawValue:
         let data = try UpdateSaleDetailsData(xdrData: &xdrData)
         self = .createUpdateDetailsRequest(data)
-      case ManageSaleAction.cancel.rawValue: self = .cancel()
+      case ManageSaleAction.cancel.rawValue: self = .cancel
       default:
         throw XDRErrors.unknownEnumCase
       }
@@ -97,7 +97,7 @@ public struct ManageSaleOp: XDRCodable {
 
   }
   public enum ManageSaleOpExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -111,7 +111,7 @@ public struct ManageSaleOp: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -121,7 +121,7 @@ public struct ManageSaleOp: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

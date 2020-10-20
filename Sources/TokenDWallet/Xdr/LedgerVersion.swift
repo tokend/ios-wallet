@@ -34,7 +34,10 @@ import Foundation
 //      FIX_MOVEMENT_REVIEW = 24,
 //      FIX_SIGNATURE_CHECK = 25,
 //      FIX_AUTOREVIEW = 26,
-//      MOVEMENT_REQUESTS_DETAILS = 27
+//      MOVEMENT_REQUESTS_DETAILS = 27,
+//      FIX_CRASH_CORE_WITH_PAYMENT = 28,
+//      FIX_INVEST_TO_IMMEDIATE_SALE = 29,
+//      FIX_PAYMENT_TASKS_WILDCARD_VALUE = 30
 //  };
 
 //  ===========================================================================
@@ -67,4 +70,7 @@ public enum LedgerVersion: Int32, XDREnum {
   case fixSignatureCheck = 25
   case fixAutoreview = 26
   case movementRequestsDetails = 27
+  case fixCrashCoreWithPayment = 28
+  case fixInvestToImmediateSale = 29
+  case fixPaymentTasksWildcardValue = 30
 }

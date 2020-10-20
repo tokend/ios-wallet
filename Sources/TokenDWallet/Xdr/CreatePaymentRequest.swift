@@ -46,7 +46,7 @@ public struct CreatePaymentRequest: XDRCodable {
   }
 
   public enum CreatePaymentRequestExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
     case movementRequestsDetails(Longstring)
 
     public var discriminant: Int32 {
@@ -62,7 +62,7 @@ public struct CreatePaymentRequest: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       case .movementRequestsDetails(let data): xdr.append(data.toXDR())
       }
 
@@ -73,7 +73,7 @@ public struct CreatePaymentRequest: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       case LedgerVersion.movementRequestsDetails.rawValue:
         let data = try Longstring(xdrData: &xdrData)
         self = .movementRequestsDetails(data)

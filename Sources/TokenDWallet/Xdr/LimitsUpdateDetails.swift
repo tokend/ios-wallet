@@ -6,8 +6,8 @@ import Foundation
 // === xdr source ============================================================
 
 //  //: Review details of a Limits Update request
-//  struct LimitsUpdateDetails { 
-//      //: Limits entry containing new limits to set 
+//  struct LimitsUpdateDetails {
+//      //: Limits entry containing new limits to set
 //      LimitsV2Entry newLimitsV2;
 //  
 //      //:reserved for future use
@@ -47,7 +47,7 @@ public struct LimitsUpdateDetails: XDRCodable {
   }
 
   public enum LimitsUpdateDetailsExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -61,7 +61,7 @@ public struct LimitsUpdateDetails: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -71,7 +71,7 @@ public struct LimitsUpdateDetails: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

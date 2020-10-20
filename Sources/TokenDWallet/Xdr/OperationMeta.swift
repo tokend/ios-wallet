@@ -29,10 +29,6 @@ public struct OperationMeta: XDRCodable {
   }
 
   public init(xdrData: inout Data) throws {
-    let length = try Int32(xdrData: &xdrData)
-    self.changes = LedgerEntryChanges()
-    for _ in 1...length {
-        self.changes.append(try LedgerEntryChange(xdrData: &xdrData))
-    }
+    self.changes = try LedgerEntryChanges(xdrData: &xdrData)
   }
 }

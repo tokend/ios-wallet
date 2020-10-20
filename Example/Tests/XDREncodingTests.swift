@@ -74,7 +74,7 @@ class XDREncodingTests: XCTestCase {
             }
         }
         // Fixed size
-        XCTAssertEqual(try! XDRArrayFixed1(data).toXDR().base64, "AAAAAAAAAAE=")
+        XCTAssertEqual(try XDRArrayFixed1(data).toXDR().base64, "AAAAAAAAAAE=")
     }
     
     func testDescriminatedUnion() {

@@ -69,7 +69,9 @@ import Foundation
 //      //: Precision set in the system and precision of the amount are mismatched
 //      INCORRECT_AMOUNT_PRECISION = -28,
 //      //: Sale specific rule forbids to participate in sale for source account
-//      SPECIFIC_RULE_FORBIDS = -29
+//      SPECIFIC_RULE_FORBIDS = -29,
+//      //: Amount must be less then pending issuance
+//      PENDING_ISSUANCE_LESS_THEN_AMOUNT = -30
 //  };
 
 //  ===========================================================================
@@ -104,4 +106,5 @@ public enum ManageOfferResultCode: Int32, XDREnum {
   case requiresVerification = -27
   case incorrectAmountPrecision = -28
   case specificRuleForbids = -29
+  case pendingIssuanceLessThenAmount = -30
 }

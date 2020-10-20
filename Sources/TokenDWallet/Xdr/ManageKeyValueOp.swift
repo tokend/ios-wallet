@@ -65,7 +65,7 @@ public struct ManageKeyValueOp: XDRCodable {
 
   public enum ManageKeyValueOpAction: XDRDiscriminatedUnion {
     case put(KeyValueEntryValue)
-    case remove()
+    case remove
 
     public var discriminant: Int32 {
       switch self {
@@ -81,7 +81,7 @@ public struct ManageKeyValueOp: XDRCodable {
 
       switch self {
       case .put(let data): xdr.append(data.toXDR())
-      case .remove(): xdr.append(Data())
+      case .remove: xdr.append(Data())
       }
 
       return xdr
@@ -94,7 +94,7 @@ public struct ManageKeyValueOp: XDRCodable {
       case ManageKVAction.put.rawValue:
         let data = try KeyValueEntryValue(xdrData: &xdrData)
         self = .put(data)
-      case ManageKVAction.remove.rawValue: self = .remove()
+      case ManageKVAction.remove.rawValue: self = .remove
       default:
         throw XDRErrors.unknownEnumCase
       }
@@ -102,7 +102,7 @@ public struct ManageKeyValueOp: XDRCodable {
 
   }
   public enum ManageKeyValueOpExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -116,7 +116,7 @@ public struct ManageKeyValueOp: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -126,7 +126,7 @@ public struct ManageKeyValueOp: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

@@ -136,6 +136,16 @@ import Foundation
 //          //: reserved for future extension
 //          EmptyExt ext;
 //      } swap;
+//  case DATA:
+//      struct
+//      {
+//          //: Numeric type of the data
+//          uint64 type;
+//          //: Reserved for future extension
+//          EmptyExt ext;
+//      } data;
+//  case CUSTOM:
+//      CustomRuleResource custom;
 //  default:
 //      //: reserved for future extension
 //      EmptyExt ext;
@@ -145,7 +155,7 @@ import Foundation
 public enum AccountRuleResource: XDRDiscriminatedUnion {
   case asset(AccountRuleResourceAsset)
   case reviewableRequest(AccountRuleResourceReviewableRequest)
-  case any()
+  case any
   case offerEntry(AccountRuleResourceOffer)
   case sale(AccountRuleResourceSale)
   case atomicSwapAsk(AccountRuleResourceAtomicSwapAsk)
@@ -155,6 +165,8 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
   case initiateKycRecovery(AccountRuleResourceInitiateKYCRecovery)
   case accountSpecificRule(AccountRuleResourceAccountSpecificRuleExt)
   case swap(AccountRuleResourceSwap)
+  case data(AccountRuleResourceData)
+  case custom(CustomRuleResource)
 
   public var discriminant: Int32 {
     switch self {
@@ -170,6 +182,8 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case .initiateKycRecovery: return LedgerEntryType.initiateKycRecovery.rawValue
     case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
     case .swap: return LedgerEntryType.swap.rawValue
+    case .data: return LedgerEntryType.data.rawValue
+    case .custom: return LedgerEntryType.custom.rawValue
     }
   }
 
@@ -181,7 +195,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     switch self {
     case .asset(let data): xdr.append(data.toXDR())
     case .reviewableRequest(let data): xdr.append(data.toXDR())
-    case .any(): xdr.append(Data())
+    case .any: xdr.append(Data())
     case .offerEntry(let data): xdr.append(data.toXDR())
     case .sale(let data): xdr.append(data.toXDR())
     case .atomicSwapAsk(let data): xdr.append(data.toXDR())
@@ -191,6 +205,8 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case .initiateKycRecovery(let data): xdr.append(data.toXDR())
     case .accountSpecificRule(let data): xdr.append(data.toXDR())
     case .swap(let data): xdr.append(data.toXDR())
+    case .data(let data): xdr.append(data.toXDR())
+    case .custom(let data): xdr.append(data.toXDR())
     }
 
     return xdr
@@ -206,7 +222,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case LedgerEntryType.reviewableRequest.rawValue:
       let data = try AccountRuleResourceReviewableRequest(xdrData: &xdrData)
       self = .reviewableRequest(data)
-    case LedgerEntryType.any.rawValue: self = .any()
+    case LedgerEntryType.any.rawValue: self = .any
     case LedgerEntryType.offerEntry.rawValue:
       let data = try AccountRuleResourceOffer(xdrData: &xdrData)
       self = .offerEntry(data)
@@ -234,6 +250,12 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case LedgerEntryType.swap.rawValue:
       let data = try AccountRuleResourceSwap(xdrData: &xdrData)
       self = .swap(data)
+    case LedgerEntryType.data.rawValue:
+      let data = try AccountRuleResourceData(xdrData: &xdrData)
+      self = .data(data)
+    case LedgerEntryType.custom.rawValue:
+      let data = try CustomRuleResource(xdrData: &xdrData)
+      self = .custom(data)
     default:
       throw XDRErrors.unknownEnumCase
     }
@@ -527,7 +549,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
 
   }
   public enum AccountRuleResourceAccountSpecificRuleExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
     case addAccSpecificRuleResource(AccountRuleResourceAccountSpecificRuleExtAccountSpecificRule)
 
     public var discriminant: Int32 {
@@ -543,7 +565,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       case .addAccSpecificRuleResource(let data): xdr.append(data.toXDR())
       }
 
@@ -554,7 +576,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       case LedgerVersion.addAccSpecificRuleResource.rawValue:
         let data = try AccountRuleResourceAccountSpecificRuleExtAccountSpecificRule(xdrData: &xdrData)
         self = .addAccSpecificRuleResource(data)
@@ -619,6 +641,33 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     public init(xdrData: inout Data) throws {
       self.assetCode = try AssetCode(xdrData: &xdrData)
       self.assetType = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct AccountRuleResourceData: XDRCodable {
+    public var type: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        type: Uint64,
+        ext: EmptyExt) {
+
+      self.type = type
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.type.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.type = try Uint64(xdrData: &xdrData)
       self.ext = try EmptyExt(xdrData: &xdrData)
     }
 

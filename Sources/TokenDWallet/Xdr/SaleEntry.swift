@@ -136,8 +136,8 @@ public struct SaleEntry: XDRCodable {
   }
 
   public enum SaleEntryExt: XDRDiscriminatedUnion {
-    case emptyVersion()
-    case addSaleWhitelists()
+    case emptyVersion
+    case addSaleWhitelists
 
     public var discriminant: Int32 {
       switch self {
@@ -152,8 +152,8 @@ public struct SaleEntry: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
-      case .addSaleWhitelists(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
+      case .addSaleWhitelists: xdr.append(Data())
       }
 
       return xdr
@@ -163,8 +163,8 @@ public struct SaleEntry: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
-      case LedgerVersion.addSaleWhitelists.rawValue: self = .addSaleWhitelists()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
+      case LedgerVersion.addSaleWhitelists.rawValue: self = .addSaleWhitelists
       default:
         throw XDRErrors.unknownEnumCase
       }

@@ -45,7 +45,7 @@ public enum StellarMessage: XDRDiscriminatedUnion {
   case hello(Hello)
   case auth(Auth)
   case dontHave(DontHave)
-  case getPeers()
+  case getPeers
   case peers([PeerAddress])
   case getTxSet(Uint256)
   case txSet(TransactionSet)
@@ -83,7 +83,7 @@ public enum StellarMessage: XDRDiscriminatedUnion {
     case .hello(let data): xdr.append(data.toXDR())
     case .auth(let data): xdr.append(data.toXDR())
     case .dontHave(let data): xdr.append(data.toXDR())
-    case .getPeers(): xdr.append(Data())
+    case .getPeers: xdr.append(Data())
     case .peers(let data): xdr.append(data.toXDR())
     case .getTxSet(let data): xdr.append(data.toXDR())
     case .txSet(let data): xdr.append(data.toXDR())
@@ -113,7 +113,7 @@ public enum StellarMessage: XDRDiscriminatedUnion {
     case MessageType.dontHave.rawValue:
       let data = try DontHave(xdrData: &xdrData)
       self = .dontHave(data)
-    case MessageType.getPeers.rawValue: self = .getPeers()
+    case MessageType.getPeers.rawValue: self = .getPeers
     case MessageType.peers.rawValue:
       let lengthpeers = try Int32(xdrData: &xdrData)
       var data = [PeerAddress]()

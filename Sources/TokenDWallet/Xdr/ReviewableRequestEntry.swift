@@ -53,6 +53,13 @@ import Foundation
 //  			CreatePaymentRequest createPaymentRequest;
 //          case PERFORM_REDEMPTION:
 //              RedemptionRequest redemptionRequest;
+//          case DATA_CREATION:
+//              DataCreationRequest dataCreationRequest;
+//          case DATA_UPDATE:
+//              DataUpdateRequest dataUpdateRequest;
+//          case DATA_REMOVE:
+//              DataRemoveRequest dataRemoveRequest;
+//  
 //  	} body;
 //  
 //  	TasksExt tasks;
@@ -157,6 +164,9 @@ public struct ReviewableRequestEntry: XDRCodable {
     case manageOffer(ManageOfferRequest)
     case createPayment(CreatePaymentRequest)
     case performRedemption(RedemptionRequest)
+    case dataCreation(DataCreationRequest)
+    case dataUpdate(DataUpdateRequest)
+    case dataRemove(DataRemoveRequest)
 
     public var discriminant: Int32 {
       switch self {
@@ -179,6 +189,9 @@ public struct ReviewableRequestEntry: XDRCodable {
       case .manageOffer: return ReviewableRequestType.manageOffer.rawValue
       case .createPayment: return ReviewableRequestType.createPayment.rawValue
       case .performRedemption: return ReviewableRequestType.performRedemption.rawValue
+      case .dataCreation: return ReviewableRequestType.dataCreation.rawValue
+      case .dataUpdate: return ReviewableRequestType.dataUpdate.rawValue
+      case .dataRemove: return ReviewableRequestType.dataRemove.rawValue
       }
     }
 
@@ -207,6 +220,9 @@ public struct ReviewableRequestEntry: XDRCodable {
       case .manageOffer(let data): xdr.append(data.toXDR())
       case .createPayment(let data): xdr.append(data.toXDR())
       case .performRedemption(let data): xdr.append(data.toXDR())
+      case .dataCreation(let data): xdr.append(data.toXDR())
+      case .dataUpdate(let data): xdr.append(data.toXDR())
+      case .dataRemove(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -273,6 +289,15 @@ public struct ReviewableRequestEntry: XDRCodable {
       case ReviewableRequestType.performRedemption.rawValue:
         let data = try RedemptionRequest(xdrData: &xdrData)
         self = .performRedemption(data)
+      case ReviewableRequestType.dataCreation.rawValue:
+        let data = try DataCreationRequest(xdrData: &xdrData)
+        self = .dataCreation(data)
+      case ReviewableRequestType.dataUpdate.rawValue:
+        let data = try DataUpdateRequest(xdrData: &xdrData)
+        self = .dataUpdate(data)
+      case ReviewableRequestType.dataRemove.rawValue:
+        let data = try DataRemoveRequest(xdrData: &xdrData)
+        self = .dataRemove(data)
       default:
         throw XDRErrors.unknownEnumCase
       }
@@ -280,7 +305,7 @@ public struct ReviewableRequestEntry: XDRCodable {
 
   }
   public enum ReviewableRequestEntryExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -294,7 +319,7 @@ public struct ReviewableRequestEntry: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -304,7 +329,7 @@ public struct ReviewableRequestEntry: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

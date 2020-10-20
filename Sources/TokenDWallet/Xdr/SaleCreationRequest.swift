@@ -132,7 +132,7 @@ public struct SaleCreationRequest: XDRCodable {
   }
 
   public enum SaleCreationRequestExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
     case addSaleWhitelists([CreateAccountSaleRuleData])
 
     public var discriminant: Int32 {
@@ -148,7 +148,7 @@ public struct SaleCreationRequest: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       case .addSaleWhitelists(let data): xdr.append(data.toXDR())
       }
 
@@ -159,7 +159,7 @@ public struct SaleCreationRequest: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       case LedgerVersion.addSaleWhitelists.rawValue:
         let lengthsaleRules = try Int32(xdrData: &xdrData)
         var data = [CreateAccountSaleRuleData]()

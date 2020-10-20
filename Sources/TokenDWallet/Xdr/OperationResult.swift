@@ -110,6 +110,24 @@ import Foundation
 //          CloseSwapResult closeSwapResult;
 //      case CREATE_REDEMPTION_REQUEST:
 //          CreateRedemptionRequestResult createRedemptionRequestResult;
+//      case CREATE_DATA:
+//          CreateDataResult createDataResult;
+//      case UPDATE_DATA:
+//          UpdateDataResult updateDataResult;
+//      case REMOVE_DATA:
+//          RemoveDataResult removeDataResult;
+//      case CREATE_DATA_CREATION_REQUEST:
+//          CreateDataCreationRequestResult createDataCreationRequestResult;
+//      case CANCEL_DATA_CREATION_REQUEST:
+//          CancelDataCreationRequestResult cancelDataCreationRequestResult;
+//      case CREATE_DATA_UPDATE_REQUEST:
+//          CreateDataUpdateRequestResult createDataUpdateRequestResult;
+//      case CREATE_DATA_REMOVE_REQUEST:
+//          CreateDataRemoveRequestResult createDataRemoveRequestResult;
+//      case CANCEL_DATA_UPDATE_REQUEST:
+//          CancelDataUpdateRequestResult cancelDataUpdateRequestResult;
+//      case CANCEL_DATA_REMOVE_REQUEST:
+//          CancelDataRemoveRequestResult cancelDataRemoveRequestResult;
 //      }
 //      tr;
 //  case opNO_ENTRY:
@@ -216,6 +234,15 @@ public enum OperationResult: XDRDiscriminatedUnion {
     case openSwap(OpenSwapResult)
     case closeSwap(CloseSwapResult)
     case createRedemptionRequest(CreateRedemptionRequestResult)
+    case createData(CreateDataResult)
+    case updateData(UpdateDataResult)
+    case removeData(RemoveDataResult)
+    case createDataCreationRequest(CreateDataCreationRequestResult)
+    case cancelDataCreationRequest(CancelDataCreationRequestResult)
+    case createDataUpdateRequest(CreateDataUpdateRequestResult)
+    case createDataRemoveRequest(CreateDataRemoveRequestResult)
+    case cancelDataUpdateRequest(CancelDataUpdateRequestResult)
+    case cancelDataRemoveRequest(CancelDataRemoveRequestResult)
 
     public var discriminant: Int32 {
       switch self {
@@ -269,6 +296,15 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .openSwap: return OperationType.openSwap.rawValue
       case .closeSwap: return OperationType.closeSwap.rawValue
       case .createRedemptionRequest: return OperationType.createRedemptionRequest.rawValue
+      case .createData: return OperationType.createData.rawValue
+      case .updateData: return OperationType.updateData.rawValue
+      case .removeData: return OperationType.removeData.rawValue
+      case .createDataCreationRequest: return OperationType.createDataCreationRequest.rawValue
+      case .cancelDataCreationRequest: return OperationType.cancelDataCreationRequest.rawValue
+      case .createDataUpdateRequest: return OperationType.createDataUpdateRequest.rawValue
+      case .createDataRemoveRequest: return OperationType.createDataRemoveRequest.rawValue
+      case .cancelDataUpdateRequest: return OperationType.cancelDataUpdateRequest.rawValue
+      case .cancelDataRemoveRequest: return OperationType.cancelDataRemoveRequest.rawValue
       }
     }
 
@@ -328,6 +364,15 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .openSwap(let data): xdr.append(data.toXDR())
       case .closeSwap(let data): xdr.append(data.toXDR())
       case .createRedemptionRequest(let data): xdr.append(data.toXDR())
+      case .createData(let data): xdr.append(data.toXDR())
+      case .updateData(let data): xdr.append(data.toXDR())
+      case .removeData(let data): xdr.append(data.toXDR())
+      case .createDataCreationRequest(let data): xdr.append(data.toXDR())
+      case .cancelDataCreationRequest(let data): xdr.append(data.toXDR())
+      case .createDataUpdateRequest(let data): xdr.append(data.toXDR())
+      case .createDataRemoveRequest(let data): xdr.append(data.toXDR())
+      case .cancelDataUpdateRequest(let data): xdr.append(data.toXDR())
+      case .cancelDataRemoveRequest(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -487,6 +532,33 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case OperationType.createRedemptionRequest.rawValue:
         let data = try CreateRedemptionRequestResult(xdrData: &xdrData)
         self = .createRedemptionRequest(data)
+      case OperationType.createData.rawValue:
+        let data = try CreateDataResult(xdrData: &xdrData)
+        self = .createData(data)
+      case OperationType.updateData.rawValue:
+        let data = try UpdateDataResult(xdrData: &xdrData)
+        self = .updateData(data)
+      case OperationType.removeData.rawValue:
+        let data = try RemoveDataResult(xdrData: &xdrData)
+        self = .removeData(data)
+      case OperationType.createDataCreationRequest.rawValue:
+        let data = try CreateDataCreationRequestResult(xdrData: &xdrData)
+        self = .createDataCreationRequest(data)
+      case OperationType.cancelDataCreationRequest.rawValue:
+        let data = try CancelDataCreationRequestResult(xdrData: &xdrData)
+        self = .cancelDataCreationRequest(data)
+      case OperationType.createDataUpdateRequest.rawValue:
+        let data = try CreateDataUpdateRequestResult(xdrData: &xdrData)
+        self = .createDataUpdateRequest(data)
+      case OperationType.createDataRemoveRequest.rawValue:
+        let data = try CreateDataRemoveRequestResult(xdrData: &xdrData)
+        self = .createDataRemoveRequest(data)
+      case OperationType.cancelDataUpdateRequest.rawValue:
+        let data = try CancelDataUpdateRequestResult(xdrData: &xdrData)
+        self = .cancelDataUpdateRequest(data)
+      case OperationType.cancelDataRemoveRequest.rawValue:
+        let data = try CancelDataRemoveRequestResult(xdrData: &xdrData)
+        self = .cancelDataRemoveRequest(data)
       default:
         throw XDRErrors.unknownEnumCase
       }

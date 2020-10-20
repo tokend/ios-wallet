@@ -65,7 +65,7 @@ public struct ManageContractOp: XDRCodable {
 
   public enum ManageContractOpData: XDRDiscriminatedUnion {
     case addDetails(Longstring)
-    case confirmCompleted()
+    case confirmCompleted
     case startDispute(Longstring)
     case resolveDispute(Bool)
 
@@ -85,7 +85,7 @@ public struct ManageContractOp: XDRCodable {
 
       switch self {
       case .addDetails(let data): xdr.append(data.toXDR())
-      case .confirmCompleted(): xdr.append(Data())
+      case .confirmCompleted: xdr.append(Data())
       case .startDispute(let data): xdr.append(data.toXDR())
       case .resolveDispute(let data): xdr.append(data.toXDR())
       }
@@ -100,7 +100,7 @@ public struct ManageContractOp: XDRCodable {
       case ManageContractAction.addDetails.rawValue:
         let data = try Longstring(xdrData: &xdrData)
         self = .addDetails(data)
-      case ManageContractAction.confirmCompleted.rawValue: self = .confirmCompleted()
+      case ManageContractAction.confirmCompleted.rawValue: self = .confirmCompleted
       case ManageContractAction.startDispute.rawValue:
         let data = try Longstring(xdrData: &xdrData)
         self = .startDispute(data)
@@ -114,7 +114,7 @@ public struct ManageContractOp: XDRCodable {
 
   }
   public enum ManageContractOpExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -128,7 +128,7 @@ public struct ManageContractOp: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -138,7 +138,7 @@ public struct ManageContractOp: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

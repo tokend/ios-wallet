@@ -41,7 +41,7 @@ public class TransactionModel {
         self.networkParams = networkParams
         self.sourceAccountId = sourceAccountId
         self.operations = operations
-        self.memo = memo ?? Memo.memoNone()
+        self.memo = memo ?? Memo.memoNone
         self.timeBounds = timeBounds ?? TimeBounds(
             minTime: 0,
             maxTime: Uint64(Date().timeIntervalSince1970) + TransactionModel.TransactionDefaultLifetimeSeconds
@@ -116,7 +116,7 @@ public class TransactionModel {
             timeBounds: self.timeBounds,
             memo: self.memo,
             operations: self.operations,
-            ext: Transaction.TransactionExt.emptyVersion()
+            ext: Transaction.TransactionExt.emptyVersion
         )
     }
     

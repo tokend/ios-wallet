@@ -27,7 +27,10 @@ import Foundation
 //  	KYC_RECOVERY = 18,
 //  	MANAGE_OFFER = 19,
 //  	CREATE_PAYMENT = 20,
-//  	PERFORM_REDEMPTION = 21
+//  	PERFORM_REDEMPTION = 21,
+//  	DATA_CREATION = 22,
+//  	DATA_UPDATE = 23,
+//  	DATA_REMOVE = 24
 //  };
 
 //  ===========================================================================
@@ -53,4 +56,7 @@ public enum ReviewableRequestType: Int32, XDREnum {
   case manageOffer = 19
   case createPayment = 20
   case performRedemption = 21
+  case dataCreation = 22
+  case dataUpdate = 23
+  case dataRemove = 24
 }

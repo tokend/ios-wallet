@@ -73,6 +73,8 @@ import Foundation
 //          AccountSpecificRuleEntry accountSpecificRule;
 //      case SWAP:
 //          SwapEntry swap;
+//      case DATA:
+//          DataEntry data;
 //      }
 //      data;
 //  
@@ -149,6 +151,7 @@ public struct LedgerEntry: XDRCodable {
     case vote(VoteEntry)
     case accountSpecificRule(AccountSpecificRuleEntry)
     case swap(SwapEntry)
+    case data(DataEntry)
 
     public var discriminant: Int32 {
       switch self {
@@ -183,6 +186,7 @@ public struct LedgerEntry: XDRCodable {
       case .vote: return LedgerEntryType.vote.rawValue
       case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
       case .swap: return LedgerEntryType.swap.rawValue
+      case .data: return LedgerEntryType.data.rawValue
       }
     }
 
@@ -223,6 +227,7 @@ public struct LedgerEntry: XDRCodable {
       case .vote(let data): xdr.append(data.toXDR())
       case .accountSpecificRule(let data): xdr.append(data.toXDR())
       case .swap(let data): xdr.append(data.toXDR())
+      case .data(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -325,6 +330,9 @@ public struct LedgerEntry: XDRCodable {
       case LedgerEntryType.swap.rawValue:
         let data = try SwapEntry(xdrData: &xdrData)
         self = .swap(data)
+      case LedgerEntryType.data.rawValue:
+        let data = try DataEntry(xdrData: &xdrData)
+        self = .data(data)
       default:
         throw XDRErrors.unknownEnumCase
       }
@@ -332,7 +340,7 @@ public struct LedgerEntry: XDRCodable {
 
   }
   public enum LedgerEntryExt: XDRDiscriminatedUnion {
-    case emptyVersion()
+    case emptyVersion
 
     public var discriminant: Int32 {
       switch self {
@@ -346,7 +354,7 @@ public struct LedgerEntry: XDRCodable {
       xdr.append(self.discriminant.toXDR())
 
       switch self {
-      case .emptyVersion(): xdr.append(Data())
+      case .emptyVersion: xdr.append(Data())
       }
 
       return xdr
@@ -356,7 +364,7 @@ public struct LedgerEntry: XDRCodable {
       let discriminant = try Int32(xdrData: &xdrData)
 
       switch discriminant {
-      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+      case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
       default:
         throw XDRErrors.unknownEnumCase
       }

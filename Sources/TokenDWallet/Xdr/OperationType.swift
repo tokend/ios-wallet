@@ -56,7 +56,16 @@ import Foundation
 //      REMOVE_ASSET = 53,
 //      OPEN_SWAP = 54,
 //      CLOSE_SWAP = 55,
-//      CREATE_REDEMPTION_REQUEST = 56
+//      CREATE_REDEMPTION_REQUEST = 56,
+//      CREATE_DATA = 57,
+//      UPDATE_DATA = 58,
+//      REMOVE_DATA = 59,
+//      CREATE_DATA_CREATION_REQUEST = 60,
+//      CANCEL_DATA_CREATION_REQUEST = 61,
+//      CREATE_DATA_UPDATE_REQUEST = 62,
+//      CREATE_DATA_REMOVE_REQUEST = 63,
+//      CANCEL_DATA_UPDATE_REQUEST = 64,
+//      CANCEL_DATA_REMOVE_REQUEST = 65
 //  };
 
 //  ===========================================================================
@@ -111,4 +120,13 @@ public enum OperationType: Int32, XDREnum {
   case openSwap = 54
   case closeSwap = 55
   case createRedemptionRequest = 56
+  case createData = 57
+  case updateData = 58
+  case removeData = 59
+  case createDataCreationRequest = 60
+  case cancelDataCreationRequest = 61
+  case createDataUpdateRequest = 62
+  case createDataRemoveRequest = 63
+  case cancelDataUpdateRequest = 64
+  case cancelDataRemoveRequest = 65
 }

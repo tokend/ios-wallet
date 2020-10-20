@@ -93,7 +93,7 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
 
     public enum ManageLimitsResultSuccessDetails: XDRDiscriminatedUnion {
       case create(Uint64)
-      case remove()
+      case remove
 
       public var discriminant: Int32 {
         switch self {
@@ -109,7 +109,7 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
 
         switch self {
         case .create(let data): xdr.append(data.toXDR())
-        case .remove(): xdr.append(Data())
+        case .remove: xdr.append(Data())
         }
 
         return xdr
@@ -122,7 +122,7 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
         case ManageLimitsAction.create.rawValue:
           let data = try Uint64(xdrData: &xdrData)
           self = .create(data)
-        case ManageLimitsAction.remove.rawValue: self = .remove()
+        case ManageLimitsAction.remove.rawValue: self = .remove
         default:
           throw XDRErrors.unknownEnumCase
         }
@@ -130,7 +130,7 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
 
     }
     public enum ManageLimitsResultSuccessExt: XDRDiscriminatedUnion {
-      case emptyVersion()
+      case emptyVersion
 
       public var discriminant: Int32 {
         switch self {
@@ -144,7 +144,7 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
         xdr.append(self.discriminant.toXDR())
 
         switch self {
-        case .emptyVersion(): xdr.append(Data())
+        case .emptyVersion: xdr.append(Data())
         }
 
         return xdr
@@ -154,7 +154,7 @@ public enum ManageLimitsResult: XDRDiscriminatedUnion {
         let discriminant = try Int32(xdrData: &xdrData)
 
         switch discriminant {
-        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion()
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
         default:
           throw XDRErrors.unknownEnumCase
         }
