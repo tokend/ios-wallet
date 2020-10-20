@@ -1,9 +1,9 @@
 PODS:
-  - DLCryptoKit (2.0.1):
+  - DLCryptoKit (2.0.2):
     - DLOpenSSL
   - DLOpenSSL (1.0.2)
-  - TokenDWallet (3.0.5):
-    - DLCryptoKit (>= 2.0.1)
+  - TokenDWallet (3.1.1):
+    - DLCryptoKit (>= 2.0.2)
 
 DEPENDENCIES:
   - TokenDWallet (from `../`)
@@ -18,10 +18,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  DLCryptoKit: 491c522583e92c90c09c06bf1192ef741022af33
+  DLCryptoKit: 89c9b51260db5a08ca73b81eba2dd5a6a9792ce1
   DLOpenSSL: 78d928228cb6d95fcaa354f4f9aba041ccf95457
-  TokenDWallet: a740f7767f3e66566e4a507f351a2bbf5901aa22
+  TokenDWallet: 65053aca57f8ea2d6cd0de08f0a9157fa232a987
 
 PODFILE CHECKSUM: 2ff703f484f93022caae12590846b6530f3c4419
 
-COCOAPODS: 1.8.0
+COCOAPODS: 1.8.4

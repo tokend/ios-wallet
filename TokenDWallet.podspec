@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'TokenDWallet'
-  s.version          = '3.0.5'
+  s.version          = '3.1.1'
   s.summary          = 'Wallet utilities for TokenD.'
   s.homepage         = 'https://github.com/tokend/ios-wallet'
   s.license          = { type: 'Apache License, Version 2.0', file: 'LICENSE' }
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Sources/TokenDWallet/**/*.swift'
   s.exclude_files    = 'Example/*'
 
-  s.dependency 'DLCryptoKit', '>= 2.0.1'
+  s.dependency 'DLCryptoKit', '>= 2.0.2'
 
   s.ios.deployment_target = '10.0'
 end
