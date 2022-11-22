@@ -75,6 +75,10 @@ import Foundation
 //          SwapEntry swap;
 //      case DATA:
 //          DataEntry data;
+//      case DEFERRED_PAYMENT:
+//          DeferredPaymentEntry deferredPayment;
+//      case LIQUIDITY_POOL:
+//          LiquidityPoolEntry liquidityPool;
 //      }
 //      data;
 //  
@@ -152,6 +156,8 @@ public struct LedgerEntry: XDRCodable {
     case accountSpecificRule(AccountSpecificRuleEntry)
     case swap(SwapEntry)
     case data(DataEntry)
+    case deferredPayment(DeferredPaymentEntry)
+    case liquidityPool(LiquidityPoolEntry)
 
     public var discriminant: Int32 {
       switch self {
@@ -187,6 +193,8 @@ public struct LedgerEntry: XDRCodable {
       case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
       case .swap: return LedgerEntryType.swap.rawValue
       case .data: return LedgerEntryType.data.rawValue
+      case .deferredPayment: return LedgerEntryType.deferredPayment.rawValue
+      case .liquidityPool: return LedgerEntryType.liquidityPool.rawValue
       }
     }
 
@@ -228,6 +236,8 @@ public struct LedgerEntry: XDRCodable {
       case .accountSpecificRule(let data): xdr.append(data.toXDR())
       case .swap(let data): xdr.append(data.toXDR())
       case .data(let data): xdr.append(data.toXDR())
+      case .deferredPayment(let data): xdr.append(data.toXDR())
+      case .liquidityPool(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -333,6 +343,12 @@ public struct LedgerEntry: XDRCodable {
       case LedgerEntryType.data.rawValue:
         let data = try DataEntry(xdrData: &xdrData)
         self = .data(data)
+      case LedgerEntryType.deferredPayment.rawValue:
+        let data = try DeferredPaymentEntry(xdrData: &xdrData)
+        self = .deferredPayment(data)
+      case LedgerEntryType.liquidityPool.rawValue:
+        let data = try LiquidityPoolEntry(xdrData: &xdrData)
+        self = .liquidityPool(data)
       default:
         throw XDRErrors.unknownEnumCase
       }

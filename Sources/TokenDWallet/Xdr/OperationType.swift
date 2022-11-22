@@ -65,7 +65,17 @@ import Foundation
 //      CREATE_DATA_UPDATE_REQUEST = 62,
 //      CREATE_DATA_REMOVE_REQUEST = 63,
 //      CANCEL_DATA_UPDATE_REQUEST = 64,
-//      CANCEL_DATA_REMOVE_REQUEST = 65
+//      CANCEL_DATA_REMOVE_REQUEST = 65,
+//      CREATE_DEFERRED_PAYMENT_CREATION_REQUEST = 66,
+//      CANCEL_DEFERRED_PAYMENT_CREATION_REQUEST = 67,
+//      CREATE_CLOSE_DEFERRED_PAYMENT_REQUEST = 68,
+//      CANCEL_CLOSE_DEFERRED_PAYMENT_REQUEST = 69,
+//      UPDATE_DATA_OWNER = 70,
+//      CREATE_DATA_OWNER_UPDATE_REQUEST = 71,
+//      CANCEL_DATA_OWNER_UPDATE_REQUEST = 72,
+//      LP_SWAP = 73,
+//      LP_ADD_LIQUIDITY = 74,
+//      LP_REMOVE_LIQUIDITY = 75
 //  };
 
 //  ===========================================================================
@@ -129,4 +139,14 @@ public enum OperationType: Int32, XDREnum {
   case createDataRemoveRequest = 63
   case cancelDataUpdateRequest = 64
   case cancelDataRemoveRequest = 65
+  case createDeferredPaymentCreationRequest = 66
+  case cancelDeferredPaymentCreationRequest = 67
+  case createCloseDeferredPaymentRequest = 68
+  case cancelCloseDeferredPaymentRequest = 69
+  case updateDataOwner = 70
+  case createDataOwnerUpdateRequest = 71
+  case cancelDataOwnerUpdateRequest = 72
+  case lpSwap = 73
+  case lpAddLiquidity = 74
+  case lpRemoveLiquidity = 75
 }

@@ -30,7 +30,10 @@ import Foundation
 //  	PERFORM_REDEMPTION = 21,
 //  	DATA_CREATION = 22,
 //  	DATA_UPDATE = 23,
-//  	DATA_REMOVE = 24
+//  	DATA_REMOVE = 24,
+//  	CREATE_DEFERRED_PAYMENT = 25,
+//      CLOSE_DEFERRED_PAYMENT = 26,
+//      DATA_OWNER_UPDATE = 27
 //  };
 
 //  ===========================================================================
@@ -59,4 +62,7 @@ public enum ReviewableRequestType: Int32, XDREnum {
   case dataCreation = 22
   case dataUpdate = 23
   case dataRemove = 24
+  case createDeferredPayment = 25
+  case closeDeferredPayment = 26
+  case dataOwnerUpdate = 27
 }

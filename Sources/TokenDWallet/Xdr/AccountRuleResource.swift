@@ -146,6 +146,22 @@ import Foundation
 //      } data;
 //  case CUSTOM:
 //      CustomRuleResource custom;
+//  case LIQUIDITY_POOL:
+//      struct
+//      {
+//          //: Code of the first asset in LP pair
+//          AssetCode firstAsset;
+//          //: Type of the first asset in LP pair
+//          uint64 firstAssetType;
+//  
+//          //: Code of the second asset in LP pair
+//          AssetCode secondAsset;
+//          //: Type of the seconds asset in LP pair
+//          uint64 secondAssetType;
+//  
+//          //: Reserved for future extension
+//          EmptyExt ext;
+//      } liquidityPool;
 //  default:
 //      //: reserved for future extension
 //      EmptyExt ext;
@@ -167,6 +183,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
   case swap(AccountRuleResourceSwap)
   case data(AccountRuleResourceData)
   case custom(CustomRuleResource)
+  case liquidityPool(AccountRuleResourceLiquidityPool)
 
   public var discriminant: Int32 {
     switch self {
@@ -184,6 +201,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case .swap: return LedgerEntryType.swap.rawValue
     case .data: return LedgerEntryType.data.rawValue
     case .custom: return LedgerEntryType.custom.rawValue
+    case .liquidityPool: return LedgerEntryType.liquidityPool.rawValue
     }
   }
 
@@ -207,6 +225,7 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case .swap(let data): xdr.append(data.toXDR())
     case .data(let data): xdr.append(data.toXDR())
     case .custom(let data): xdr.append(data.toXDR())
+    case .liquidityPool(let data): xdr.append(data.toXDR())
     }
 
     return xdr
@@ -256,6 +275,9 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
     case LedgerEntryType.custom.rawValue:
       let data = try CustomRuleResource(xdrData: &xdrData)
       self = .custom(data)
+    case LedgerEntryType.liquidityPool.rawValue:
+      let data = try AccountRuleResourceLiquidityPool(xdrData: &xdrData)
+      self = .liquidityPool(data)
     default:
       throw XDRErrors.unknownEnumCase
     }
@@ -668,6 +690,48 @@ public enum AccountRuleResource: XDRDiscriminatedUnion {
 
     public init(xdrData: inout Data) throws {
       self.type = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct AccountRuleResourceLiquidityPool: XDRCodable {
+    public var firstAsset: AssetCode
+    public var firstAssetType: Uint64
+    public var secondAsset: AssetCode
+    public var secondAssetType: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        firstAsset: AssetCode,
+        firstAssetType: Uint64,
+        secondAsset: AssetCode,
+        secondAssetType: Uint64,
+        ext: EmptyExt) {
+
+      self.firstAsset = firstAsset
+      self.firstAssetType = firstAssetType
+      self.secondAsset = secondAsset
+      self.secondAssetType = secondAssetType
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.firstAsset.toXDR())
+      xdr.append(self.firstAssetType.toXDR())
+      xdr.append(self.secondAsset.toXDR())
+      xdr.append(self.secondAssetType.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.firstAsset = try AssetCode(xdrData: &xdrData)
+      self.firstAssetType = try Uint64(xdrData: &xdrData)
+      self.secondAsset = try AssetCode(xdrData: &xdrData)
+      self.secondAssetType = try Uint64(xdrData: &xdrData)
       self.ext = try EmptyExt(xdrData: &xdrData)
     }
 

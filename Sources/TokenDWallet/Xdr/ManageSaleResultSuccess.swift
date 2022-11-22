@@ -17,6 +17,8 @@ import Foundation
 //          uint64 requestID;
 //      case CANCEL:
 //          void;
+//      case UPDATE_TIME:
+//          void;
 //      } response;
 //  
 //      //: Reserved for future use
@@ -63,11 +65,13 @@ public struct ManageSaleResultSuccess: XDRCodable {
   public enum ManageSaleResultSuccessResponse: XDRDiscriminatedUnion {
     case createUpdateDetailsRequest(Uint64)
     case cancel
+    case updateTime
 
     public var discriminant: Int32 {
       switch self {
       case .createUpdateDetailsRequest: return ManageSaleAction.createUpdateDetailsRequest.rawValue
       case .cancel: return ManageSaleAction.cancel.rawValue
+      case .updateTime: return ManageSaleAction.updateTime.rawValue
       }
     }
 
@@ -79,6 +83,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
       switch self {
       case .createUpdateDetailsRequest(let data): xdr.append(data.toXDR())
       case .cancel: xdr.append(Data())
+      case .updateTime: xdr.append(Data())
       }
 
       return xdr
@@ -92,6 +97,7 @@ public struct ManageSaleResultSuccess: XDRCodable {
         let data = try Uint64(xdrData: &xdrData)
         self = .createUpdateDetailsRequest(data)
       case ManageSaleAction.cancel.rawValue: self = .cancel
+      case ManageSaleAction.updateTime.rawValue: self = .updateTime
       default:
         throw XDRErrors.unknownEnumCase
       }

@@ -10,15 +10,19 @@ import Foundation
 //  {
 //  case SINGLE_CHOICE:
 //      EmptyExt ext;
+//  case CUSTOM_CHOICE:
+//  	EmptyExt customChoiceExt;
 //  };
 
 //  ===========================================================================
 public enum PollData: XDRDiscriminatedUnion {
   case singleChoice(EmptyExt)
+  case customChoice(EmptyExt)
 
   public var discriminant: Int32 {
     switch self {
     case .singleChoice: return PollType.singleChoice.rawValue
+    case .customChoice: return PollType.customChoice.rawValue
     }
   }
 
@@ -29,6 +33,7 @@ public enum PollData: XDRDiscriminatedUnion {
 
     switch self {
     case .singleChoice(let data): xdr.append(data.toXDR())
+    case .customChoice(let data): xdr.append(data.toXDR())
     }
 
     return xdr
@@ -41,6 +46,9 @@ public enum PollData: XDRDiscriminatedUnion {
     case PollType.singleChoice.rawValue:
       let data = try EmptyExt(xdrData: &xdrData)
       self = .singleChoice(data)
+    case PollType.customChoice.rawValue:
+      let data = try EmptyExt(xdrData: &xdrData)
+      self = .customChoice(data)
     default:
       throw XDRErrors.unknownEnumCase
     }

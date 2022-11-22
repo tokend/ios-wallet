@@ -128,6 +128,26 @@ import Foundation
 //          CancelDataUpdateRequestResult cancelDataUpdateRequestResult;
 //      case CANCEL_DATA_REMOVE_REQUEST:
 //          CancelDataRemoveRequestResult cancelDataRemoveRequestResult;
+//      case CREATE_DEFERRED_PAYMENT_CREATION_REQUEST:
+//          CreateDeferredPaymentCreationRequestResult createDeferredPaymentCreationRequestResult;
+//      case CANCEL_DEFERRED_PAYMENT_CREATION_REQUEST:
+//          CancelDeferredPaymentCreationRequestResult cancelDeferredPaymentCreationRequestResult;
+//      case CREATE_CLOSE_DEFERRED_PAYMENT_REQUEST:
+//          CreateCloseDeferredPaymentRequestResult createCloseDeferredPaymentRequestResult;
+//      case CANCEL_CLOSE_DEFERRED_PAYMENT_REQUEST:
+//          CancelCloseDeferredPaymentRequestResult cancelCloseDeferredPaymentRequestResult;
+//      case LP_SWAP:
+//          LPSwapResult lpSwapResult;
+//      case LP_ADD_LIQUIDITY:
+//          LPAddLiquidityResult lpAddLiquidityResult;
+//      case LP_REMOVE_LIQUIDITY:
+//          LPRemoveLiquidityResult lpRemoveLiquidityResult;
+//      case UPDATE_DATA_OWNER:
+//          UpdateDataOwnerResult updateDataOwnerResult;
+//      case CREATE_DATA_OWNER_UPDATE_REQUEST:
+//          CreateDataOwnerUpdateRequestResult createDataOwnerUpdateRequestResult;
+//      case CANCEL_DATA_OWNER_UPDATE_REQUEST:
+//          CancelDataOwnerUpdateRequestResult cancelDataOwnerUpdateRequestResult;
 //      }
 //      tr;
 //  case opNO_ENTRY:
@@ -243,6 +263,16 @@ public enum OperationResult: XDRDiscriminatedUnion {
     case createDataRemoveRequest(CreateDataRemoveRequestResult)
     case cancelDataUpdateRequest(CancelDataUpdateRequestResult)
     case cancelDataRemoveRequest(CancelDataRemoveRequestResult)
+    case createDeferredPaymentCreationRequest(CreateDeferredPaymentCreationRequestResult)
+    case cancelDeferredPaymentCreationRequest(CancelDeferredPaymentCreationRequestResult)
+    case createCloseDeferredPaymentRequest(CreateCloseDeferredPaymentRequestResult)
+    case cancelCloseDeferredPaymentRequest(CancelCloseDeferredPaymentRequestResult)
+    case lpSwap(LPSwapResult)
+    case lpAddLiquidity(LPAddLiquidityResult)
+    case lpRemoveLiquidity(LPRemoveLiquidityResult)
+    case updateDataOwner(UpdateDataOwnerResult)
+    case createDataOwnerUpdateRequest(CreateDataOwnerUpdateRequestResult)
+    case cancelDataOwnerUpdateRequest(CancelDataOwnerUpdateRequestResult)
 
     public var discriminant: Int32 {
       switch self {
@@ -305,6 +335,16 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .createDataRemoveRequest: return OperationType.createDataRemoveRequest.rawValue
       case .cancelDataUpdateRequest: return OperationType.cancelDataUpdateRequest.rawValue
       case .cancelDataRemoveRequest: return OperationType.cancelDataRemoveRequest.rawValue
+      case .createDeferredPaymentCreationRequest: return OperationType.createDeferredPaymentCreationRequest.rawValue
+      case .cancelDeferredPaymentCreationRequest: return OperationType.cancelDeferredPaymentCreationRequest.rawValue
+      case .createCloseDeferredPaymentRequest: return OperationType.createCloseDeferredPaymentRequest.rawValue
+      case .cancelCloseDeferredPaymentRequest: return OperationType.cancelCloseDeferredPaymentRequest.rawValue
+      case .lpSwap: return OperationType.lpSwap.rawValue
+      case .lpAddLiquidity: return OperationType.lpAddLiquidity.rawValue
+      case .lpRemoveLiquidity: return OperationType.lpRemoveLiquidity.rawValue
+      case .updateDataOwner: return OperationType.updateDataOwner.rawValue
+      case .createDataOwnerUpdateRequest: return OperationType.createDataOwnerUpdateRequest.rawValue
+      case .cancelDataOwnerUpdateRequest: return OperationType.cancelDataOwnerUpdateRequest.rawValue
       }
     }
 
@@ -373,6 +413,16 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case .createDataRemoveRequest(let data): xdr.append(data.toXDR())
       case .cancelDataUpdateRequest(let data): xdr.append(data.toXDR())
       case .cancelDataRemoveRequest(let data): xdr.append(data.toXDR())
+      case .createDeferredPaymentCreationRequest(let data): xdr.append(data.toXDR())
+      case .cancelDeferredPaymentCreationRequest(let data): xdr.append(data.toXDR())
+      case .createCloseDeferredPaymentRequest(let data): xdr.append(data.toXDR())
+      case .cancelCloseDeferredPaymentRequest(let data): xdr.append(data.toXDR())
+      case .lpSwap(let data): xdr.append(data.toXDR())
+      case .lpAddLiquidity(let data): xdr.append(data.toXDR())
+      case .lpRemoveLiquidity(let data): xdr.append(data.toXDR())
+      case .updateDataOwner(let data): xdr.append(data.toXDR())
+      case .createDataOwnerUpdateRequest(let data): xdr.append(data.toXDR())
+      case .cancelDataOwnerUpdateRequest(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -559,6 +609,36 @@ public enum OperationResult: XDRDiscriminatedUnion {
       case OperationType.cancelDataRemoveRequest.rawValue:
         let data = try CancelDataRemoveRequestResult(xdrData: &xdrData)
         self = .cancelDataRemoveRequest(data)
+      case OperationType.createDeferredPaymentCreationRequest.rawValue:
+        let data = try CreateDeferredPaymentCreationRequestResult(xdrData: &xdrData)
+        self = .createDeferredPaymentCreationRequest(data)
+      case OperationType.cancelDeferredPaymentCreationRequest.rawValue:
+        let data = try CancelDeferredPaymentCreationRequestResult(xdrData: &xdrData)
+        self = .cancelDeferredPaymentCreationRequest(data)
+      case OperationType.createCloseDeferredPaymentRequest.rawValue:
+        let data = try CreateCloseDeferredPaymentRequestResult(xdrData: &xdrData)
+        self = .createCloseDeferredPaymentRequest(data)
+      case OperationType.cancelCloseDeferredPaymentRequest.rawValue:
+        let data = try CancelCloseDeferredPaymentRequestResult(xdrData: &xdrData)
+        self = .cancelCloseDeferredPaymentRequest(data)
+      case OperationType.lpSwap.rawValue:
+        let data = try LPSwapResult(xdrData: &xdrData)
+        self = .lpSwap(data)
+      case OperationType.lpAddLiquidity.rawValue:
+        let data = try LPAddLiquidityResult(xdrData: &xdrData)
+        self = .lpAddLiquidity(data)
+      case OperationType.lpRemoveLiquidity.rawValue:
+        let data = try LPRemoveLiquidityResult(xdrData: &xdrData)
+        self = .lpRemoveLiquidity(data)
+      case OperationType.updateDataOwner.rawValue:
+        let data = try UpdateDataOwnerResult(xdrData: &xdrData)
+        self = .updateDataOwner(data)
+      case OperationType.createDataOwnerUpdateRequest.rawValue:
+        let data = try CreateDataOwnerUpdateRequestResult(xdrData: &xdrData)
+        self = .createDataOwnerUpdateRequest(data)
+      case OperationType.cancelDataOwnerUpdateRequest.rawValue:
+        let data = try CancelDataOwnerUpdateRequestResult(xdrData: &xdrData)
+        self = .cancelDataOwnerUpdateRequest(data)
       default:
         throw XDRErrors.unknownEnumCase
       }

@@ -133,6 +133,26 @@ import Foundation
 //          CancelDataUpdateRequestOp cancelDataUpdateRequestOp;
 //      case CANCEL_DATA_REMOVE_REQUEST:
 //          CancelDataRemoveRequestOp cancelDataRemoveRequestOp;
+//      case CREATE_DEFERRED_PAYMENT_CREATION_REQUEST:
+//          CreateDeferredPaymentCreationRequestOp createDeferredPaymentCreationRequestOp;
+//      case CANCEL_DEFERRED_PAYMENT_CREATION_REQUEST:
+//          CancelDeferredPaymentCreationRequestOp cancelDeferredPaymentCreationRequestOp;
+//      case CREATE_CLOSE_DEFERRED_PAYMENT_REQUEST:
+//          CreateCloseDeferredPaymentRequestOp createCloseDeferredPaymentRequestOp;
+//      case CANCEL_CLOSE_DEFERRED_PAYMENT_REQUEST:
+//          CancelCloseDeferredPaymentRequestOp cancelCloseDeferredPaymentRequestOp;
+//      case LP_SWAP:
+//          LPSwapOp lpSwapOp;
+//      case LP_ADD_LIQUIDITY:
+//          LPAddLiquidityOp lpAddLiquidityOp;
+//      case LP_REMOVE_LIQUIDITY:
+//          LPRemoveLiquidityOp lpRemoveLiquidityOp;
+//      case UPDATE_DATA_OWNER:
+//          UpdateDataOwnerOp updateDataOwnerOp;
+//      case CREATE_DATA_OWNER_UPDATE_REQUEST:
+//          CreateDataOwnerUpdateRequestOp createDataOwnerUpdateRequestOp;
+//      case CANCEL_DATA_OWNER_UPDATE_REQUEST:
+//          CancelDataOwnerUpdateRequestOp cancelDataOwnerUpdateRequestOp;
 //      }
 //  
 //      body;
@@ -229,6 +249,16 @@ public struct Operation: XDRCodable {
     case createDataRemoveRequest(CreateDataRemoveRequestOp)
     case cancelDataUpdateRequest(CancelDataUpdateRequestOp)
     case cancelDataRemoveRequest(CancelDataRemoveRequestOp)
+    case createDeferredPaymentCreationRequest(CreateDeferredPaymentCreationRequestOp)
+    case cancelDeferredPaymentCreationRequest(CancelDeferredPaymentCreationRequestOp)
+    case createCloseDeferredPaymentRequest(CreateCloseDeferredPaymentRequestOp)
+    case cancelCloseDeferredPaymentRequest(CancelCloseDeferredPaymentRequestOp)
+    case lpSwap(LPSwapOp)
+    case lpAddLiquidity(LPAddLiquidityOp)
+    case lpRemoveLiquidity(LPRemoveLiquidityOp)
+    case updateDataOwner(UpdateDataOwnerOp)
+    case createDataOwnerUpdateRequest(CreateDataOwnerUpdateRequestOp)
+    case cancelDataOwnerUpdateRequest(CancelDataOwnerUpdateRequestOp)
 
     public var discriminant: Int32 {
       switch self {
@@ -291,6 +321,16 @@ public struct Operation: XDRCodable {
       case .createDataRemoveRequest: return OperationType.createDataRemoveRequest.rawValue
       case .cancelDataUpdateRequest: return OperationType.cancelDataUpdateRequest.rawValue
       case .cancelDataRemoveRequest: return OperationType.cancelDataRemoveRequest.rawValue
+      case .createDeferredPaymentCreationRequest: return OperationType.createDeferredPaymentCreationRequest.rawValue
+      case .cancelDeferredPaymentCreationRequest: return OperationType.cancelDeferredPaymentCreationRequest.rawValue
+      case .createCloseDeferredPaymentRequest: return OperationType.createCloseDeferredPaymentRequest.rawValue
+      case .cancelCloseDeferredPaymentRequest: return OperationType.cancelCloseDeferredPaymentRequest.rawValue
+      case .lpSwap: return OperationType.lpSwap.rawValue
+      case .lpAddLiquidity: return OperationType.lpAddLiquidity.rawValue
+      case .lpRemoveLiquidity: return OperationType.lpRemoveLiquidity.rawValue
+      case .updateDataOwner: return OperationType.updateDataOwner.rawValue
+      case .createDataOwnerUpdateRequest: return OperationType.createDataOwnerUpdateRequest.rawValue
+      case .cancelDataOwnerUpdateRequest: return OperationType.cancelDataOwnerUpdateRequest.rawValue
       }
     }
 
@@ -359,6 +399,16 @@ public struct Operation: XDRCodable {
       case .createDataRemoveRequest(let data): xdr.append(data.toXDR())
       case .cancelDataUpdateRequest(let data): xdr.append(data.toXDR())
       case .cancelDataRemoveRequest(let data): xdr.append(data.toXDR())
+      case .createDeferredPaymentCreationRequest(let data): xdr.append(data.toXDR())
+      case .cancelDeferredPaymentCreationRequest(let data): xdr.append(data.toXDR())
+      case .createCloseDeferredPaymentRequest(let data): xdr.append(data.toXDR())
+      case .cancelCloseDeferredPaymentRequest(let data): xdr.append(data.toXDR())
+      case .lpSwap(let data): xdr.append(data.toXDR())
+      case .lpAddLiquidity(let data): xdr.append(data.toXDR())
+      case .lpRemoveLiquidity(let data): xdr.append(data.toXDR())
+      case .updateDataOwner(let data): xdr.append(data.toXDR())
+      case .createDataOwnerUpdateRequest(let data): xdr.append(data.toXDR())
+      case .cancelDataOwnerUpdateRequest(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -545,6 +595,36 @@ public struct Operation: XDRCodable {
       case OperationType.cancelDataRemoveRequest.rawValue:
         let data = try CancelDataRemoveRequestOp(xdrData: &xdrData)
         self = .cancelDataRemoveRequest(data)
+      case OperationType.createDeferredPaymentCreationRequest.rawValue:
+        let data = try CreateDeferredPaymentCreationRequestOp(xdrData: &xdrData)
+        self = .createDeferredPaymentCreationRequest(data)
+      case OperationType.cancelDeferredPaymentCreationRequest.rawValue:
+        let data = try CancelDeferredPaymentCreationRequestOp(xdrData: &xdrData)
+        self = .cancelDeferredPaymentCreationRequest(data)
+      case OperationType.createCloseDeferredPaymentRequest.rawValue:
+        let data = try CreateCloseDeferredPaymentRequestOp(xdrData: &xdrData)
+        self = .createCloseDeferredPaymentRequest(data)
+      case OperationType.cancelCloseDeferredPaymentRequest.rawValue:
+        let data = try CancelCloseDeferredPaymentRequestOp(xdrData: &xdrData)
+        self = .cancelCloseDeferredPaymentRequest(data)
+      case OperationType.lpSwap.rawValue:
+        let data = try LPSwapOp(xdrData: &xdrData)
+        self = .lpSwap(data)
+      case OperationType.lpAddLiquidity.rawValue:
+        let data = try LPAddLiquidityOp(xdrData: &xdrData)
+        self = .lpAddLiquidity(data)
+      case OperationType.lpRemoveLiquidity.rawValue:
+        let data = try LPRemoveLiquidityOp(xdrData: &xdrData)
+        self = .lpRemoveLiquidity(data)
+      case OperationType.updateDataOwner.rawValue:
+        let data = try UpdateDataOwnerOp(xdrData: &xdrData)
+        self = .updateDataOwner(data)
+      case OperationType.createDataOwnerUpdateRequest.rawValue:
+        let data = try CreateDataOwnerUpdateRequestOp(xdrData: &xdrData)
+        self = .createDataOwnerUpdateRequest(data)
+      case OperationType.cancelDataOwnerUpdateRequest.rawValue:
+        let data = try CancelDataOwnerUpdateRequestOp(xdrData: &xdrData)
+        self = .cancelDataOwnerUpdateRequest(data)
       default:
         throw XDRErrors.unknownEnumCase
       }

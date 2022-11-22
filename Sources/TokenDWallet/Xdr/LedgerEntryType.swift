@@ -44,7 +44,9 @@ import Foundation
 //      INITIATE_KYC_RECOVERY = 37,
 //      SWAP = 38,
 //      DATA = 39,
-//      CUSTOM = 40
+//      CUSTOM = 40,
+//      DEFERRED_PAYMENT = 41,
+//      LIQUIDITY_POOL = 42
 //  };
 
 //  ===========================================================================
@@ -87,4 +89,6 @@ public enum LedgerEntryType: Int32, XDREnum {
   case swap = 38
   case data = 39
   case custom = 40
+  case deferredPayment = 41
+  case liquidityPool = 42
 }

@@ -23,7 +23,13 @@ import Foundation
 //      //: It is not allowed to set allTasks for a pending reviewable request
 //      NOT_ALLOWED_TO_SET_TASKS_ON_UPDATE = -5, // not allowed to set allTasks on request update
 //      //: Update sale details tasks are not set in the system, i.e. it's not allowed to perform the update of sale details 
-//      SALE_UPDATE_DETAILS_TASKS_NOT_FOUND = -6
+//      SALE_UPDATE_DETAILS_TASKS_NOT_FOUND = -6,
+//      //: Both fields are zero
+//      INVALID_UPDATE_TIME_DATA = -7,
+//      //: Start time could not be updated (sale has already started)
+//      INVALID_START_TIME = -8,
+//      //: End time could not be less than start time
+//      INVALID_END_TIME = -9
 //  };
 
 //  ===========================================================================
@@ -35,4 +41,7 @@ public enum ManageSaleResultCode: Int32, XDREnum {
   case updateDetailsRequestNotFound = -4
   case notAllowedToSetTasksOnUpdate = -5
   case saleUpdateDetailsTasksNotFound = -6
+  case invalidUpdateTimeData = -7
+  case invalidStartTime = -8
+  case invalidEndTime = -9
 }

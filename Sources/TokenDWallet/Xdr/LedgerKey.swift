@@ -316,6 +316,18 @@ import Foundation
 //  
 //          EmptyExt ext;
 //      } data;
+//  case DEFERRED_PAYMENT:
+//      struct {
+//          uint64 id;
+//  
+//          EmptyExt ext;
+//      } deferredPayment;
+//  case LIQUIDITY_POOL:
+//      struct {
+//          uint64 id;
+//  
+//          EmptyExt ext;
+//      } liquidityPool;
 //  };
 
 //  ===========================================================================
@@ -352,6 +364,8 @@ public enum LedgerKey: XDRDiscriminatedUnion {
   case accountSpecificRule(LedgerKeyAccountSpecificRule)
   case swap(LedgerKeySwap)
   case data(LedgerKeyData)
+  case deferredPayment(LedgerKeyDeferredPayment)
+  case liquidityPool(LedgerKeyLiquidityPool)
 
   public var discriminant: Int32 {
     switch self {
@@ -387,6 +401,8 @@ public enum LedgerKey: XDRDiscriminatedUnion {
     case .accountSpecificRule: return LedgerEntryType.accountSpecificRule.rawValue
     case .swap: return LedgerEntryType.swap.rawValue
     case .data: return LedgerEntryType.data.rawValue
+    case .deferredPayment: return LedgerEntryType.deferredPayment.rawValue
+    case .liquidityPool: return LedgerEntryType.liquidityPool.rawValue
     }
   }
 
@@ -428,6 +444,8 @@ public enum LedgerKey: XDRDiscriminatedUnion {
     case .accountSpecificRule(let data): xdr.append(data.toXDR())
     case .swap(let data): xdr.append(data.toXDR())
     case .data(let data): xdr.append(data.toXDR())
+    case .deferredPayment(let data): xdr.append(data.toXDR())
+    case .liquidityPool(let data): xdr.append(data.toXDR())
     }
 
     return xdr
@@ -533,6 +551,12 @@ public enum LedgerKey: XDRDiscriminatedUnion {
     case LedgerEntryType.data.rawValue:
       let data = try LedgerKeyData(xdrData: &xdrData)
       self = .data(data)
+    case LedgerEntryType.deferredPayment.rawValue:
+      let data = try LedgerKeyDeferredPayment(xdrData: &xdrData)
+      self = .deferredPayment(data)
+    case LedgerEntryType.liquidityPool.rawValue:
+      let data = try LedgerKeyLiquidityPool(xdrData: &xdrData)
+      self = .liquidityPool(data)
     default:
       throw XDRErrors.unknownEnumCase
     }
@@ -2252,6 +2276,60 @@ public enum LedgerKey: XDRDiscriminatedUnion {
 
   }
   public struct LedgerKeyData: XDRCodable {
+    public var id: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        id: Uint64,
+        ext: EmptyExt) {
+
+      self.id = id
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.id.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct LedgerKeyDeferredPayment: XDRCodable {
+    public var id: Uint64
+    public var ext: EmptyExt
+
+    public init(
+        id: Uint64,
+        ext: EmptyExt) {
+
+      self.id = id
+      self.ext = ext
+    }
+
+    public func toXDR() -> Data {
+      var xdr = Data()
+
+      xdr.append(self.id.toXDR())
+      xdr.append(self.ext.toXDR())
+
+      return xdr
+    }
+
+    public init(xdrData: inout Data) throws {
+      self.id = try Uint64(xdrData: &xdrData)
+      self.ext = try EmptyExt(xdrData: &xdrData)
+    }
+
+  }
+  public struct LedgerKeyLiquidityPool: XDRCodable {
     public var id: Uint64
     public var ext: EmptyExt
 

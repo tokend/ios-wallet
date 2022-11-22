@@ -8,11 +8,13 @@ import Foundation
 //  enum ManageSaleAction
 //  {
 //      CREATE_UPDATE_DETAILS_REQUEST = 1,
-//      CANCEL = 2
+//      CANCEL = 2,
+//      UPDATE_TIME = 3
 //  };
 
 //  ===========================================================================
 public enum ManageSaleAction: Int32, XDREnum {
   case createUpdateDetailsRequest = 1
   case cancel = 2
+  case updateTime = 3
 }

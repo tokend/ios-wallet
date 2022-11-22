@@ -37,7 +37,12 @@ import Foundation
 //      MOVEMENT_REQUESTS_DETAILS = 27,
 //      FIX_CRASH_CORE_WITH_PAYMENT = 28,
 //      FIX_INVEST_TO_IMMEDIATE_SALE = 29,
-//      FIX_PAYMENT_TASKS_WILDCARD_VALUE = 30
+//      FIX_PAYMENT_TASKS_WILDCARD_VALUE = 30,
+//      FIX_CHANGE_ROLE_REQUEST_REQUESTOR = 31,
+//      FIX_UNORDERED_FEE_DESTINATION = 32,
+//      ADD_DEFAULT_FEE_RECEIVER_BALANCE_KV = 33,
+//      DELETE_REDEMPTION_ZERO_TASKS_CHECKING = 34,
+//      FIX_DATA_OWNERSHIP_TRANSFER_OWNER_CHECK = 35
 //  };
 
 //  ===========================================================================
@@ -73,4 +78,9 @@ public enum LedgerVersion: Int32, XDREnum {
   case fixCrashCoreWithPayment = 28
   case fixInvestToImmediateSale = 29
   case fixPaymentTasksWildcardValue = 30
+  case fixChangeRoleRequestRequestor = 31
+  case fixUnorderedFeeDestination = 32
+  case addDefaultFeeReceiverBalanceKv = 33
+  case deleteRedemptionZeroTasksChecking = 34
+  case fixDataOwnershipTransferOwnerCheck = 35
 }

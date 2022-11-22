@@ -59,6 +59,12 @@ import Foundation
 //              DataUpdateRequest dataUpdateRequest;
 //          case DATA_REMOVE:
 //              DataRemoveRequest dataRemoveRequest;
+//          case CREATE_DEFERRED_PAYMENT:
+//              CreateDeferredPaymentRequest createDeferredPaymentRequest;
+//          case CLOSE_DEFERRED_PAYMENT:
+//              CloseDeferredPaymentRequest closeDeferredPaymentRequest;
+//          case DATA_OWNER_UPDATE:
+//              DataOwnerUpdateRequest dataOwnerUpdateRequest;
 //  
 //  	} body;
 //  
@@ -167,6 +173,9 @@ public struct ReviewableRequestEntry: XDRCodable {
     case dataCreation(DataCreationRequest)
     case dataUpdate(DataUpdateRequest)
     case dataRemove(DataRemoveRequest)
+    case createDeferredPayment(CreateDeferredPaymentRequest)
+    case closeDeferredPayment(CloseDeferredPaymentRequest)
+    case dataOwnerUpdate(DataOwnerUpdateRequest)
 
     public var discriminant: Int32 {
       switch self {
@@ -192,6 +201,9 @@ public struct ReviewableRequestEntry: XDRCodable {
       case .dataCreation: return ReviewableRequestType.dataCreation.rawValue
       case .dataUpdate: return ReviewableRequestType.dataUpdate.rawValue
       case .dataRemove: return ReviewableRequestType.dataRemove.rawValue
+      case .createDeferredPayment: return ReviewableRequestType.createDeferredPayment.rawValue
+      case .closeDeferredPayment: return ReviewableRequestType.closeDeferredPayment.rawValue
+      case .dataOwnerUpdate: return ReviewableRequestType.dataOwnerUpdate.rawValue
       }
     }
 
@@ -223,6 +235,9 @@ public struct ReviewableRequestEntry: XDRCodable {
       case .dataCreation(let data): xdr.append(data.toXDR())
       case .dataUpdate(let data): xdr.append(data.toXDR())
       case .dataRemove(let data): xdr.append(data.toXDR())
+      case .createDeferredPayment(let data): xdr.append(data.toXDR())
+      case .closeDeferredPayment(let data): xdr.append(data.toXDR())
+      case .dataOwnerUpdate(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -298,6 +313,15 @@ public struct ReviewableRequestEntry: XDRCodable {
       case ReviewableRequestType.dataRemove.rawValue:
         let data = try DataRemoveRequest(xdrData: &xdrData)
         self = .dataRemove(data)
+      case ReviewableRequestType.createDeferredPayment.rawValue:
+        let data = try CreateDeferredPaymentRequest(xdrData: &xdrData)
+        self = .createDeferredPayment(data)
+      case ReviewableRequestType.closeDeferredPayment.rawValue:
+        let data = try CloseDeferredPaymentRequest(xdrData: &xdrData)
+        self = .closeDeferredPayment(data)
+      case ReviewableRequestType.dataOwnerUpdate.rawValue:
+        let data = try DataOwnerUpdateRequest(xdrData: &xdrData)
+        self = .dataOwnerUpdate(data)
       default:
         throw XDRErrors.unknownEnumCase
       }

@@ -29,6 +29,11 @@ import Foundation
 //          CreateRedemptionRequestResult createRedemptionResult;
 //      case DATA_CREATION:
 //          DataCreationExtended dataCreationExtended;
+//      case CREATE_DEFERRED_PAYMENT:
+//          CreateDeferredPaymentResult createDeferredPaymentResult;
+//      case CLOSE_DEFERRED_PAYMENT:
+//           CloseDeferredPaymentResult closeDeferredPaymentResult;
+//  
 //      } typeExt;
 //  
 //      //: Reserved for future use
@@ -82,6 +87,8 @@ public struct ExtendedResult: XDRCodable {
     case createPayment(PaymentResult)
     case performRedemption(CreateRedemptionRequestResult)
     case dataCreation(DataCreationExtended)
+    case createDeferredPayment(CreateDeferredPaymentResult)
+    case closeDeferredPayment(CloseDeferredPaymentResult)
 
     public var discriminant: Int32 {
       switch self {
@@ -94,6 +101,8 @@ public struct ExtendedResult: XDRCodable {
       case .createPayment: return ReviewableRequestType.createPayment.rawValue
       case .performRedemption: return ReviewableRequestType.performRedemption.rawValue
       case .dataCreation: return ReviewableRequestType.dataCreation.rawValue
+      case .createDeferredPayment: return ReviewableRequestType.createDeferredPayment.rawValue
+      case .closeDeferredPayment: return ReviewableRequestType.closeDeferredPayment.rawValue
       }
     }
 
@@ -112,6 +121,8 @@ public struct ExtendedResult: XDRCodable {
       case .createPayment(let data): xdr.append(data.toXDR())
       case .performRedemption(let data): xdr.append(data.toXDR())
       case .dataCreation(let data): xdr.append(data.toXDR())
+      case .createDeferredPayment(let data): xdr.append(data.toXDR())
+      case .closeDeferredPayment(let data): xdr.append(data.toXDR())
       }
 
       return xdr
@@ -146,6 +157,12 @@ public struct ExtendedResult: XDRCodable {
       case ReviewableRequestType.dataCreation.rawValue:
         let data = try DataCreationExtended(xdrData: &xdrData)
         self = .dataCreation(data)
+      case ReviewableRequestType.createDeferredPayment.rawValue:
+        let data = try CreateDeferredPaymentResult(xdrData: &xdrData)
+        self = .createDeferredPayment(data)
+      case ReviewableRequestType.closeDeferredPayment.rawValue:
+        let data = try CloseDeferredPaymentResult(xdrData: &xdrData)
+        self = .closeDeferredPayment(data)
       default:
         throw XDRErrors.unknownEnumCase
       }

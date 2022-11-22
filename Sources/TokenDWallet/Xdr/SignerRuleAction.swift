@@ -29,7 +29,11 @@ import Foundation
 //      REMOVE_FOR_OTHER = 19,
 //      EXCHANGE = 20,
 //      UPDATE_FOR_OTHER = 21,
-//      CUSTOM = 22
+//      CUSTOM = 22,
+//      TRANSFER_OWNERSHIP = 23,
+//      LP_ADD_LIQUIDITY = 24,
+//      LP_REMOVE_LIQUIDITY = 25,
+//      LP_SWAP = 26
 //  };
 
 //  ===========================================================================
@@ -56,4 +60,8 @@ public enum SignerRuleAction: Int32, XDREnum {
   case exchange = 20
   case updateForOther = 21
   case custom = 22
+  case transferOwnership = 23
+  case lpAddLiquidity = 24
+  case lpRemoveLiquidity = 25
+  case lpSwap = 26
 }

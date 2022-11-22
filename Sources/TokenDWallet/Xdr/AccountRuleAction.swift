@@ -32,7 +32,11 @@ import Foundation
 //      RECEIVE_REDEMPTION = 22,
 //      UPDATE = 23,
 //      UPDATE_FOR_OTHER = 24,
-//      CUSTOM = 25
+//      CUSTOM = 25,
+//      TRANSFER_OWNERSHIP = 26,
+//      LP_ADD_LIQUIDITY = 27,
+//      LP_REMOVE_LIQUIDITY = 28,
+//      LP_SWAP = 29
 //  };
 
 //  ===========================================================================
@@ -62,4 +66,8 @@ public enum AccountRuleAction: Int32, XDREnum {
   case update = 23
   case updateForOther = 24
   case custom = 25
+  case transferOwnership = 26
+  case lpAddLiquidity = 27
+  case lpRemoveLiquidity = 28
+  case lpSwap = 29
 }
