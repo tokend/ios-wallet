@@ -34,4 +34,16 @@ public enum CancelASwapBidResult: XDRDiscriminatedUnion {
 
     return xdr
   }
+  
+  public init(xdrData: inout Data) throws {
+    let discriminant = try Int32(xdrData: &xdrData)
+    
+    switch discriminant {
+      case CancelASwapBidResultCode.success.rawValue:
+        let data = try CancelASwapBidResultSuccess(xdrData: &xdrData)
+        self = .success(data)
+      default:
+        throw XDRErrors.unknownEnumCase
+    }
+  }
 }

@@ -18,7 +18,7 @@ import Foundation
 //  };
 
 //  ===========================================================================
-public struct CancelASwapBidOp: XDREncodable {
+public struct CancelASwapBidOp: XDRCodable {
   public var bidID: Uint64
   public var ext: CancelASwapBidOpExt
 
@@ -39,6 +39,11 @@ public struct CancelASwapBidOp: XDREncodable {
     return xdr
   }
 
+  public init(xdrData: inout Data) throws {
+    self.bidID = try UInt64(xdrData: &xdrData)
+    self.ext = try CancelASwapBidOpExt(xdrData: &xdrData)
+  }
+  
   public enum CancelASwapBidOpExt: XDRDiscriminatedUnion {
     case emptyVersion
 
@@ -59,6 +64,16 @@ public struct CancelASwapBidOp: XDREncodable {
 
       return xdr
     }
-
+    
+    public init(xdrData: inout Data) throws {
+      let discriminant = try Int32(xdrData: &xdrData)
+      
+      switch discriminant {
+        case LedgerVersion.emptyVersion.rawValue: self = .emptyVersion
+        default:
+          throw XDRErrors.unknownEnumCase
+      }
+    }
+    
   }
 }
